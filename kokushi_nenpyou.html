@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国史年表 v2 — 地球誕生から令和まで</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700;900&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:#0a0a0f; --gold:#c9a84c; --gold-dim:#8a6f2e; --crimson:#c0392b;
+  --pale:#e8e0d0; --muted:#7a7060; --panel-bg:#111118;
+  --sidebar-bg:#0e0e14; --left-w:210px; --right-w:195px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--black);color:var(--pale);font-family:'Noto Sans JP',sans-serif;font-weight:300;line-height:1.8;overflow-x:hidden;}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;background:radial-gradient(ellipse at center,#1a1020 0%,var(--black) 70%);overflow:hidden;}
+.hero::before{content:'菊';font-family:'Noto Serif JP',serif;font-size:40vw;color:rgba(201,168,76,0.03);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;line-height:1;}
+.hero-eyebrow{font-size:.7rem;letter-spacing:.4em;color:var(--gold);margin-bottom:2rem;}
+.hero h1{font-family:'Noto Serif JP',serif;font-size:clamp(2.5rem,8vw,6rem);font-weight:900;line-height:1.1;margin-bottom:1rem;}
+.hero h1 span{color:var(--gold);}
+.hero-sub{font-size:.9rem;color:var(--muted);letter-spacing:.2em;margin-bottom:3rem;}
+.hero-range{font-family:'Noto Serif JP',serif;font-size:1rem;color:var(--gold-dim);border:1px solid var(--gold-dim);padding:.5rem 2rem;letter-spacing:.2em;}
+.scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-size:.7rem;letter-spacing:.3em;color:var(--muted);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* TOP NAV */
+.top-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,10,15,.97);border-bottom:1px solid rgba(201,168,76,.2);display:flex;align-items:center;padding:0 1rem;height:48px;backdrop-filter:blur(10px);}
+.nav-title{font-family:'Noto Serif JP',serif;font-size:.85rem;color:var(--gold);letter-spacing:.2em;margin-right:1rem;white-space:nowrap;}
+.nav-links{display:flex;overflow-x:auto;scrollbar-width:none;}
+.nav-links::-webkit-scrollbar{display:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.68rem;padding:0 .6rem;white-space:nowrap;transition:color .2s;border-right:1px solid rgba(255,255,255,.07);}
+.nav-links a:hover{color:var(--gold);}
+.search-input-nav{margin-left:auto;flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.2);color:var(--pale);padding:.25rem .7rem;font-family:'Noto Sans JP',sans-serif;font-size:.72rem;outline:none;width:140px;transition:border-color .2s;}
+.search-input-nav:focus{border-color:var(--gold);}
+.search-input-nav::placeholder{color:var(--muted);}
+
+/* 3-COL LAYOUT */
+.three-col{display:grid;grid-template-columns:var(--left-w) 1fr var(--right-w);padding-top:48px;min-height:100vh;align-items:start;}
+
+/* LEFT SIDEBAR */
+.sidebar-left{position:sticky;top:48px;height:calc(100vh - 48px);overflow-y:auto;background:var(--sidebar-bg);border-right:1px solid rgba(201,168,76,.15);padding:0;scrollbar-width:thin;scrollbar-color:var(--gold-dim) transparent;}
+.sidebar-left::-webkit-scrollbar{width:3px;}
+.sidebar-left::-webkit-scrollbar-thumb{background:var(--gold-dim);}
+.sl-header{font-size:.58rem;letter-spacing:.2em;color:var(--gold);padding:.5rem .8rem .4rem;border-bottom:1px solid rgba(201,168,76,.2);background:rgba(201,168,76,.04);}
+.sidebar-section{padding:.55rem .8rem;border-bottom:1px solid rgba(201,168,76,.07);cursor:pointer;transition:background .2s;}
+.sidebar-section:hover{background:rgba(201,168,76,.05);}
+.sidebar-section.active{background:rgba(201,168,76,.08);border-left:2px solid var(--gold);}
+.ss-era{font-size:.58rem;letter-spacing:.15em;color:var(--muted);margin-bottom:.15rem;}
+.ss-date{font-size:.58rem;color:#4a4840;margin-bottom:.2rem;}
+.ss-emperor{font-family:'Noto Serif JP',serif;font-size:.78rem;color:var(--gold);cursor:pointer;display:inline-block;transition:color .2s;}
+.ss-emperor:hover{color:#e8c870;text-decoration:underline;}
+.ss-persons{margin-top:.25rem;display:flex;flex-wrap:wrap;gap:2px;}
+.ss-person-tag{font-size:.6rem;border:1px solid rgba(201,168,76,.2);color:#8a8070;padding:0 .35rem;border-radius:2px;}
+
+/* RIGHT SIDEBAR */
+.sidebar-right{position:sticky;top:48px;height:calc(100vh - 48px);overflow-y:auto;background:var(--sidebar-bg);border-left:1px solid rgba(80,110,160,.2);scrollbar-width:thin;scrollbar-color:#3a5a8a transparent;}
+.sidebar-right::-webkit-scrollbar{width:3px;}
+.sidebar-right::-webkit-scrollbar-thumb{background:#3a5a8a;}
+.wr-header{font-size:.58rem;letter-spacing:.2em;color:#5a7aaa;padding:.5rem .8rem .4rem;border-bottom:1px solid rgba(80,110,160,.2);background:rgba(40,60,100,.04);}
+.wr-item{padding:.5rem .8rem;border-bottom:1px solid rgba(80,110,160,.07);}
+.wr-date{font-size:.58rem;color:#4a6a9a;margin-bottom:.1rem;}
+.wr-event{font-size:.66rem;color:#7a90a8;line-height:1.5;}
+.wr-region{font-size:.56rem;color:#3a4a5a;margin-top:.1rem;}
+
+/* CENTER */
+.center-main{min-width:0;padding:0 1.2rem;}
+
+/* ERA */
+.era-section{scroll-margin-top:58px;}
+.era-header{padding:2.5rem 0 1rem;border-bottom:2px solid;display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;}
+.era-num{font-family:'Noto Serif JP',serif;font-size:.68rem;letter-spacing:.3em;color:var(--muted);}
+.era-title{font-family:'Noto Serif JP',serif;font-size:clamp(1.2rem,2.2vw,1.7rem);font-weight:700;}
+.era-span{font-size:.72rem;color:var(--muted);margin-left:auto;}
+
+/* TIMELINE */
+.timeline{padding:1rem 0;}
+.entry{display:grid;grid-template-columns:130px 2px 1fr;gap:0 1rem;align-items:start;padding:.9rem 0;}
+.entry.hidden{display:none;}
+.entry-date{text-align:right;font-family:'Noto Serif JP',serif;font-size:.75rem;color:var(--gold);padding-top:.2rem;line-height:1.4;}
+.entry-spine{display:flex;flex-direction:column;align-items:center;}
+.entry-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:.35rem;}
+.entry-dot.big{width:11px;height:11px;background:var(--crimson);box-shadow:0 0 8px var(--crimson);margin-top:.2rem;}
+.entry-line{flex:1;width:1px;background:rgba(201,168,76,.14);min-height:32px;}
+.entry-body{padding-bottom:.2rem;}
+.entry-title{font-family:'Noto Serif JP',serif;font-size:.88rem;font-weight:700;color:var(--pale);margin-bottom:.2rem;line-height:1.4;}
+.entry-desc{font-size:.76rem;color:#9a9080;line-height:1.7;}
+.tag{display:inline-block;font-size:.58rem;letter-spacing:.08em;padding:.08rem .38rem;border:1px solid;border-radius:2px;margin-right:.3rem;margin-bottom:.2rem;vertical-align:middle;}
+.tag-emperor{border-color:var(--gold);color:var(--gold);}
+.tag-war{border-color:var(--crimson);color:var(--crimson);}
+.tag-culture{border-color:#6a9a8a;color:#6a9a8a;}
+.tag-politics{border-color:#8a7aaa;color:#8a7aaa;}
+.tag-nature{border-color:#5a8a6a;color:#5a8a6a;}
+.tag-religion{border-color:#aa8a5a;color:#aa8a5a;}
+
+/* MIGRATION MAP */
+.migration-section{margin:1.5rem 0;padding:1.2rem 0;border-top:1px solid rgba(201,168,76,.2);border-bottom:1px solid rgba(201,168,76,.2);}
+.migration-title{font-family:'Noto Serif JP',serif;font-size:.95rem;color:var(--gold);margin-bottom:.25rem;letter-spacing:.1em;}
+.migration-sub{font-size:.7rem;color:var(--muted);margin-bottom:.8rem;}
+.migration-map-wrap{background:#050510;border:1px solid rgba(201,168,76,.15);overflow-x:auto;}
+.migration-map-wrap svg{display:block;min-width:580px;max-width:100%;height:auto;}
+
+/* EMPEROR GRID */
+.emperor-section{scroll-margin-top:58px;padding:2.5rem 0;border-top:1px solid rgba(201,168,76,.3);}
+.section-heading{font-family:'Noto Serif JP',serif;font-size:clamp(1rem,2vw,1.4rem);font-weight:700;color:var(--gold);margin-bottom:.35rem;letter-spacing:.1em;}
+.section-sub{font-size:.72rem;color:var(--muted);margin-bottom:1.2rem;}
+.emperor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.7rem;}
+.emperor-card{background:var(--panel-bg);border:1px solid rgba(201,168,76,.15);padding:.8rem 1rem;cursor:pointer;transition:border-color .2s,background .2s;}
+.emperor-card:hover{border-color:var(--gold);background:rgba(201,168,76,.05);}
+.ec-num{font-size:.6rem;color:var(--muted);letter-spacing:.2em;margin-bottom:.15rem;}
+.ec-name{font-family:'Noto Serif JP',serif;font-size:.9rem;font-weight:700;color:var(--gold);margin-bottom:.12rem;}
+.ec-name-read{font-size:.65rem;color:var(--muted);margin-bottom:.3rem;}
+.ec-reign{font-size:.68rem;color:var(--pale);border-top:1px solid rgba(255,255,255,.06);padding-top:.3rem;}
+.ec-note{font-size:.65rem;color:#7a7060;margin-top:.2rem;}
+
+/* LINEAGE */
+.lineage-section{scroll-margin-top:58px;padding:2.5rem 0;border-top:1px solid rgba(201,168,76,.3);overflow-x:auto;}
+.lineage-tree{min-width:680px;}
+.lineage-age-label{font-size:.6rem;color:var(--muted);letter-spacing:.15em;margin:1.1rem 0 .4rem;border-left:2px solid var(--gold-dim);padding-left:.7rem;}
+.lineage-gen{display:flex;flex-wrap:wrap;gap:2px;}
+.lnode{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.18);padding:.28rem .55rem;font-size:.66rem;cursor:pointer;transition:background .2s;display:inline-block;}
+.lnode:hover{background:rgba(201,168,76,.18);}
+.lnode .ln-num{color:var(--muted);font-size:.58rem;}
+.lnode .ln-name{color:var(--gold);font-family:'Noto Serif JP',serif;}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:500;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:#13131e;border:1px solid var(--gold);max-width:500px;width:90%;max-height:82vh;overflow-y:auto;padding:1.8rem;position:relative;animation:modalIn .22s ease;}
+@keyframes modalIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.modal-close{position:absolute;top:.9rem;right:.9rem;background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;transition:color .2s;}
+.modal-close:hover{color:var(--gold);}
+.modal-num{font-size:.62rem;letter-spacing:.2em;color:var(--muted);margin-bottom:.25rem;}
+.modal-name{font-family:'Noto Serif JP',serif;font-size:1.5rem;font-weight:900;color:var(--gold);margin-bottom:.15rem;}
+.modal-read{font-size:.72rem;color:var(--muted);margin-bottom:.9rem;}
+.modal-portrait{width:110px;height:138px;float:right;margin:0 0 1rem 1.1rem;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.2);display:flex;align-items:center;justify-content:center;font-size:2.8rem;overflow:hidden;}
+.modal-portrait img{width:100%;height:100%;object-fit:cover;}
+.modal-reign{font-size:.76rem;color:var(--pale);margin-bottom:.7rem;}
+.modal-reign span{color:var(--muted);}
+.modal-desc{font-size:.78rem;color:#a09880;line-height:1.8;margin-bottom:.9rem;clear:both;}
+.modal-achievements{list-style:none;padding:0;margin-bottom:.8rem;}
+.modal-achievements li{font-size:.74rem;color:#9a9080;padding:.28rem 0;border-bottom:1px solid rgba(255,255,255,.05);padding-left:1rem;position:relative;}
+.modal-achievements li::before{content:'▸';color:var(--gold);position:absolute;left:0;}
+.modal-keizoku{padding:.55rem .75rem;background:rgba(201,168,76,.04);border-left:2px solid var(--gold-dim);font-size:.68rem;color:var(--muted);}
+
+/* FOOTER */
+.footer{border-top:1px solid rgba(201,168,76,.2);padding:2.2rem 1.5rem;text-align:center;color:var(--muted);font-size:.7rem;letter-spacing:.1em;line-height:2;}
+
+@media(max-width:860px){
+  .three-col{grid-template-columns:1fr;}
+  .sidebar-left,.sidebar-right{display:none;}
+  .entry{grid-template-columns:88px 2px 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="nav-title">国史年表</div>
+  <div class="nav-links">
+    <a href="#geo">地質</a><a href="#jomon">縄文</a><a href="#yayoi">弥生</a>
+    <a href="#kofun">古墳</a><a href="#asuka">飛鳥</a><a href="#nara">奈良</a>
+    <a href="#heian">平安</a><a href="#kamakura">鎌倉</a><a href="#muromachi">室町</a>
+    <a href="#azuchi">桃山</a><a href="#edo">江戸</a><a href="#meiji">明治〜</a>
+    <a href="#heisei">平成〜</a><a href="#emperors">天皇系譜</a>
+  </div>
+  <input class="search-input-nav" type="text" id="searchInput" placeholder="🔍 キーワード">
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">日本国史 完全年表 v2</div>
+  <h1>国史<span>年表</span></h1>
+  <div class="hero-sub">地球誕生から令和まで — 46億年を一本の縦軸に</div>
+  <div class="hero-range">46億年前 ▸ 令和現代</div>
+  <div class="scroll-hint">▼ スクロール</div>
+</section>
+
+<div class="three-col">
+
+<!-- LEFT SIDEBAR -->
+<aside class="sidebar-left">
+  <div class="sl-header">天皇 ＆ 主要人物</div>
+
+  <div class="sidebar-section" data-target="geo">
+    <div class="ss-era">地質・人類</div><div class="ss-date">46億年前〜BC300</div>
+    <div class="ss-emperor">（天皇制以前）</div>
+    <div class="ss-persons"><span class="ss-person-tag">縄文人</span><span class="ss-person-tag">ジャワ原人</span></div>
+  </div>
+  <div class="sidebar-section" data-target="yayoi">
+    <div class="ss-era">弥生</div><div class="ss-date">BC300〜AD250</div>
+    <div class="ss-emperor" data-emperor="himiko">👑 卑弥呼（女王）</div>
+    <div class="ss-persons"><span class="ss-person-tag">邪馬台国</span><span class="ss-person-tag">渡来人</span></div>
+  </div>
+  <div class="sidebar-section" data-target="kofun">
+    <div class="ss-era">古墳</div><div class="ss-date">250〜593年</div>
+    <div class="ss-emperor" data-emperor="nintoku">👑 仁徳天皇(16代)</div>
+    <div class="ss-persons"><span class="ss-person-tag">蘇我氏</span><span class="ss-person-tag">物部氏</span><span class="ss-person-tag">渡来人（王仁）</span></div>
+  </div>
+  <div class="sidebar-section" data-target="asuka">
+    <div class="ss-era">飛鳥</div><div class="ss-date">593〜710年</div>
+    <div class="ss-emperor" data-emperor="suiko">👑 推古天皇(33代)</div>
+    <div class="ss-persons"><span class="ss-person-tag">聖徳太子</span><span class="ss-person-tag">蘇我馬子</span><span class="ss-person-tag">中大兄皇子</span><span class="ss-person-tag">中臣鎌足</span></div>
+  </div>
+  <div class="sidebar-section" data-target="nara">
+    <div class="ss-era">奈良</div><div class="ss-date">710〜794年</div>
+    <div class="ss-emperor" data-emperor="shomu">👑 聖武天皇(45代)</div>
+    <div class="ss-persons"><span class="ss-person-tag">藤原不比等</span><span class="ss-person-tag">行基</span><span class="ss-person-tag">鑑真</span><span class="ss-person-tag">藤原仲麻呂</span></div>
+  </div>
+  <div class="sidebar-section" data-target="heian">
+    <div class="ss-era">平安</div><div class="ss-date">794〜1185年</div>
+    <div class="ss-emperor" data-emperor="daigo">👑 醍醐・一条天皇</div>
+    <div class="ss-persons"><span class="ss-person-tag">藤原道長</span><span class="ss-person-tag">菅原道真</span><span class="ss-person-tag">紫式部</span><span class="ss-person-tag">清少納言</span><span class="ss-person-tag">源義経</span><span class="ss-person-tag">平清盛</span></div>
+  </div>
+  <div class="sidebar-section" data-target="kamakura">
+    <div class="ss-era">鎌倉</div><div class="ss-date">1185〜1333年</div>
+    <div class="ss-emperor" data-emperor="gotoba">👑 後鳥羽・後醍醐</div>
+    <div class="ss-persons"><span class="ss-person-tag">源頼朝</span><span class="ss-person-tag">北条義時</span><span class="ss-person-tag">北条時宗</span><span class="ss-person-tag">日蓮</span></div>
+  </div>
+  <div class="sidebar-section" data-target="muromachi">
+    <div class="ss-era">室町</div><div class="ss-date">1336〜1573年</div>
+    <div class="ss-emperor" data-emperor="godaigo">👑 後醍醐・北朝各代</div>
+    <div class="ss-persons"><span class="ss-person-tag">足利尊氏</span><span class="ss-person-tag">足利義満</span><span class="ss-person-tag">山名宗全</span><span class="ss-person-tag">細川勝元</span></div>
+  </div>
+  <div class="sidebar-section" data-target="azuchi">
+    <div class="ss-era">安土桃山</div><div class="ss-date">1573〜1603年</div>
+    <div class="ss-emperor" data-emperor="ogimachi">👑 正親町・後陽成(106・107代)</div>
+    <div class="ss-persons"><span class="ss-person-tag">織田信長</span><span class="ss-person-tag">豊臣秀吉</span><span class="ss-person-tag">明智光秀</span><span class="ss-person-tag">徳川家康</span></div>
+  </div>
+  <div class="sidebar-section" data-target="edo">
+    <div class="ss-era">江戸</div><div class="ss-date">1603〜1868年</div>
+    <div class="ss-emperor" data-emperor="komei">👑 霊元〜孝明天皇</div>
+    <div class="ss-persons"><span class="ss-person-tag">徳川歴代将軍</span><span class="ss-person-tag">松尾芭蕉</span><span class="ss-person-tag">本居宣長</span><span class="ss-person-tag">坂本龍馬</span><span class="ss-person-tag">吉田松陰</span></div>
+  </div>
+  <div class="sidebar-section" data-target="meiji">
+    <div class="ss-era">明治〜昭和</div><div class="ss-date">1868〜1989年</div>
+    <div class="ss-emperor" data-emperor="meiji">👑 明治・大正・昭和天皇</div>
+    <div class="ss-persons"><span class="ss-person-tag">伊藤博文</span><span class="ss-person-tag">大久保利通</span><span class="ss-person-tag">西郷隆盛</span><span class="ss-person-tag">東郷平八郎</span><span class="ss-person-tag">吉田茂</span></div>
+  </div>
+  <div class="sidebar-section" data-target="heisei">
+    <div class="ss-era">平成〜令和</div><div class="ss-date">1989〜現在</div>
+    <div class="ss-emperor" data-emperor="akihito">👑 上皇明仁・今上徳仁</div>
+    <div class="ss-persons"><span class="ss-person-tag">小泉純一郎</span><span class="ss-person-tag">安倍晋三</span></div>
+  </div>
+</aside>
+
+<!-- CENTER MAIN -->
+<main class="center-main" id="searchTarget">
+
+<!-- I. 地質・生命 -->
+<section class="era-section" id="geo">
+  <div class="era-header" style="border-color:#4a6a5a;">
+    <span class="era-num">I</span><span class="era-title" style="color:#7abaa0;">地質・生命の誕生</span>
+    <span class="era-span">46億年前 〜 1万年前</span>
+  </div>
+  <div class="timeline">
+    <div class="entry"><div class="entry-date">約46億年前</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">地球誕生</div><div class="entry-desc">太陽系形成とともに原始地球が誕生。マグマオーシャン・激しい隕石衝突の時代。</div></div></div>
+    <div class="entry"><div class="entry-date">約40億年前</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">最古の生命体（原核生物）</div><div class="entry-desc">海中に単細胞生物出現。地球史上最初の生命の痕跡。</div></div></div>
+    <div class="entry"><div class="entry-date">約5.4億年前</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">カンブリア爆発</div><div class="entry-desc">多細胞動物が爆発的に多様化。脊椎動物の祖先が登場。</div></div></div>
+    <div class="entry"><div class="entry-date">約2300万年前</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">日本列島の原形成</div><div class="entry-desc">ユーラシア大陸東端から分離し始め、日本海が形成される。</div></div></div>
+    <div class="entry"><div class="entry-date">約700万年前</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">人類（ホミニン）の出現</div><div class="entry-desc">チンパンジーとの共通祖先から分岐。東アフリカで二足歩行を開始。</div></div></div>
+    <div class="entry"><div class="entry-date">約180万年前</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">ジャワ原人・北京原人（ホモ・エレクトゥス）</div><div class="entry-desc">アフリカを出てアジアへ進出。ジャワ島・中国で生活痕が発見。火の使用を開始。脳容量が急拡大。</div></div></div>
+    <div class="entry"><div class="entry-date">約30〜10万年前</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">ネアンデルタール人・デニソワ人</div><div class="entry-desc">ホモ・サピエンスと共存・混血。デニソワ人は東アジア人の祖先DNAに今も痕跡。</div></div></div>
+    <div class="entry"><div class="entry-date">約20万年前</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">ホモ・サピエンス誕生（現生人類）</div><div class="entry-desc">東アフリカで現代人の直接の祖先が出現。言語・道具・芸術能力が発達。</div></div></div>
+    <div class="entry"><div class="entry-date">約6〜7万年前</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">Out of Africa — アフリカ脱出・世界拡散開始</div><div class="entry-desc">紅海・アラビア半島を経由して中東へ。その後インド沿岸→東南アジア→東アジアへ拡散。<strong>↓ 下の地図参照</strong></div></div></div>
+    <div class="entry"><div class="entry-date">約3.8万年前</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">日本列島への人類渡来（旧石器時代）</div><div class="entry-desc">陸橋・海峡を越えて現生人類が列島に到達。野尻湖遺跡にナウマン象狩猟の痕跡。</div></div></div>
+  </div>
+
+  <!-- 人類拡散マップ -->
+  <div class="migration-section">
+    <div class="migration-title">🗺 人類のアフリカからの拡散ルート</div>
+    <div class="migration-sub">約6〜7万年前〜1万年前 ／ Out of Africa から日本列島到達まで</div>
+    <div class="migration-map-wrap">
+      <svg viewBox="0 0 860 420" xmlns="http://www.w3.org/2000/svg">
+        <rect width="860" height="420" fill="#050510"/>
+        <!-- 大陸シルエット -->
+        <ellipse cx="280" cy="230" rx="90" ry="110" fill="#0f1f0f" stroke="#1a3a1a" stroke-width="1"/>
+        <text x="280" y="228" text-anchor="middle" font-size="10" fill="#3a7a3a" font-family="sans-serif">アフリカ</text>
+        <path d="M365,75 Q490,55 630,72 Q730,82 775,110 Q795,140 765,168 Q725,188 678,178 Q625,186 578,176 Q528,182 492,170 Q458,152 430,138 Q395,118 375,100 Z" fill="#0f0f1f" stroke="#1a1a3a" stroke-width="1"/>
+        <text x="580" y="132" text-anchor="middle" font-size="10" fill="#3a3a7a" font-family="sans-serif">ユーラシア大陸</text>
+        <ellipse cx="415" cy="162" rx="30" ry="26" fill="#1a1a0f" stroke="#2a2a1a" stroke-width="1"/>
+        <text x="415" y="164" text-anchor="middle" font-size="8" fill="#5a5a3a" font-family="sans-serif">中東</text>
+        <ellipse cx="510" cy="208" rx="32" ry="40" fill="#0f1f0f" stroke="#1a3a1a" stroke-width="1"/>
+        <text x="510" y="210" text-anchor="middle" font-size="8" fill="#3a6a3a" font-family="sans-serif">インド</text>
+        <ellipse cx="638" cy="218" rx="38" ry="32" fill="#0f1f0f" stroke="#1a3a1a" stroke-width="1"/>
+        <text x="638" y="220" text-anchor="middle" font-size="8" fill="#3a6a3a" font-family="sans-serif">東南アジア</text>
+        <ellipse cx="675" cy="143" rx="45" ry="30" fill="#0f0f1f" stroke="#1a1a3a" stroke-width="1"/>
+        <text x="675" y="145" text-anchor="middle" font-size="8" fill="#3a3a7a" font-family="sans-serif">中国・朝鮮</text>
+        <ellipse cx="762" cy="143" rx="16" ry="26" fill="#0f0f1f" stroke="#c9a84c" stroke-width="1.5"/>
+        <text x="795" y="145" font-size="9" fill="#c9a84c" font-family="sans-serif">日本</text>
+        <ellipse cx="698" cy="318" rx="50" ry="36" fill="#1a0f0f" stroke="#2a1a1a" stroke-width="1"/>
+        <text x="698" y="320" text-anchor="middle" font-size="9" fill="#5a3a3a" font-family="sans-serif">オーストラリア</text>
+        <ellipse cx="362" cy="92" rx="55" ry="30" fill="#0f0f1f" stroke="#1a1a3a" stroke-width="1"/>
+        <text x="362" y="94" text-anchor="middle" font-size="9" fill="#3a3a7a" font-family="sans-serif">ヨーロッパ</text>
+        <ellipse cx="70" cy="185" rx="50" ry="92" fill="#0f1f0f" stroke="#1a2a1a" stroke-width="1"/>
+        <text x="70" y="180" text-anchor="middle" font-size="8" fill="#3a5a3a" font-family="sans-serif">南北</text>
+        <text x="70" y="192" text-anchor="middle" font-size="8" fill="#3a5a3a" font-family="sans-serif">アメリカ</text>
+        <ellipse cx="143" cy="88" rx="22" ry="10" fill="#0f1a0f" stroke="#1a2a1a" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="143" y="90" text-anchor="middle" font-size="7" fill="#3a5a5a" font-family="sans-serif">ベーリング</text>
+        <!-- 矢印定義 -->
+        <defs>
+          <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#e8a030"/></marker>
+          <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#c9a84c"/></marker>
+          <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6a8a60"/></marker>
+          <marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6a7aaa"/></marker>
+          <marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#8a6060"/></marker>
+        </defs>
+        <!-- 起点 -->
+        <circle cx="295" cy="190" r="7" fill="#c0392b" opacity=".9"/>
+        <circle cx="295" cy="190" r="13" fill="none" stroke="#c0392b" stroke-width="1.5" opacity=".4"/>
+        <text x="295" y="194" text-anchor="middle" font-size="8" fill="white" font-family="sans-serif">起点</text>
+        <!-- ルート: アフリカ→中東 -->
+        <path d="M345,200 Q375,178 390,166" fill="none" stroke="#e8a030" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#a1)"/>
+        <!-- 中東→インド -->
+        <path d="M442,170 Q470,188 482,196" fill="none" stroke="#e8a030" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#a1)"/>
+        <!-- インド→東南アジア -->
+        <path d="M540,215 Q578,218 600,218" fill="none" stroke="#e8a030" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#a1)"/>
+        <!-- 東南アジア→日本（海岸ルート） -->
+        <path d="M672,200 Q710,175 748,155" fill="none" stroke="#c9a84c" stroke-width="2.5" stroke-dasharray="5,3" marker-end="url(#a2)"/>
+        <!-- 大陸→日本 -->
+        <path d="M717,143 Q738,141 747,141" fill="none" stroke="#c9a84c" stroke-width="2" stroke-dasharray="4,2" marker-end="url(#a2)"/>
+        <!-- 中東→ヨーロッパ -->
+        <path d="M400,148 Q388,122 382,106" fill="none" stroke="#6a7aaa" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#a4)"/>
+        <!-- シベリア→ベーリング→アメリカ -->
+        <path d="M680,88 Q580,72 480,68 Q380,65 270,70 Q200,72 145,82" fill="none" stroke="#6a8a60" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a3)"/>
+        <path d="M130,94 Q106,125 97,155" fill="none" stroke="#6a8a60" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a3)"/>
+        <!-- 東南アジア→オーストラリア -->
+        <path d="M658,248 Q678,278 682,284" fill="none" stroke="#8a6060" stroke-width="1.8" stroke-dasharray="5,3" marker-end="url(#a5)"/>
+        <!-- 凡例 -->
+        <rect x="10" y="355" width="215" height="58" fill="rgba(0,0,0,.7)" stroke="rgba(201,168,76,.2)" stroke-width="1"/>
+        <text x="18" y="370" font-size="8" fill="#c9a84c" font-family="sans-serif">凡例</text>
+        <line x1="18" y1="380" x2="45" y2="380" stroke="#e8a030" stroke-width="2" stroke-dasharray="4,2"/>
+        <text x="50" y="383" font-size="7.5" fill="#e8a030" font-family="sans-serif">主要拡散ルート（7〜5万年前）</text>
+        <line x1="18" y1="393" x2="45" y2="393" stroke="#c9a84c" stroke-width="2" stroke-dasharray="4,2"/>
+        <text x="50" y="396" font-size="7.5" fill="#c9a84c" font-family="sans-serif">日本列島への到達（3〜4万年前）</text>
+        <line x1="18" y1="406" x2="45" y2="406" stroke="#6a8a60" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <text x="50" y="409" font-size="7.5" fill="#6a8a60" font-family="sans-serif">ベーリング経由→アメリカ（1.5万年前）</text>
+        <!-- 注記 -->
+        <rect x="768" y="108" width="84" height="22" fill="rgba(201,168,76,.1)" stroke="rgba(201,168,76,.3)" stroke-width="1" rx="2"/>
+        <text x="810" y="122" text-anchor="middle" font-size="7.5" fill="#c9a84c" font-family="sans-serif">約3.8万年前到達</text>
+        <text x="450" y="270" font-size="8" fill="#2a3a4a" font-family="sans-serif">インド洋</text>
+        <text x="720" y="270" font-size="8" fill="#2a3a4a" font-family="sans-serif">太平洋</text>
+        <text x="180" y="330" font-size="8" fill="#2a3a4a" font-family="sans-serif">大西洋</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- II. 縄文 -->
+<section class="era-section" id="jomon">
+  <div class="era-header" style="border-color:#2d4a3e;">
+    <span class="era-num">II</span><span class="era-title" style="color:#7abaa0;">縄文時代</span>
+    <span class="era-span">約1万6000年前 〜 BC3世紀</span>
+  </div>
+  <div class="timeline">
+    <div class="entry"><div class="entry-date">約1万6000年前</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">縄文土器の出現（世界最古級）</div><div class="entry-desc">採集・狩猟・漁撈の定住生活が始まる。</div></div></div>
+    <div class="entry"><div class="entry-date">約5000〜4000年前</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">縄文文化の成熟期</div><div class="entry-desc">三内丸山遺跡（青森）など大規模集落。翡翠・黒曜石の交易ネットワーク。土偶・環状列石。</div></div></div>
+    <div class="entry"><div class="entry-date">紀元前1000年頃</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">縄文晩期・水田の萌芽</div><div class="entry-desc">九州北部で水稲栽培の痕跡。大陸文化の影響が始まる。</div></div></div>
+  </div>
+</section>
+
+<!-- III. 弥生 -->
+<section class="era-section" id="yayoi">
+  <div class="era-header" style="border-color:#3a4a2d;">
+    <span class="era-num">III</span><span class="era-title" style="color:#9aba7a;">弥生時代</span>
+    <span class="era-span">BC3世紀 〜 AD3世紀</span>
+  </div>
+  <div class="timeline">
+    <div class="entry"><div class="entry-date">紀元前300年頃</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">弥生文化・水稲農耕の普及</div><div class="entry-desc">渡来人が稲作・金属器をもたらす。階級社会の萌芽。</div></div></div>
+    <div class="entry"><div class="entry-date">西暦57年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">倭奴国王、後漢に朝貢</div><div class="entry-desc">光武帝より「漢委奴国王」金印を授かる（志賀島出土）。</div></div></div>
+    <div class="entry"><div class="entry-date">239年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">卑弥呼、魏に使者を送る（邪馬台国）</div><div class="entry-desc">魏志倭人伝に記録。「親魏倭王」の称号と銅鏡100枚。邪馬台国の所在は現在も論争中。</div></div></div>
+  </div>
+</section>
+
+<!-- IV. 古墳 -->
+<section class="era-section" id="kofun">
+  <div class="era-header" style="border-color:#4a3a2d;">
+    <span class="era-num">IV</span><span class="era-title" style="color:#ba9a7a;">古墳時代</span>
+    <span class="era-span">3世紀後半 〜 7世紀初頭</span>
+  </div>
+  <div class="timeline">
+    <div class="entry"><div class="entry-date">280年頃</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">大和政権（ヤマト王権）の成立</div><div class="entry-desc">大和（奈良）を中心に豪族連合政権が形成。前方後円墳文化が広がる。</div></div></div>
+    <div class="entry"><div class="entry-date">313年頃</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">仁徳天皇陵（大仙古墳）造営</div><div class="entry-desc">世界最大の墳墓（全長486m）。第16代仁徳天皇に比定。</div></div></div>
+    <div class="entry"><div class="entry-date">4〜5世紀</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">漢字・儒教・技術の伝来</div><div class="entry-desc">渡来人（王仁）が漢字・論語を伝える。鍛冶・陶器・機織りの技術が普及。</div></div></div>
+    <div class="entry"><div class="entry-date">538年（552年説も）</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-religion">宗教</span>仏教の公伝</div><div class="entry-desc">百済の聖明王から欽明天皇へ仏像・経典が献上。崇仏・廃仏論争（蘇我氏 vs 物部氏）が始まる。</div></div></div>
+  </div>
+</section>
+
+<!-- V. 飛鳥 -->
+<section class="era-section" id="asuka">
+  <div class="era-header" style="border-color:#6a4a7a;">
+    <span class="era-num">V</span><span class="era-title" style="color:#aa7aba;">飛鳥時代</span>
+    <span class="era-span">593年 〜 710年</span>
+  </div>
+  <div class="timeline">
+    <div class="entry"><div class="entry-date">593年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-emperor">天皇</span>推古天皇即位・聖徳太子摂政</div><div class="entry-desc">日本初の女性天皇即位。甥の聖徳太子が摂政として政治改革を主導。</div></div></div>
+    <div class="entry"><div class="entry-date">604年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">十七条憲法・冠位十二階制定</div><div class="entry-desc">聖徳太子が制定。仏教・儒教に基づく国家統治の理念。</div></div></div>
+    <div class="entry"><div class="entry-date">607年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">遣隋使（小野妹子）派遣</div><div class="entry-desc">「日出づる処の天子〜」の国書。対等外交を宣言。</div></div></div>
+    <div class="entry"><div class="entry-date">645年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-politics">政変</span>大化の改新</div><div class="entry-desc">中大兄皇子・中臣鎌足が蘇我入鹿を暗殺（乙巳の変）。「大化」元号制定。公地公民制。</div></div></div>
+    <div class="entry"><div class="entry-date">663年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-war">戦争</span>白村江の戦い</div><div class="entry-desc">百済救援のため出兵するも唐・新羅連合軍に大敗。防衛体制強化。</div></div></div>
+    <div class="entry"><div class="entry-date">672年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-war">内乱</span>壬申の乱</div><div class="entry-desc">大海人皇子（天武天皇）が大友皇子を破り即位。天皇権力が確立。</div></div></div>
+    <div class="entry"><div class="entry-date">701年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">大宝律令の制定</div><div class="entry-desc">律令国家体制の確立。「日本」国号・「天皇」称号が正式使用される。</div></div></div>
+  </div>
+</section>
+
+<!-- VI. 奈良 -->
+<section class="era-section" id="nara">
+  <div class="era-header" style="border-color:#3a2d4a;">
+    <span class="era-num">VI</span><span class="era-title" style="color:#8a7aba;">奈良時代</span>
+    <span class="era-span">710年 〜 794年</span>
+  </div>
+  <div class="timeline">
+    <div class="entry"><div class="entry-date">710年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">平城京遷都</div><div class="entry-desc">元明天皇が奈良に都を移す。唐の長安を模した碁盤目状の都市計画。人口約10万人。</div></div></div>
+    <div class="entry"><div class="entry-date">712年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-culture">文化</span>古事記の編纂</div><div class="entry-desc">太安万侣が撰録。日本最古の歴史書。神代〜推古天皇。</div></div></div>
+    <div class="entry"><div class="entry-date">720年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-culture">文化</span>日本書紀の完成</div><div class="entry-desc">舎人親王らが編纂。六国史の第一。漢文で記述。</div></div></div>
+    <div class="entry"><div class="entry-date">752年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">東大寺大仏の開眼供養</div><div class="entry-desc">聖武天皇の詔（743年）→インド僧・菩提僊那が開眼。国家仏教の頂点。</div></div></div>
+    <div class="entry"><div class="entry-date">759年頃</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-culture">文化</span>万葉集の成立</div><div class="entry-desc">大伴家持らが編纂。4500首以上。天皇から庶民までの歌を収録。</div></div></div>
+  </div>
+</section>
+
+<!-- VII. 平安 -->
+<section class="era-section" id="heian">
+  <div class="era-header" style="border-color:#2d3a4a;">
+    <span class="era-num">VII</span><span class="era-title" style="color:#7a9aba;">平安時代</span>
+    <span class="era-span">794年 〜 1185年</span>
+  </div>
+  <div class="timeline">
+    <div class="entry"><div class="entry-date">794年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">平安京遷都（京都）</div><div class="entry-desc">桓武天皇が遷都。以後400年の都。</div></div></div>
+    <div class="entry"><div class="entry-date">894年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">遣唐使の廃止</div><div class="entry-desc">菅原道真の建議。国風文化（仮名・大和絵・和歌）が花開く転機。</div></div></div>
+    <div class="entry"><div class="entry-date">1000年頃</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-culture">文化</span>源氏物語・枕草子の成立</div><div class="entry-desc">紫式部「源氏物語」、清少納言「枕草子」。藤原道長の摂関政治全盛期。</div></div></div>
+    <div class="entry"><div class="entry-date">1086年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">院政の開始（白河上皇）</div><div class="entry-desc">退位天皇が院として政治権力を握る院政が始まる。</div></div></div>
+    <div class="entry"><div class="entry-date">1185年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-war">戦争</span>壇ノ浦の戦い・平氏滅亡</div><div class="entry-desc">源義経が平家を滅ぼす。安徳天皇と三種の神器が海中へ。</div></div></div>
+  </div>
+</section>
+
+<!-- VIII〜XIII 略まとめ -->
+<section class="era-section" id="kamakura">
+  <div class="era-header" style="border-color:#4a2d2d;">
+    <span class="era-num">VIII</span><span class="era-title" style="color:#ba7a7a;">鎌倉時代</span>
+    <span class="era-span">1185年 〜 1333年</span>
+  </div>
+  <div class="timeline">
+    <div class="entry"><div class="entry-date">1192年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">源頼朝、征夷大将軍就任・鎌倉幕府成立</div><div class="entry-desc">武家政権の始まり。朝廷（公家）と幕府（武家）の二元支配時代。</div></div></div>
+    <div class="entry"><div class="entry-date">1221年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-war">内乱</span>承久の乱</div><div class="entry-desc">後鳥羽上皇が倒幕を企てるが失敗。幕府の優位確立。</div></div></div>
+    <div class="entry"><div class="entry-date">1274・1281年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-war">外敵</span>元寇（文永・弘安の役）</div><div class="entry-desc">フビライ・ハンの元軍が二度侵攻。台風（神風）で撃退。</div></div></div>
+    <div class="entry"><div class="entry-date">1333年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">鎌倉幕府滅亡・建武の新政</div><div class="entry-desc">後醍醐天皇が天皇親政を復活。</div></div></div>
+  </div>
+</section>
+<section class="era-section" id="muromachi">
+  <div class="era-header" style="border-color:#4a4a2d;">
+    <span class="era-num">IX</span><span class="era-title" style="color:#baba7a;">室町時代</span>
+    <span class="era-span">1336年 〜 1573年</span>
+  </div>
+  <div class="timeline">
+    <div class="entry"><div class="entry-date">1336年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">足利尊氏、室町幕府を開く（南北朝）</div><div class="entry-desc">後醍醐天皇（南朝・吉野）vs 北朝（京都）の二朝並立。60年続く。</div></div></div>
+    <div class="entry"><div class="entry-date">1392年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">南北朝合一（足利義満）</div><div class="entry-desc">勘合貿易で日明貿易が栄える。</div></div></div>
+    <div class="entry"><div class="entry-date">1467年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-war">内乱</span>応仁の乱（〜1477年）</div><div class="entry-desc">細川・山名両氏の争い。京都が焦土に。戦国時代の幕開け。</div></div></div>
+    <div class="entry"><div class="entry-date">1543・1549年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">鉄砲の伝来・キリスト教の伝来</div><div class="entry-desc">種子島（ポルトガル人）に鉄砲。ザビエルが鹿児島上陸。南蛮文化の流入。</div></div></div>
+  </div>
+</section>
+<section class="era-section" id="azuchi">
+  <div class="era-header" style="border-color:#7a4a2a;">
+    <span class="era-num">X</span><span class="era-title" style="color:#daa060;">安土桃山時代</span>
+    <span class="era-span">1573年 〜 1603年</span>
+  </div>
+  <div class="timeline">
+    <div class="entry"><div class="entry-date">1573年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">織田信長、室町幕府を滅ぼす</div><div class="entry-desc">将軍足利義昭を追放。天下統一へ向けた覇業が本格化。</div></div></div>
+    <div class="entry"><div class="entry-date">1582年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-war">政変</span>本能寺の変・信長横死</div><div class="entry-desc">明智光秀が主君信長を急襲。信長自刃。秀吉が山崎の戦いで光秀を破る。</div></div></div>
+    <div class="entry"><div class="entry-date">1590年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">豊臣秀吉、天下統一</div><div class="entry-desc">北条氏を降伏させ全国統一。刀狩令・太閤検地で封建制度を確立。</div></div></div>
+  </div>
+</section>
+<section class="era-section" id="edo">
+  <div class="era-header" style="border-color:#2d4a4a;">
+    <span class="era-num">XI</span><span class="era-title" style="color:#7ababa;">江戸時代</span>
+    <span class="era-span">1603年 〜 1868年</span>
+  </div>
+  <div class="timeline">
+    <div class="entry"><div class="entry-date">1600年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-war">決戦</span>関ヶ原の戦い</div><div class="entry-desc">徳川家康（東軍）vs 石田三成ら（西軍）。家康が勝利し覇者に。</div></div></div>
+    <div class="entry"><div class="entry-date">1603年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">徳川家康、江戸幕府を開く</div><div class="entry-desc">265年続く武家政権。鎖国体制・参勤交代で安定統治。</div></div></div>
+    <div class="entry"><div class="entry-date">1688〜1703年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-culture">文化</span>元禄文化の全盛</div><div class="entry-desc">松尾芭蕉（俳諧）・近松門左衛門（歌舞伎）・菱川師宣（浮世絵）。上方の町人文化。</div></div></div>
+    <div class="entry"><div class="entry-date">1853年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">ペリー来航・開国</div><div class="entry-desc">黒船4隻が浦賀に。翌年日米和親条約締結。鎖国体制崩壊。</div></div></div>
+    <div class="entry"><div class="entry-date">1867年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">大政奉還・江戸幕府終焉</div><div class="entry-desc">徳川慶喜が政権を朝廷へ返上。265年の幕藩体制に幕。</div></div></div>
+  </div>
+</section>
+<section class="era-section" id="meiji">
+  <div class="era-header" style="border-color:#4a3040;">
+    <span class="era-num">XII</span><span class="era-title" style="color:#ba7a9a;">明治・大正・昭和</span>
+    <span class="era-span">1868年 〜 1989年</span>
+  </div>
+  <div class="timeline">
+    <div class="entry"><div class="entry-date">1868年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-emperor">天皇</span>明治維新・明治天皇御親政</div><div class="entry-desc">王政復古の大号令。五箇条の御誓文。富国強兵・文明開化・廃藩置県。</div></div></div>
+    <div class="entry"><div class="entry-date">1889年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">大日本帝国憲法発布</div><div class="entry-desc">伊藤博文らが起草。アジア初の近代憲法。天皇主権と議会制度の並立。</div></div></div>
+    <div class="entry"><div class="entry-date">1904〜05年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-war">戦争</span>日露戦争・勝利</div><div class="entry-desc">日本海海戦（東郷平八郎）で決定的勝利。ポーツマス条約。</div></div></div>
+    <div class="entry"><div class="entry-date">1941〜45年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-war">戦争</span>太平洋戦争・敗戦</div><div class="entry-desc">真珠湾攻撃から始まる全面戦争。広島・長崎への原爆投下。8月15日玉音放送で終戦。</div></div></div>
+    <div class="entry"><div class="entry-date">1946年</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">日本国憲法公布</div><div class="entry-desc">国民主権・平和主義・基本的人権の三原則。天皇は象徴へ。</div></div></div>
+    <div class="entry"><div class="entry-date">1964年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">東京オリンピック・新幹線開業</div><div class="entry-desc">戦後復興の象徴。高度経済成長の頂点。</div></div></div>
+  </div>
+</section>
+<section class="era-section" id="heisei">
+  <div class="era-header" style="border-color:#1a1a2e;">
+    <span class="era-num">XIII</span><span class="era-title" style="color:#7a7aba;">平成・令和</span>
+    <span class="era-span">1989年 〜 現在</span>
+  </div>
+  <div class="timeline">
+    <div class="entry"><div class="entry-date">1989年1月8日</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-emperor">天皇</span>昭和天皇崩御・平成へ改元</div><div class="entry-desc">明仁天皇即位。元号「平成」。</div></div></div>
+    <div class="entry"><div class="entry-date">1995年</div><div class="entry-spine"><div class="entry-dot"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-nature">災害</span>阪神・淡路大震災</div><div class="entry-desc">M7.3。死者6434人。神戸・阪神地域が壊滅。</div></div></div>
+    <div class="entry"><div class="entry-date">2011年3月11日</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-nature">災害</span>東日本大震災・福島原発事故</div><div class="entry-desc">M9.0。死者・行方不明約2万2000人。戦後最大の国難。</div></div></div>
+    <div class="entry"><div class="entry-date">2019年5月1日</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title"><span class="tag tag-emperor">天皇</span>令和へ改元・徳仁天皇即位</div><div class="entry-desc">明仁上皇が生前退位。第126代徳仁天皇即位。元号「令和」（万葉集より）。</div></div></div>
+    <div class="entry"><div class="entry-date">現在</div><div class="entry-spine"><div class="entry-dot big"></div><div class="entry-line"></div></div><div class="entry-body"><div class="entry-title">令和 — 継続する皇統</div><div class="entry-desc">第126代徳仁天皇のもと、2600年以上続く世界最長の皇統が続く。</div></div></div>
+  </div>
+</section>
+
+<!-- 天皇系譜 -->
+<section class="emperor-section" id="emperors">
+  <div class="section-heading">天皇系譜 — 歴代天皇一覧</div>
+  <div class="section-sub">クリックすると詳細・業績パネルが開きます</div>
+  <div class="emperor-grid" id="emperorGrid"></div>
+</section>
+
+<!-- 系譜チャート -->
+<section class="lineage-section" id="lineage">
+  <div class="section-heading">系譜チャート — 時代別皇統の流れ</div>
+  <div class="section-sub">クリックで詳細モーダルを表示</div>
+  <div class="lineage-tree">
+    <div class="lineage-age-label">▌ 神代・初期（〜飛鳥）第1〜37代</div>
+    <div class="lineage-gen" id="lineage1"></div>
+    <div class="lineage-age-label">▌ 飛鳥後期〜奈良 第38〜49代</div>
+    <div class="lineage-gen" id="lineage2"></div>
+    <div class="lineage-age-label">▌ 平安時代 第50〜84代</div>
+    <div class="lineage-gen" id="lineage3"></div>
+    <div class="lineage-age-label">▌ 鎌倉〜室町（南北朝含む）第85〜102代</div>
+    <div class="lineage-gen" id="lineage4"></div>
+    <div class="lineage-age-label">▌ 戦国〜江戸 第103〜119代</div>
+    <div class="lineage-gen" id="lineage5"></div>
+    <div class="lineage-age-label">▌ 近代〜令和 第120〜126代</div>
+    <div class="lineage-gen" id="lineage6"></div>
+  </div>
+</section>
+
+</main>
+
+<!-- RIGHT SIDEBAR -->
+<aside class="sidebar-right">
+  <div class="wr-header">世界史 同時代の動き</div>
+  <div class="wr-item"><div class="wr-date">約46億年前</div><div class="wr-event">地球誕生（太陽系形成）</div><div class="wr-region">全地球</div></div>
+  <div class="wr-item"><div class="wr-date">約700万年前</div><div class="wr-event">人類（ホミニン）がアフリカで出現</div><div class="wr-region">東アフリカ</div></div>
+  <div class="wr-item"><div class="wr-date">約6万年前</div><div class="wr-event">ホモ・サピエンスがアフリカを出る（Out of Africa）</div><div class="wr-region">中東・アラビア</div></div>
+  <div class="wr-item"><div class="wr-date">BC3500年頃</div><div class="wr-event">メソポタミアでシュメール文明・楔形文字誕生</div><div class="wr-region">中東</div></div>
+  <div class="wr-item"><div class="wr-date">BC3000年頃</div><div class="wr-event">エジプトでファラオ文明・ピラミッド建設</div><div class="wr-region">エジプト</div></div>
+  <div class="wr-item"><div class="wr-date">BC2500年頃</div><div class="wr-event">インダス文明（モヘンジョダロ）</div><div class="wr-region">インド亜大陸</div></div>
+  <div class="wr-item"><div class="wr-date">BC1600年頃</div><div class="wr-event">中国・殷（商）王朝の成立・甲骨文字</div><div class="wr-region">中国</div></div>
+  <div class="wr-item"><div class="wr-date">BC563年頃</div><div class="wr-event">釈迦（仏陀）の誕生</div><div class="wr-region">インド</div></div>
+  <div class="wr-item"><div class="wr-date">BC551年</div><div class="wr-event">孔子の誕生（儒教の祖）</div><div class="wr-region">中国・魯</div></div>
+  <div class="wr-item"><div class="wr-date">BC221年</div><div class="wr-event">秦の始皇帝が中国統一・万里の長城</div><div class="wr-region">中国</div></div>
+  <div class="wr-item"><div class="wr-date">BC27年</div><div class="wr-event">ローマ帝国成立（オクタウィアヌス）</div><div class="wr-region">ローマ</div></div>
+  <div class="wr-item"><div class="wr-date">AD57年</div><div class="wr-event">後漢・光武帝が倭（日本）に金印を授ける</div><div class="wr-region">中国</div></div>
+  <div class="wr-item"><div class="wr-date">AD313年</div><div class="wr-event">ミラノ勅令・ローマがキリスト教を公認</div><div class="wr-region">ローマ帝国</div></div>
+  <div class="wr-item"><div class="wr-date">AD618年</div><div class="wr-event">中国・唐王朝の成立（日本の律令制に影響）</div><div class="wr-region">中国</div></div>
+  <div class="wr-item"><div class="wr-date">AD622年</div><div class="wr-event">ムハンマドがメディナへ聖遷。イスラム暦元年</div><div class="wr-region">アラビア</div></div>
+  <div class="wr-item"><div class="wr-date">AD800年</div><div class="wr-event">カール大帝がローマ皇帝に戴冠</div><div class="wr-region">ヨーロッパ</div></div>
+  <div class="wr-item"><div class="wr-date">1096年</div><div class="wr-event">第1回十字軍遠征</div><div class="wr-region">ヨーロッパ・中東</div></div>
+  <div class="wr-item"><div class="wr-date">1206年</div><div class="wr-event">チンギス・ハンがモンゴル帝国建国</div><div class="wr-region">モンゴル</div></div>
+  <div class="wr-item"><div class="wr-date">1347年</div><div class="wr-event">黒死病（ペスト）がヨーロッパで大流行。人口1/3が死亡</div><div class="wr-region">ヨーロッパ</div></div>
+  <div class="wr-item"><div class="wr-date">1492年</div><div class="wr-event">コロンブスがアメリカ大陸に到達</div><div class="wr-region">カリブ海</div></div>
+  <div class="wr-item"><div class="wr-date">1517年</div><div class="wr-event">マルティン・ルターが宗教改革</div><div class="wr-region">ドイツ</div></div>
+  <div class="wr-item"><div class="wr-date">1600年</div><div class="wr-event">東インド会社設立（英・蘭）。植民地時代へ</div><div class="wr-region">ヨーロッパ</div></div>
+  <div class="wr-item"><div class="wr-date">1776年</div><div class="wr-event">アメリカ独立宣言</div><div class="wr-region">北米</div></div>
+  <div class="wr-item"><div class="wr-date">1789年</div><div class="wr-event">フランス革命勃発</div><div class="wr-region">フランス</div></div>
+  <div class="wr-item"><div class="wr-date">1840年</div><div class="wr-event">アヘン戦争（英vs清）。清の没落開始</div><div class="wr-region">中国</div></div>
+  <div class="wr-item"><div class="wr-date">1861〜65年</div><div class="wr-event">南北戦争・リンカーン奴隷解放宣言</div><div class="wr-region">アメリカ</div></div>
+  <div class="wr-item"><div class="wr-date">1914〜18年</div><div class="wr-event">第一次世界大戦。欧州の旧秩序が崩壊</div><div class="wr-region">ヨーロッパ</div></div>
+  <div class="wr-item"><div class="wr-date">1917年</div><div class="wr-event">ロシア革命。ソビエト連邦の誕生</div><div class="wr-region">ロシア</div></div>
+  <div class="wr-item"><div class="wr-date">1939〜45年</div><div class="wr-event">第二次世界大戦・原爆投下</div><div class="wr-region">全世界</div></div>
+  <div class="wr-item"><div class="wr-date">1945年</div><div class="wr-event">国連設立。冷戦時代の幕開け</div><div class="wr-region">全世界</div></div>
+  <div class="wr-item"><div class="wr-date">1969年</div><div class="wr-event">アポロ11号が月面着陸（人類初）</div><div class="wr-region">宇宙</div></div>
+  <div class="wr-item"><div class="wr-date">1989年</div><div class="wr-event">ベルリンの壁崩壊。冷戦終結</div><div class="wr-region">ドイツ</div></div>
+  <div class="wr-item"><div class="wr-date">2001年</div><div class="wr-event">9.11同時多発テロ</div><div class="wr-region">アメリカ</div></div>
+  <div class="wr-item"><div class="wr-date">2020年</div><div class="wr-event">COVID-19パンデミック</div><div class="wr-region">全世界</div></div>
+  <div class="wr-item"><div class="wr-date">2022年</div><div class="wr-event">ロシアがウクライナへ軍事侵攻</div><div class="wr-region">ヨーロッパ</div></div>
+</aside>
+
+</div><!-- /.three-col -->
+
+<footer class="footer">
+  <div>国史年表 v2 — 地球誕生 46億年前 〜 令和現在</div>
+  <div style="margin-top:.4rem;color:#4a4a40;font-size:.62rem;">参考：古事記・日本書紀・国史大辞典・宮内庁公式資料 ／ ※神代〜初期天皇の在位年は伝承・神話的記録に基づく</div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-num" id="mNum"></div>
+    <div class="modal-name" id="mName"></div>
+    <div class="modal-read" id="mRead"></div>
+    <div class="modal-portrait" id="mPortrait"></div>
+    <div class="modal-reign" id="mReign"></div>
+    <div class="modal-desc" id="mDesc"></div>
+    <ul class="modal-achievements" id="mAchievements"></ul>
+    <div class="modal-keizoku" id="mKeizoku"></div>
+  </div>
+</div>
+<script>
+const emperors=[
+  {num:1,name:'神武天皇',read:'じんむてんのう',reign:'BC660〜BC585（伝承）',era:'神代',portrait:'🌸',desc:'初代天皇。天照大神の末裔とされ、神武東征で大和を平定。橿原宮に即位。建国記念の日（2/11）の由来。',achievements:['神武東征・大和平定','橿原宮に即位','天皇家の始祖'],keizoku:'初代。皇統の原点。'},
+  {num:10,name:'崇神天皇',read:'すじんてんのう',reign:'BC97〜BC30（伝承）',era:'古墳前',portrait:'⛩️',desc:'実在性の高い初期天皇。「御肇国天皇」の尊称。疫病鎮静のため三輪山の神を祀る。四道将軍を派遣し国土を拡張。',achievements:['三輪山信仰の確立','四道将軍派遣・国土平定'],keizoku:'第10代。史実と神話の境界とされる重要天皇。'},
+  {num:16,name:'仁徳天皇',read:'にんとくてんのう',reign:'AD313〜399（伝承）',era:'古墳',portrait:'🏯',desc:'仁政の象徴。「民のかまど」の逸話で有名。課税を3年間停止。大仙古墳（全長486m・世界最大）に比定される。難波高津宮に都を置く。',achievements:['大仙古墳（仁徳天皇陵）','民のかまど〜課税停止の仁政','難波高津宮'],keizoku:'応神天皇の皇子。仁政天皇の象徴として後世に称えられる。'},
+  {num:26,name:'継体天皇',read:'けいたいてんのう',reign:'AD507〜531',era:'古墳',portrait:'⛩️',desc:'応神天皇の五世孫。傍系から即位。越前国から迎えられ20年以上かけて大和入り。磐井の乱を鎮圧。現皇室の直接の祖とされる。',achievements:['傍系から新皇統の確立','磐井の乱鎮圧（528年）'],keizoku:'応神天皇の五世孫。現皇室は継体天皇から連続する系譜。'},
+  {num:33,name:'推古天皇',read:'すいこてんのう',reign:'593〜628',era:'飛鳥',portrait:'👸',desc:'日本最初の女性天皇。欽明天皇の皇女。甥の聖徳太子を摂政に任命。607年に遣隋使を派遣し「日出づる処の天子〜」で対等外交を宣言。',achievements:['日本初の女性天皇','聖徳太子を摂政に','遣隋使派遣（607年）','法隆寺建立促進'],keizoku:'欽明天皇の皇女。在位36年の長期政権。'},
+  {num:38,name:'天智天皇',read:'てんじてんのう',reign:'668〜671',era:'飛鳥',portrait:'⚙️',desc:'中大兄皇子として大化の改新（645年）を主導。668年正式即位。近江大津宮に遷都。庚午年籍（最初の全国戸籍）制定。漏刻（水時計）を設置。百人一首「秋の田の〜」の作者。',achievements:['大化の改新の主導（645年）','庚午年籍（最初の全国戸籍）','近江大津宮への遷都'],keizoku:'舒明天皇の皇子。壬申の乱で弟の天武天皇に皇統が移る。'},
+  {num:40,name:'天武天皇',read:'てんむてんのう',reign:'673〜686',era:'飛鳥',portrait:'⚡',desc:'壬申の乱（672年）で大友皇子を破り即位。「天皇」号と「日本」国号を確立。古事記・日本書紀の編纂を命令。皇親政治を実施し皇権を絶対化。',achievements:['「天皇」号・「日本」国号の確立','古事記・日本書紀の編纂命令','壬申の乱で皇権強化','律令制度の整備を推進'],keizoku:'舒明天皇の皇子。天智天皇の弟。天武〜持統の系譜で皇権が絶対化。'},
+  {num:43,name:'元明天皇',read:'げんめいてんのう',reign:'707〜715',era:'奈良',portrait:'👸',desc:'平城京遷都（710年）を実施。和同開珎（日本最古の公式貨幣）の鋳造。古事記の完成（712年）。',achievements:['平城京遷都（710年）','和同開珎の鋳造','古事記の完成（712年）'],keizoku:'天智天皇の皇女。文武天皇の母。'},
+  {num:45,name:'聖武天皇',read:'しょうむてんのう',reign:'724〜749',era:'奈良',portrait:'🏛️',desc:'奈良仏教文化の頂点。743年に東大寺大仏建立の詔を発布、752年に開眼供養。国分寺・国分尼寺を全国に建立。光明皇后と並ぶ奈良時代の象徴。',achievements:['東大寺大仏建立（743年詔・752年開眼）','国分寺・国分尼寺の設置','正倉院宝物の収蔵'],keizoku:'文武天皇の皇子。光明皇后（藤原不比等の娘）の夫。'},
+  {num:50,name:'桓武天皇',read:'かんむてんのう',reign:'781〜806',era:'平安',portrait:'🏯',desc:'長岡京（784年）・平安京（794年）への二度の遷都。坂上田村麻呂を征夷大将軍に任命し蝦夷を制圧。平安時代の開幕を告げた天皇。',achievements:['平安京遷都（794年）','坂上田村麻呂を征夷大将軍に','蝦夷平定'],keizoku:'光仁天皇の皇子。平安時代の開祖。'},
+  {num:60,name:'醍醐天皇',read:'だいごてんのう',reign:'897〜930',era:'平安',portrait:'📜',desc:'延喜の治。摂関を置かない天皇親政。古今和歌集（905年）の編纂勅令。延喜式の制定。菅原道真を大宰府に左遷（901年）。',achievements:['古今和歌集の勅令（905年）','延喜式の制定','延喜の治（天皇親政）'],keizoku:'宇多天皇の皇子。'},
+  {num:82,name:'後鳥羽天皇',read:'ごとばてんのう',reign:'1183〜1198（→院政）',era:'鎌倉',portrait:'⚔️',desc:'新古今和歌集を編纂。1221年の承久の乱で幕府打倒を試みるが失敗し、隠岐島に配流。',achievements:['新古今和歌集の編纂','承久の乱（1221年）で幕府に敗北'],keizoku:'高倉天皇の皇子。承久の乱で隠岐島に流される。'},
+  {num:96,name:'後醍醐天皇',read:'ごだいごてんのう',reign:'1318〜1339',era:'鎌倉末〜室町',portrait:'👑',desc:'鎌倉幕府打倒を二度企て（正中の変・元弘の変）、足利尊氏らの援助で1333年に幕府を滅亡させる。建武の新政で天皇親政を復活させるが、足利尊氏の離反で失敗。吉野に南朝を開く。',achievements:['鎌倉幕府の滅亡（1333年）','建武の新政','南朝（吉野）の開設'],keizoku:'後宇多天皇の皇子。南朝の始祖。'},
+  {num:106,name:'正親町天皇',read:'おおぎまちてんのう',reign:'1557〜1586',era:'戦国',portrait:'👑',desc:'戦国時代の天皇。財政難の中で即位。織田信長・豊臣秀吉の援助を受け朝廷の権威を維持。信長・秀吉の天下統一を勅許。',achievements:['戦国期の朝廷財政再建','信長・秀吉の天下統一を勅許'],keizoku:'後奈良天皇の皇子。'},
+  {num:108,name:'後水尾天皇',read:'ごみずのおてんのう',reign:'1611〜1629',era:'江戸',portrait:'📚',desc:'江戸幕府との緊張関係（紫衣事件1629年）。幕府の干渉に抗議して突然退位。修学院離宮を造営。院政で長く影響力を保持。',achievements:['紫衣事件（幕府との対立）','修学院離宮の造営','文化・歌道の振興'],keizoku:'後陽成天皇の皇子。退位後も50年以上院政を行う。'},
+  {num:122,name:'明治天皇',read:'めいじてんのう',reign:'1867〜1912',era:'明治',portrait:'🎌',desc:'孝明天皇の第二皇子。15歳で即位し明治維新を主導。五箇条の御誓文（1868年）、廃藩置県（1871年）、大日本帝国憲法発布（1889年）、日清・日露戦争を経験。近代日本の礎を築いた天皇。',achievements:['明治維新の主導','五箇条の御誓文（1868年）','廃藩置県（1871年）','大日本帝国憲法発布（1889年）','日清・日露戦争の勝利','教育勅語の発布（1890年）'],keizoku:'孝明天皇の皇子。在位44年。'},
+  {num:123,name:'大正天皇',read:'たいしょうてんのう',reign:'1912〜1926',era:'大正',portrait:'👑',desc:'明治天皇の皇子。大正デモクラシーの時代。第一次世界大戦参加（連合国側）。健康上の問題から1921年に摂政（後の昭和天皇）を置く。',achievements:['第一次世界大戦参加','大正デモクラシーの時代'],keizoku:'明治天皇の皇子。在位14年。'},
+  {num:124,name:'昭和天皇',read:'しょうわてんのう',reign:'1926〜1989',era:'昭和',portrait:'🌸',desc:'在位62年（日本最長）。太平洋戦争・玉音放送（1945年8月15日）で終戦を宣告。戦後は象徴天皇として皇位に留まり高度経済成長期を経験。生物学（ヒドロゾア）研究者としても知られる。',achievements:['玉音放送（1945年）での終戦宣告','象徴天皇制の実践','在位62年（日本最長）'],keizoku:'大正天皇の皇子。在位62年（日本最長）。'},
+  {num:125,name:'上皇明仁',read:'じょうこうあきひと',reign:'1989〜2019',era:'平成',portrait:'🕊️',desc:'昭和天皇の皇子。阪神・淡路大震災、東日本大震災の際に被災地を訪問。ハゼ類の魚類学研究者。2019年に生前退位（憲政史上初）。',achievements:['生前退位（2019年、憲政史上初）','被災地・戦没地への慰霊訪問','ハゼ類の魚類学研究'],keizoku:'昭和天皇の皇子。在位30年。生前退位で上皇に。'},
+  {num:126,name:'今上天皇（徳仁）',read:'きんじょうてんのう・なるひと',reign:'2019年〜現在',era:'令和',portrait:'⛩️',desc:'上皇明仁の長男。水問題・水資源の研究者（オックスフォード大学）。令和へ改元。コロナ禍・東京五輪・能登地震を経験。',achievements:['水資源・水問題の研究','令和へ改元（2019年）','コロナ禍・能登地震での慰霊'],keizoku:'上皇明仁の長男。第126代天皇。現在の今上天皇。'}
+];
+
+const extraData={
+  himiko:{num:'？',name:'卑弥呼（女王）',read:'ひみこ',reign:'2〜3世紀',era:'弥生',portrait:'🔮',desc:'邪馬台国の女王。魏志倭人伝（239年）に「親魏倭王」として記録。シャーマン的な女王で鬼道（呪術）を用い国をまとめた。邪馬台国の所在（畿内説・北九州説）は現在も論争中。',achievements:['魏志倭人伝に記録された最初の「日本の支配者」','「親魏倭王」の称号を魏から授かる'],keizoku:'天皇家との系譜的つながりは不明。'},
+  daigo:{num:'60代',name:'醍醐天皇',read:'だいごてんのう',reign:'897〜930',era:'平安',portrait:'📜',desc:'延喜の治。古今和歌集の勅令（905年）。摂関を置かない天皇親政。',achievements:['古今和歌集（905年）','延喜式の制定'],keizoku:'宇多天皇の皇子。'},
+  gotoba:{num:'82代',name:'後鳥羽天皇',read:'ごとばてんのう',reign:'1183〜1221',era:'鎌倉',portrait:'⚔️',desc:'新古今和歌集を編纂。承久の乱（1221年）で幕府に敗北し隠岐へ配流。',achievements:['新古今和歌集の編纂','承久の乱で幕府に敗北'],keizoku:'高倉天皇の皇子。'},
+  komei:{num:'119〜121代',name:'光格〜孝明天皇',read:'こうかく〜こうめいてんのう',reign:'1779〜1867',era:'江戸後期',portrait:'👑',desc:'光格天皇は天皇権威の回復に努めた（尊号事件）。孝明天皇は開国に強く反対し尊王攘夷運動の精神的支柱となった。明治天皇の父。',achievements:['光格天皇：天皇権威の回復','孝明天皇：攘夷運動の精神的支柱'],keizoku:'孝明天皇崩御後に明治天皇が即位し明治維新へ。'}
+};
+
+function openModal(e){
+  document.getElementById('mNum').textContent='第'+e.num+'代';
+  document.getElementById('mName').textContent=e.name;
+  document.getElementById('mRead').textContent=e.read;
+  document.getElementById('mPortrait').textContent=e.portrait;
+  document.getElementById('mReign').innerHTML='<span>在位</span> '+e.reign+' <span>時代</span> '+e.era;
+  document.getElementById('mDesc').textContent=e.desc;
+  const ul=document.getElementById('mAchievements');
+  ul.innerHTML='';
+  e.achievements.forEach(a=>{const li=document.createElement('li');li.textContent=a;ul.appendChild(li);});
+  document.getElementById('mKeizoku').textContent=e.keizoku;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+document.getElementById('modalClose').addEventListener('click',()=>document.getElementById('modalOverlay').classList.remove('open'));
+document.getElementById('modalOverlay').addEventListener('click',function(ev){if(ev.target===this)this.classList.remove('open');});
+
+// 天皇カード生成
+const grid=document.getElementById('emperorGrid');
+emperors.forEach(e=>{
+  const c=document.createElement('div');c.className='emperor-card';
+  c.innerHTML=`<div class="ec-num">第${e.num}代</div><div class="ec-name">${e.name}</div><div class="ec-name-read">${e.read}</div><div class="ec-reign">${e.reign}</div><div class="ec-note">${e.desc.slice(0,38)}…</div>`;
+  c.addEventListener('click',()=>openModal(e));grid.appendChild(c);
+});
+
+// 系譜チャート
+const groups=[{id:'lineage1',r:[1,37]},{id:'lineage2',r:[38,49]},{id:'lineage3',r:[50,84]},{id:'lineage4',r:[85,102]},{id:'lineage5',r:[103,119]},{id:'lineage6',r:[120,126]}];
+groups.forEach(g=>{
+  const el=document.getElementById(g.id);if(!el)return;
+  for(let i=g.r[0];i<=g.r[1];i++){
+    const det=emperors.find(x=>x.num===i);
+    const n=document.createElement('div');n.className='lnode';
+    if(i===126)n.style.cssText='border-color:var(--gold);background:rgba(201,168,76,.14)';
+    n.innerHTML=`<span class="ln-num">${i}</span> <span class="ln-name">${det?det.name:'第'+i+'代'}</span>`;
+    if(det){n.addEventListener('click',()=>openModal(det));n.title=det.name+'（クリックで詳細）';}
+    el.appendChild(n);
+  }
+});
+
+// サイドバー天皇クリック
+document.querySelectorAll('.ss-emperor[data-emperor]').forEach(el=>{
+  el.addEventListener('click',function(e){
+    e.stopPropagation();
+    const key=this.dataset.emperor;
+    const det=emperors.find(x=>x.num===({nintoku:16,suiko:33,shomu:45,daigo:60,gotoba:82,godaigo:96,ogimachi:106,meiji:122,akihito:125}[key]||0));
+    if(det){openModal(det);}
+    else if(extraData[key]){openModal(extraData[key]);}
+  });
+});
+
+// サイドバーセクションクリック→スクロール
+document.querySelectorAll('.sidebar-section').forEach(el=>{
+  el.addEventListener('click',function(ev){
+    if(ev.target.closest('[data-emperor]'))return;
+    const t=document.getElementById(this.dataset.target);
+    if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+
+// スクロール連動でサイドバーをアクティブ化
+const sections=document.querySelectorAll('.era-section');
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const id=entry.target.id;
+      document.querySelectorAll('.sidebar-section').forEach(s=>{
+        s.classList.toggle('active',s.dataset.target===id);
+      });
+    }
+  });
+},{rootMargin:'-30% 0px -60% 0px'});
+sections.forEach(s=>observer.observe(s));
+
+// 検索
+document.getElementById('searchInput').addEventListener('input',function(){
+  const q=this.value.trim().toLowerCase();
+  document.querySelectorAll('.entry').forEach(el=>{
+    el.classList.toggle('hidden',q&&!el.textContent.toLowerCase().includes(q));
+  });
+});
+</script>
+</body>
+</html>
