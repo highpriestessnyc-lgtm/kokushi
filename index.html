@@ -282,6 +282,48 @@ body{background:var(--black);color:var(--pale);font-family:'Noto Sans JP',sans-s
   .tri-date-col { border-right:none; border-bottom:1px solid rgba(201,168,76,.15); }
   .koto-cols { grid-template-columns: 1fr; }
 }
+
+/* ===== 神社リンク ===== */
+.modal-shrines {
+  margin-top: 1rem;
+  border-top: 1px solid rgba(201,168,76,.2);
+  padding-top: .8rem;
+}
+.modal-shrines-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: .72rem; color: var(--gold);
+  letter-spacing: .15em; margin-bottom: .5rem;
+}
+.shrine-item {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .35rem 0;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+}
+.shrine-item:last-child { border-bottom: none; }
+.shrine-rank {
+  font-size: .58rem; color: var(--muted);
+  min-width: 2rem; text-align: center;
+}
+.shrine-name {
+  font-family: 'Noto Serif JP', serif;
+  font-size: .78rem; color: var(--pale); flex: 1;
+}
+.shrine-loc {
+  font-size: .62rem; color: var(--muted); min-width: 60px;
+}
+.shrine-map-btn {
+  display: inline-block;
+  font-size: .6rem; padding: .15rem .5rem;
+  border: 1px solid rgba(201,168,76,.4);
+  color: var(--gold); text-decoration: none;
+  border-radius: 2px; white-space: nowrap;
+  transition: background .2s;
+}
+.shrine-map-btn:hover { background: rgba(201,168,76,.15); }
+.shrine-note {
+  font-size: .62rem; color: #7a7060;
+  padding: .2rem 0 0 2.6rem;
+}
 </style>
 </head>
 <body>
@@ -615,7 +657,7 @@ body{background:var(--black);color:var(--pale);font-family:'Noto Sans JP',sans-s
 <section class="tri-section" id="shumeru">
   <div class="tri-header" style="border-color:#6a5a3a;">
     <span class="era-num">０ʼ</span>
-    <span class="era-title" style="color:#d4a840;">シュメール文明・失われた12部族・日本起源論</span>
+    <span class="era-title" style="color:#d4a840;">シュメール文明・失われた10支族・日本起源論</span>
     <span class="era-span">BC4000年 〜 AD400年</span>
   </div>
 
@@ -658,7 +700,7 @@ body{background:var(--black);color:var(--pale);font-family:'Noto Sans JP',sans-s
   </div>
 
   <div class="tri-entry">
-    <div class="tri-date-col">BC722年<br>イスラエル12部族</div>
+    <div class="tri-date-col">BC722年<br>イスラエル10支族</div>
     <div class="tri-col tc-tsuu"><div class="tri-col-title">アッシリアに征服され10部族が消える</div>北イスラエル王国がアッシリアに滅ぼされ、10支族が歴史から消える（「失われた10支族」）。以後の行方は不明。</div>
     <div class="tri-col tc-ises"><div class="tri-col-title">一部がシルクロードを経て東アジアへ</div>失われた10支族がアフガニスタン・インド・中央アジアへ移動した痕跡が研究者によって指摘されている。インドの「ブネイ・イスラエル」、アフガンの「パシュトゥーン人」に10支族の子孫という説がある。</div>
     <div class="tri-col tc-roman"><div class="tri-col-title">秦氏として日本に「帰還」したかもしれない</div>3〜4世紀に日本に帰化した「秦氏（はたうじ）」。その名前（ハタ）がヘブライ語の「ハッタ（罪・贖罪）」と響き合う。秦氏が建てた「太秦（うずまさ）」＝ヘブライ語「ウズ・マサ（偉大な王）」説もある。失われた部族の一部が数千年をかけて「約束の地ジパング」へ戻ったロマンがある。</div>
@@ -1052,6 +1094,10 @@ body{background:var(--black);color:var(--pale);font-family:'Noto Sans JP',sans-s
     <div class="modal-desc" id="mDesc"></div>
     <ul class="modal-achievements" id="mAchievements"></ul>
     <div class="modal-keizoku" id="mKeizoku"></div>
+    <div class="modal-shrines" id="mShrines" style="display:none;">
+      <div class="modal-shrines-title">⛩️ 祀っている主な神社</div>
+      <div id="mShrineList"></div>
+    </div>
   </div>
 </div>
 <script>
@@ -1079,25 +1125,13 @@ const emperors=[
 ];
 
 const extraData={
-  himiko:{num:'？',name:'卑弥呼（女王）',read:'ひみこ',reign:'2〜3世紀',era:'弥生',portrait:'🔮',desc:'邪馬台国の女王。魏志倭人伝（239年）に「親魏倭王」として記録。シャーマン的な女王で鬼道（呪術）を用い国をまとめた。邪馬台国の所在（畿内説・北九州説）は現在も論争中。',achievements:['魏志倭人伝に記録された最初の「日本の支配者」','「親魏倭王」の称号を魏から授かる'],keizoku:'天皇家との系譜的つながりは不明。'},
+  himiko:{shrineKey:'himiko',num:'？',name:'卑弥呼（女王）',read:'ひみこ',reign:'2〜3世紀',era:'弥生',portrait:'🔮',desc:'邪馬台国の女王。魏志倭人伝（239年）に「親魏倭王」として記録。シャーマン的な女王で鬼道（呪術）を用い国をまとめた。邪馬台国の所在（畿内説・北九州説）は現在も論争中。',achievements:['魏志倭人伝に記録された最初の「日本の支配者」','「親魏倭王」の称号を魏から授かる'],keizoku:'天皇家との系譜的つながりは不明。'},
   daigo:{num:'60代',name:'醍醐天皇',read:'だいごてんのう',reign:'897〜930',era:'平安',portrait:'📜',desc:'延喜の治。古今和歌集の勅令（905年）。摂関を置かない天皇親政。',achievements:['古今和歌集（905年）','延喜式の制定'],keizoku:'宇多天皇の皇子。'},
   gotoba:{num:'82代',name:'後鳥羽天皇',read:'ごとばてんのう',reign:'1183〜1221',era:'鎌倉',portrait:'⚔️',desc:'新古今和歌集を編纂。承久の乱（1221年）で幕府に敗北し隠岐へ配流。',achievements:['新古今和歌集の編纂','承久の乱で幕府に敗北'],keizoku:'高倉天皇の皇子。'},
   komei:{num:'119〜121代',name:'光格〜孝明天皇',read:'こうかく〜こうめいてんのう',reign:'1779〜1867',era:'江戸後期',portrait:'👑',desc:'光格天皇は天皇権威の回復に努めた（尊号事件）。孝明天皇は開国に強く反対し尊王攘夷運動の精神的支柱となった。明治天皇の父。',achievements:['光格天皇：天皇権威の回復','孝明天皇：攘夷運動の精神的支柱'],keizoku:'孝明天皇崩御後に明治天皇が即位し明治維新へ。'}
 };
 
-function openModal(e){
-  document.getElementById('mNum').textContent='第'+e.num+'代';
-  document.getElementById('mName').textContent=e.name;
-  document.getElementById('mRead').textContent=e.read;
-  document.getElementById('mPortrait').textContent=e.portrait;
-  document.getElementById('mReign').innerHTML='<span>在位</span> '+e.reign+' <span>時代</span> '+e.era;
-  document.getElementById('mDesc').textContent=e.desc;
-  const ul=document.getElementById('mAchievements');
-  ul.innerHTML='';
-  e.achievements.forEach(a=>{const li=document.createElement('li');li.textContent=a;ul.appendChild(li);});
-  document.getElementById('mKeizoku').textContent=e.keizoku;
-  document.getElementById('modalOverlay').classList.add('open');
-}
+// openModal replaced below
 document.getElementById('modalClose').addEventListener('click',()=>document.getElementById('modalOverlay').classList.remove('open'));
 document.getElementById('modalOverlay').addEventListener('click',function(ev){if(ev.target===this)this.classList.remove('open');});
 
@@ -1164,6 +1198,155 @@ document.getElementById('searchInput').addEventListener('input',function(){
     el.classList.toggle('hidden',q&&!el.textContent.toLowerCase().includes(q));
   });
 });
+
+// ===== 神社データベース =====
+const shrineDB = {
+  // 神代の神々
+  'amaterasu': [
+    { name:'伊勢神宮（内宮・皇大神宮）', loc:'三重県伊勢市', note:'日本最高の神社。天照大御神を祀る総本社', map:'https://maps.google.com/?q=伊勢神宮内宮' },
+    { name:'熱田神宮', loc:'愛知県名古屋市', note:'草薙剣（三種の神器）を奉安', map:'https://maps.google.com/?q=熱田神宮' },
+    { name:'皇大神社（元伊勢）', loc:'京都府福知山市', note:'伊勢遷座前の旧鎮座地', map:'https://maps.google.com/?q=元伊勢皇大神社' },
+    { name:'伊勢神宮（外宮・豊受大神宮）', loc:'三重県伊勢市', note:'内宮と対をなす外宮', map:'https://maps.google.com/?q=伊勢神宮外宮' },
+  ],
+  'izanagi': [
+    { name:'多賀大社', loc:'滋賀県多賀町', note:'イザナギ・イザナミを主祭神とする総本社', map:'https://maps.google.com/?q=多賀大社' },
+    { name:'淡路島・伊弉諾神宮', loc:'兵庫県淡路市', note:'国産みの島・淡路島に鎮座。最古の神宮', map:'https://maps.google.com/?q=伊弉諾神宮' },
+    { name:'花窟神社', loc:'三重県熊野市', note:'イザナミを祀る日本最古の神社の一つ', map:'https://maps.google.com/?q=花窟神社' },
+  ],
+  'susanoo': [
+    { name:'出雲大社', loc:'島根県出雲市', note:'スサノオの子孫・大国主命を主祭神とする総本社', map:'https://maps.google.com/?q=出雲大社' },
+    { name:'八坂神社（祇園）', loc:'京都府京都市', note:'スサノオを主祭神。祇園祭の総本社', map:'https://maps.google.com/?q=八坂神社京都' },
+    { name:'須賀神社', loc:'島根県雲南市', note:'スサノオが「我が心清々し」と詠んだ地', map:'https://maps.google.com/?q=須賀神社島根' },
+    { name:'津島神社', loc:'愛知県津島市', note:'スサノオを祀る全国3000社の総本社', map:'https://maps.google.com/?q=津島神社' },
+  ],
+  'okuninushi': [
+    { name:'出雲大社', loc:'島根県出雲市', note:'大国主命の総本社。縁結びの神。高さ48mの本殿', map:'https://maps.google.com/?q=出雲大社' },
+    { name:'大神神社（三輪明神）', loc:'奈良県桜井市', note:'日本最古の神社の一つ。三輪山そのものが御神体', map:'https://maps.google.com/?q=大神神社奈良' },
+    { name:'大国魂神社', loc:'東京都府中市', note:'武蔵国の総社', map:'https://maps.google.com/?q=大国魂神社' },
+    { name:'富士山本宮浅間大社', loc:'静岡県富士宮市', note:'大国主の子・木花咲耶姫を祀る', map:'https://maps.google.com/?q=富士山本宮浅間大社' },
+  ],
+  'ninigi': [
+    { name:'霧島神宮', loc:'鹿児島県霧島市', note:'天孫降臨の地・高千穂峰に鎮座。瓊瓊杵尊を主祭神', map:'https://maps.google.com/?q=霧島神宮' },
+    { name:'高千穂神社', loc:'宮崎県高千穂町', note:'天孫降臨・天岩戸伝説の地', map:'https://maps.google.com/?q=高千穂神社' },
+    { name:'天岩戸神社', loc:'宮崎県高千穂町', note:'天岩戸の遺跡を御神体とする', map:'https://maps.google.com/?q=天岩戸神社' },
+  ],
+  'tsukuyomi': [
+    { name:'月読神社', loc:'京都府松尾大社内', note:'月読命を主祭神。伊勢神宮と同じ神格', map:'https://maps.google.com/?q=月読神社京都' },
+    { name:'月夜見宮', loc:'三重県伊勢市', note:'伊勢神宮・外宮の別宮。月読命を祀る', map:'https://maps.google.com/?q=月夜見宮伊勢' },
+    { name:'月読宮', loc:'三重県伊勢市', note:'伊勢神宮・内宮の別宮', map:'https://maps.google.com/?q=月読宮伊勢' },
+  ],
+  // 歴代天皇
+  '1': [  // 神武天皇
+    { name:'橿原神宮', loc:'奈良県橿原市', note:'神武天皇と媛蹈鞴五十鈴媛命を主祭神。即位の地', map:'https://maps.google.com/?q=橿原神宮' },
+    { name:'宮崎神宮', loc:'宮崎県宮崎市', note:'神武天皇を主祭神。神武東征出発の地', map:'https://maps.google.com/?q=宮崎神宮' },
+    { name:'上賀茂神社', loc:'京都府京都市', note:'神武天皇に仕えた賀茂氏の総社', map:'https://maps.google.com/?q=上賀茂神社' },
+  ],
+  '10': [ // 崇神天皇
+    { name:'大神神社（三輪明神）', loc:'奈良県桜井市', note:'崇神天皇が三輪山の神を祀った日本最古級の神社', map:'https://maps.google.com/?q=大神神社奈良' },
+    { name:'崇神天皇陵（山辺道勾岡上陵）', loc:'奈良県天理市', note:'崇神天皇の陵墓', map:'https://maps.google.com/?q=崇神天皇陵' },
+  ],
+  '16': [ // 仁徳天皇
+    { name:'仁徳天皇陵古墳（大仙陵古墳）', loc:'大阪府堺市', note:'世界最大の墳墓（全長486m）。世界遺産', map:'https://maps.google.com/?q=仁徳天皇陵古墳' },
+    { name:'難波大社（大阪天満宮）', loc:'大阪府大阪市', note:'仁徳天皇ゆかりの難波の地', map:'https://maps.google.com/?q=大阪天満宮' },
+  ],
+  '33': [ // 推古天皇
+    { name:'法隆寺', loc:'奈良県斑鳩町', note:'聖徳太子・推古天皇が建立。世界最古の木造建築群', map:'https://maps.google.com/?q=法隆寺' },
+    { name:'豊浦寺跡（向原寺）', loc:'奈良県明日香村', note:'推古天皇が即位した豊浦宮の跡地', map:'https://maps.google.com/?q=向原寺奈良' },
+  ],
+  '40': [ // 天武天皇
+    { name:'吉野神宮', loc:'奈良県吉野町', note:'後醍醐天皇を祀るが天武天皇ゆかりの地', map:'https://maps.google.com/?q=吉野神宮' },
+    { name:'天武・持統天皇陵（野口王墓古墳）', loc:'奈良県明日香村', note:'天武天皇と持統天皇が合葬された陵墓', map:'https://maps.google.com/?q=天武持統天皇陵' },
+  ],
+  '45': [ // 聖武天皇
+    { name:'東大寺', loc:'奈良県奈良市', note:'聖武天皇が建立。盧舎那仏（大仏）を安置', map:'https://maps.google.com/?q=東大寺' },
+    { name:'唐招提寺', loc:'奈良県奈良市', note:'聖武天皇が鑑真のために建立を援助', map:'https://maps.google.com/?q=唐招提寺' },
+  ],
+  '50': [ // 桓武天皇
+    { name:'平安神宮', loc:'京都府京都市', note:'桓武天皇と孝明天皇を祀る。平安遷都1100年記念に創建', map:'https://maps.google.com/?q=平安神宮' },
+    { name:'延暦寺', loc:'滋賀県大津市', note:'桓武天皇が最澄に命じて建立', map:'https://maps.google.com/?q=延暦寺' },
+  ],
+  '96': [ // 後醍醐天皇
+    { name:'吉野神宮', loc:'奈良県吉野町', note:'後醍醐天皇を主祭神。南朝の都・吉野に鎮座', map:'https://maps.google.com/?q=吉野神宮' },
+    { name:'如意輪寺', loc:'奈良県吉野町', note:'後醍醐天皇の勅願寺。御陵がある', map:'https://maps.google.com/?q=如意輪寺吉野' },
+  ],
+  '122': [ // 明治天皇
+    { name:'明治神宮', loc:'東京都渋谷区', note:'明治天皇と昭憲皇太后を主祭神。初詣参拝者数日本一', map:'https://maps.google.com/?q=明治神宮' },
+    { name:'伏見桃山陵', loc:'京都府伏見区', note:'明治天皇の陵墓', map:'https://maps.google.com/?q=伏見桃山陵' },
+  ],
+  '124': [ // 昭和天皇
+    { name:'武蔵野陵', loc:'東京都八王子市', note:'昭和天皇の陵墓', map:'https://maps.google.com/?q=武蔵野陵' },
+    { name:'靖国神社', loc:'東京都千代田区', note:'昭和天皇時代の戦没者246万6千余柱を祀る', map:'https://maps.google.com/?q=靖国神社' },
+  ],
+  // 特別人物
+  'himiko': [
+    { name:'箸墓古墳（倭迹迹日百襲姫命大市墓）', loc:'奈良県桜井市', note:'卑弥呼の墓と有力視される前方後円墳', map:'https://maps.google.com/?q=箸墓古墳' },
+    { name:'纒向遺跡', loc:'奈良県桜井市', note:'邪馬台国有力候補地。3世紀の大規模遺跡', map:'https://maps.google.com/?q=纒向遺跡' },
+  ],
+};
+
+// openModal関数に神社表示を追加（上書き）
+function openModal(e) {
+  document.getElementById('mNum').textContent = '第'+e.num+'代';
+  document.getElementById('mName').textContent = e.name;
+  document.getElementById('mRead').textContent = e.read;
+  document.getElementById('mPortrait').textContent = e.portrait;
+  document.getElementById('mReign').innerHTML = '<span>在位</span> '+e.reign+' <span>時代</span> '+e.era;
+  document.getElementById('mDesc').textContent = e.desc;
+  const ul = document.getElementById('mAchievements');
+  ul.innerHTML = '';
+  e.achievements.forEach(a => { const li=document.createElement('li'); li.textContent=a; ul.appendChild(li); });
+  document.getElementById('mKeizoku').textContent = e.keizoku;
+
+  // 神社データ表示
+  const shrineSection = document.getElementById('mShrines');
+  const shrineList = document.getElementById('mShrineList');
+  const key = e.shrineKey || String(e.num);
+  const shrines = shrineDB[key] || shrineDB[String(e.num)];
+  if (shrines && shrines.length > 0) {
+    shrineList.innerHTML = '';
+    shrines.forEach((s, i) => {
+      shrineList.innerHTML += `
+        <div class="shrine-item">
+          <div class="shrine-rank">⛩️</div>
+          <div>
+            <div class="shrine-name">${s.name}</div>
+            <div class="shrine-loc">📍 ${s.loc}</div>
+          </div>
+          <a class="shrine-map-btn" href="${s.map}" target="_blank" rel="noopener">🗺 地図</a>
+        </div>
+        <div class="shrine-note">${s.note}</div>
+      `;
+    });
+    shrineSection.style.display = 'block';
+  } else {
+    shrineSection.style.display = 'none';
+  }
+
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+
+// 神代ノードにクリックイベントを追加
+document.querySelectorAll('.st-node').forEach(node => {
+  const name = node.textContent.trim();
+  const shintaiData = {
+    '天照大御神': { num:'神', name:'天照大御神', read:'あまてらすおおみかみ', reign:'神代', era:'高天原', portrait:'☀️', shrineKey:'amaterasu', desc:'高天原を治める太陽の女神。イザナギの左目から生まれた。天岩戸に隠れ世界を暗闇にしたが、神々の踊りで引き出された。三種の神器（八咺鏡・草薙剣・八尺瓊勾玉）の起源。天皇家の祖神。', achievements:['高天原の統治者','三種の神器の起源','天皇家の祖神（皇祖神）','天岩戸事件'], keizoku:'天照大御神の子孫が天皇家。現在まで続く皇統の源流。'},
+    '☀️ 天照大御神': { num:'神', name:'天照大御神', read:'あまてらすおおみかみ', reign:'神代', era:'高天原', portrait:'☀️', shrineKey:'amaterasu', desc:'高天原を治める太陽の女神。三種の神器の起源。天皇家の祖神。', achievements:['高天原の統治者','天皇家の祖神'], keizoku:'現在まで続く皇統の源流。'},
+    '🌙 月読命': { num:'神', name:'月読命', read:'つくよみのみこと', reign:'神代', era:'高天原', portrait:'🌙', shrineKey:'tsukuyomi', desc:'夜と月を治める神。イザナギの右目から生まれた。食物神・保食神を殺したため天照大御神と仲違いし、昼と夜が分かれたとされる。謎の多い神。', achievements:['夜・月の統治者','昼夜分離の起源'], keizoku:'謎の多い神。月読神社・月夜見宮に祀られる。'},
+    '🌊 スサノオ': { num:'神', name:'スサノオノミコト', read:'すさのおのみこと', reign:'神代', era:'出雲', portrait:'🌊', shrineKey:'susanoo', desc:'海原を治める荒ぶる神。高天原で暴れ追放された後、出雲でヤマタノオロチを退治し草薙剣を得る。大国主命の先祖。', achievements:['ヤマタノオロチ退治','草薙剣の発見','出雲神話の中心神'], keizoku:'大国主命の先祖。出雲系神話の起点。'},
+    'イザナギノミコト': { num:'神', name:'イザナギノミコト', read:'いざなぎのみこと', reign:'神代', era:'神代', portrait:'⚡', shrineKey:'izanagi', desc:'天地の間に生まれた神の一柱。イザナミとともに日本列島・諸神を生む「国産み・神産み」を行う。黄泉の国でイザナミと別れ、禊ぎから三貴子（天照・月読・スサノオ）を生んだ。', achievements:['国産み（日本列島の生成）','神産み','三貴子の誕生'], keizoku:'日本神話最重要の創造神の一人。'},
+    'イザナミノミコト': { num:'神', name:'イザナミノミコト', read:'いざなみのみこと', reign:'神代', era:'神代', portrait:'🌸', shrineKey:'izanagi', desc:'イザナギとともに国産みを行う。火の神・カグツチを産んだ際に亡くなり黄泉の国へ。イザナギが迎えに来るが腐敗した姿を見られ怒り「日に千人殺す」と誓う。', achievements:['国産み（日本列島の生成）','黄泉の国の主'], keizoku:'生と死の概念の起源とされる神。'},
+    '大国主命（オオクニヌシ）': { num:'神', name:'大国主命', read:'おおくにぬしのみこと', reign:'神代', era:'出雲', portrait:'🌿', shrineKey:'okuninushi', desc:'スサノオの子孫。出雲を中心に国土を発展させた「国造り」の神。天孫降臨前に高天原の神々に国を譲る「国譲り」をした。縁結び・医療・農業・商業の神。', achievements:['国造り（葦原中国の発展）','国譲り','縁結びの神','医療・農業・商業の神'], keizoku:'出雲大社に鎮座。縄文系先住神の象徴とも言われる。'},
+    '瓊瓊杵尊（ニニギノミコト）': { num:'神', name:'瓊瓊杵尊', read:'ににぎのみこと', reign:'神代', era:'高千穂', portrait:'⭐', shrineKey:'ninigi', desc:'天照大御神の孫。三種の神器を携えて高千穂（宮崎・鹿児島）に天孫降臨した神。木花咲耶姫と結婚。神武天皇の曾祖父。', achievements:['天孫降臨（高千穂）','三種の神器の地上への持来','神武天皇の曾祖父'], keizoku:'神武天皇の曾祖父。天照大御神の血脈を地上に伝えた。'},
+  };
+  const data = shintaiData[name];
+  if (data) {
+    node.style.cursor = 'pointer';
+    node.title = name + '（クリックで詳細）';
+    node.addEventListener('click', () => openModal(data));
+  }
+});
+
 </script>
 </body>
 </html>
