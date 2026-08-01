@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>五行神社巡礼 — GOKO SHRINE QUEST</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8;
+  --ink: #1a1410;
+  --muted: #6a5a4a;
+  --card: #fffdf8;
+  --border: #d4c8b0;
+
+  --water: #3a7ab8;   --water-pale: #ddeeff; --water-deep: #1a4a78;
+  --fire:  #c84820;   --fire-pale:  #ffeedd; --fire-deep:  #882200;
+  --wood:  #4a8a30;   --wood-pale:  #ddf0d0; --wood-deep:  #2a5a18;
+  --earth: #b87820;   --earth-pale: #fff0cc; --earth-deep: #7a5010;
+  --metal: #8060c0;   --metal-pale: #eeddf8; --metal-deep: #4a3080;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+}
+
+/* ===== HERO ===== */
+.hero {
+  background: linear-gradient(135deg, #0a1420 0%, #1a2840 50%, #0a1820 100%);
+  color: white;
+  text-align: center;
+  padding: 3rem 1.5rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '⛩';
+  font-size: 18rem;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  opacity: .04;
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block;
+  font-size: .65rem;
+  letter-spacing: .35em;
+  color: #c9a84c;
+  border: 1px solid #c9a84c;
+  padding: .25rem 1rem;
+  margin-bottom: 1.2rem;
+}
+.hero h1 {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(1.8rem, 6vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: .5rem;
+}
+.hero h1 em { color: #c9a84c; font-style: normal; }
+.hero-sub {
+  font-size: .88rem;
+  color: #a0b8c8;
+  letter-spacing: .15em;
+  margin-bottom: 2rem;
+}
+
+/* ===== ATTR TABS ===== */
+.attr-tabs {
+  display: flex;
+  justify-content: center;
+  gap: .4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.attr-tab {
+  padding: .45rem 1.1rem;
+  border: 1px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.7);
+  font-size: .8rem;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all .2s;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.attr-tab:hover { background: rgba(255,255,255,.12); color: white; }
+.attr-tab.active { color: white; border-color: currentColor; }
+.attr-tab[data-attr="water"].active  { background: rgba(58,122,184,.35); border-color: #5a9ad4; color: #9acfff; }
+.attr-tab[data-attr="fire"].active   { background: rgba(200,72,32,.35);  border-color: #e87050; color: #ffb090; }
+.attr-tab[data-attr="wood"].active   { background: rgba(74,138,48,.35);  border-color: #70b850; color: #a0e080; }
+.attr-tab[data-attr="earth"].active  { background: rgba(184,120,32,.35); border-color: #d8a040; color: #ffd080; }
+.attr-tab[data-attr="metal"].active  { background: rgba(128,96,192,.35); border-color: #a888e8; color: #d0b8ff; }
+
+/* ===== MAIN LAYOUT ===== */
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.2rem;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* ===== LEFT PANEL ===== */
+.left-panel { display: flex; flex-direction: column; gap: 1rem; }
+
+/* 五行診断フォーム */
+.diagnosis-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 1.2rem;
+}
+.card-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: .88rem;
+  color: var(--ink);
+  letter-spacing: .1em;
+  margin-bottom: 1rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+.card-title span { color: #c9a84c; margin-right: .4rem; }
+
+.form-row {
+  margin-bottom: .8rem;
+}
+.form-label {
+  display: block;
+  font-size: .7rem;
+  color: var(--muted);
+  letter-spacing: .1em;
+  margin-bottom: .3rem;
+}
+.form-input {
+  width: 100%;
+  padding: .5rem .7rem;
+  border: 1px solid var(--border);
+  background: white;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: .82rem;
+  color: var(--ink);
+  outline: none;
+  transition: border-color .2s;
+}
+.form-input:focus { border-color: #c9a84c; }
+.form-row-2col { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+
+.btn-diagnose {
+  width: 100%;
+  padding: .7rem;
+  background: #1a2840;
+  color: #c9a84c;
+  border: 1px solid #c9a84c;
+  font-family: 'Noto Serif JP', serif;
+  font-size: .85rem;
+  letter-spacing: .2em;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-diagnose:hover { background: #c9a84c; color: #1a2840; }
+
+/* 診断結果 */
+.result-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 1.2rem;
+  display: none;
+}
+.result-card.show { display: block; }
+
+.result-name {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: .3rem;
+}
+.result-sub { font-size: .7rem; color: var(--muted); margin-bottom: 1rem; }
+
+/* 五行バーチャート */
+.gogyou-bars { display: flex; flex-direction: column; gap: .4rem; margin-bottom: .8rem; }
+.gogyou-row { display: flex; align-items: center; gap: .6rem; }
+.gogyou-label { font-size: .72rem; min-width: 40px; color: var(--muted); }
+.gogyou-bar-wrap { flex: 1; height: 12px; background: #e8e0d0; border-radius: 2px; overflow: hidden; }
+.gogyou-bar { height: 100%; border-radius: 2px; transition: width 1s ease; }
+.gogyou-pct { font-size: .65rem; color: var(--muted); min-width: 30px; text-align: right; }
+
+/* 主属性バッジ */
+.main-attr-badge {
+  display: flex; align-items: center; gap: .8rem;
+  padding: .8rem;
+  border: 1px solid;
+  margin-bottom: .6rem;
+}
+.main-attr-icon { font-size: 1.8rem; }
+.main-attr-info { flex: 1; }
+.main-attr-name { font-family: 'Noto Serif JP', serif; font-size: 1rem; font-weight: 700; }
+.main-attr-desc { font-size: .68rem; color: var(--muted); line-height: 1.6; margin-top: .15rem; }
+.weak-attr { font-size: .7rem; color: var(--muted); }
+.weak-attr strong { color: var(--ink); }
+
+/* スタンプコレクション */
+.stamp-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 1.2rem;
+}
+.stamp-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: .4rem;
+  margin-top: .6rem;
+}
+.stamp-item {
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: all .2s;
+  background: white;
+  position: relative;
+}
+.stamp-item.collected {
+  background: #fffdf0;
+  border-color: #c9a84c;
+}
+.stamp-item.collected::after {
+  content: '✓';
+  position: absolute;
+  top: 1px; right: 2px;
+  font-size: .55rem;
+  color: #c9a84c;
+}
+.stamp-item:hover { background: #f5f0e0; }
+.stamp-name { font-size: .45rem; color: var(--muted); margin-top: .1rem; text-align: center; line-height: 1.2; }
+.stamp-count { font-size: .65rem; color: var(--muted); margin-top: .4rem; }
+
+/* ===== RIGHT: MAP AREA ===== */
+.map-area { display: flex; flex-direction: column; gap: 1rem; }
+
+/* 属性見出し */
+.attr-headline {
+  padding: 1rem 1.2rem;
+  border-left: 4px solid;
+  background: var(--card);
+}
+.attr-headline-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: .15rem;
+}
+.attr-headline-desc { font-size: .75rem; color: var(--muted); line-height: 1.7; }
+.attr-headline-kami { font-size: .7rem; margin-top: .4rem; }
+
+/* 日本地図 */
+.japan-map-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: .8rem;
+  position: relative;
+}
+.map-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: .78rem;
+  color: var(--muted);
+  letter-spacing: .15em;
+  margin-bottom: .6rem;
+}
+.japan-map-wrap svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 神社カードグリッド */
+.shrine-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: .7rem;
+}
+.shrine-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: .9rem;
+  transition: border-color .2s, box-shadow .2s;
+  cursor: pointer;
+  position: relative;
+}
+.shrine-card:hover {
+  box-shadow: 0 2px 12px rgba(0,0,0,.1);
+}
+.shrine-card.collected { border-color: #c9a84c; }
+.shrine-card.collected::before {
+  content: '⛩スタンプ取得済み';
+  position: absolute;
+  top: .4rem; right: .4rem;
+  font-size: .55rem;
+  color: #c9a84c;
+  background: #fffdf0;
+  padding: .1rem .4rem;
+  border: 1px solid #c9a84c;
+}
+.shrine-attr-tag {
+  font-size: .58rem;
+  letter-spacing: .1em;
+  padding: .1rem .4rem;
+  border: 1px solid;
+  border-radius: 1px;
+  display: inline-block;
+  margin-bottom: .4rem;
+}
+.shrine-name {
+  font-family: 'Noto Serif JP', serif;
+  font-size: .9rem;
+  font-weight: 700;
+  margin-bottom: .1rem;
+}
+.shrine-read { font-size: .62rem; color: var(--muted); margin-bottom: .3rem; }
+.shrine-loc { font-size: .65rem; color: var(--muted); margin-bottom: .4rem; }
+.shrine-desc { font-size: .68rem; color: #5a5040; line-height: 1.7; margin-bottom: .5rem; }
+.shrine-kami { font-size: .65rem; color: var(--muted); margin-bottom: .5rem; }
+.shrine-kami strong { color: var(--ink); }
+.shrine-btn-row { display: flex; gap: .4rem; }
+.shrine-btn {
+  flex: 1;
+  padding: .3rem;
+  font-size: .65rem;
+  border: 1px solid var(--border);
+  background: white;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  color: var(--ink);
+  transition: background .2s;
+  display: flex; align-items: center; justify-content: center; gap: .2rem;
+}
+.shrine-btn:hover { background: var(--bg); }
+.shrine-btn.stamp-btn { border-color: #c9a84c; color: #8a6820; }
+.shrine-btn.stamp-btn:hover { background: #fffdf0; }
+.shrine-btn.stamp-btn.done { background: #c9a84c; color: white; border-color: #c9a84c; }
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 2rem; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: #1a2840;
+  color: #c9a84c;
+  padding: .7rem 1.5rem;
+  font-family: 'Noto Serif JP', serif;
+  font-size: .82rem;
+  letter-spacing: .1em;
+  border: 1px solid #c9a84c;
+  transition: transform .3s;
+  z-index: 999;
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+@media(max-width: 800px) {
+  .main { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">GOKO SHRINE QUEST</div>
+  <h1>五行<em>神社</em>巡礼</h1>
+  <p class="hero-sub">生年月日から五行属性を診断 — あなたの神社へ</p>
+  <div class="attr-tabs">
+    <button class="attr-tab active" data-attr="all">🗾 全て</button>
+    <button class="attr-tab" data-attr="water">💧 水</button>
+    <button class="attr-tab" data-attr="fire">🔥 火</button>
+    <button class="attr-tab" data-attr="wood">🌱 木</button>
+    <button class="attr-tab" data-attr="earth">🪨 土</button>
+    <button class="attr-tab" data-attr="metal">⚔️ 金</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- LEFT -->
+  <div class="left-panel">
+
+    <!-- 診断フォーム -->
+    <div class="diagnosis-card">
+      <div class="card-title"><span>✦</span>五行属性 診断</div>
+      <div class="form-row">
+        <label class="form-label">生年月日</label>
+        <input class="form-input" type="date" id="birthdate" value="1990-01-01">
+      </div>
+      <div class="form-row-2col">
+        <div>
+          <label class="form-label">出生時刻（任意・四柱推命用）</label>
+          <input class="form-input" type="time" id="birthtime" value="12:00">
+        </div>
+        <div>
+          <label class="form-label">性別</label>
+          <select class="form-input" id="gender">
+            <option value="male">男性</option>
+            <option value="female">女性</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-diagnose" onclick="diagnose()">✦ 五行を診断する</button>
+    </div>
+
+    <!-- 診断結果 -->
+    <div class="result-card" id="resultCard">
+      <div class="card-title"><span>✦</span>あなたの五行バランス</div>
+      <div id="mainAttrBadge" class="main-attr-badge"></div>
+      <div class="gogyou-bars" id="gogyouBars"></div>
+      <div class="weak-attr" id="weakAttr"></div>
+    </div>
+
+    <!-- スタンプコレクション -->
+    <div class="stamp-card">
+      <div class="card-title"><span>⛩</span>スタンプコレクション</div>
+      <div class="stamp-grid" id="stampGrid"></div>
+      <div class="stamp-count" id="stampCount">0 / 25 社参拝済み</div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT -->
+  <div class="map-area">
+
+    <!-- 属性ヘッドライン -->
+    <div class="attr-headline" id="attrHeadline" style="border-color:#c9a84c;">
+      <div class="attr-headline-title">🗾 全国の五行神社</div>
+      <div class="attr-headline-desc">五行（水・火・木・土・金）の属性別に神社を探せます。属性タブで切り替えてください。</div>
+      <div class="attr-headline-kami">✦ 生年月日を入力すると、あなたに合った神社が分かります</div>
+    </div>
+
+    <!-- 日本地図 -->
+    <div class="japan-map-wrap">
+      <div class="map-title">⛩ 属性別 全国神社マップ</div>
+      <svg id="japanMap" viewBox="0 0 700 620" xmlns="http://www.w3.org/2000/svg">
+        <rect width="700" height="620" fill="#daeeff" rx="4"/>
+        <!-- 日本地図 簡略シルエット -->
+        <!-- 北海道 -->
+        <ellipse cx="540" cy="80" rx="80" ry="55" fill="#c8d8a0" stroke="#aab880" stroke-width="1"/>
+        <text x="540" y="84" text-anchor="middle" font-size="11" fill="#506030" font-family="Noto Sans JP">北海道</text>
+        <!-- 東北 -->
+        <ellipse cx="530" cy="195" rx="38" ry="65" fill="#c8d8a0" stroke="#aab880" stroke-width="1"/>
+        <text x="530" y="199" text-anchor="middle" font-size="9" fill="#506030" font-family="Noto Sans JP">東北</text>
+        <!-- 関東 -->
+        <ellipse cx="490" cy="300" rx="42" ry="35" fill="#c8d8a0" stroke="#aab880" stroke-width="1"/>
+        <text x="490" y="304" text-anchor="middle" font-size="10" fill="#506030" font-family="Noto Sans JP">関東</text>
+        <!-- 中部 -->
+        <ellipse cx="420" cy="310" rx="45" ry="32" fill="#c8d8a0" stroke="#aab880" stroke-width="1"/>
+        <text x="420" y="314" text-anchor="middle" font-size="9" fill="#506030" font-family="Noto Sans JP">中部</text>
+        <!-- 近畿 -->
+        <ellipse cx="370" cy="350" rx="38" ry="30" fill="#c8d8a0" stroke="#aab880" stroke-width="1"/>
+        <text x="370" y="354" text-anchor="middle" font-size="9" fill="#506030" font-family="Noto Sans JP">近畿</text>
+        <!-- 中国 -->
+        <ellipse cx="300" cy="380" rx="55" ry="22" fill="#c8d8a0" stroke="#aab880" stroke-width="1"/>
+        <text x="300" y="384" text-anchor="middle" font-size="9" fill="#506030" font-family="Noto Sans JP">中国</text>
+        <!-- 四国 -->
+        <ellipse cx="350" cy="430" rx="45" ry="22" fill="#c8d8a0" stroke="#aab880" stroke-width="1"/>
+        <text x="350" y="434" text-anchor="middle" font-size="9" fill="#506030" font-family="Noto Sans JP">四国</text>
+        <!-- 九州 -->
+        <ellipse cx="230" cy="460" rx="55" ry="65" fill="#c8d8a0" stroke="#aab880" stroke-width="1"/>
+        <text x="230" y="464" text-anchor="middle" font-size="10" fill="#506030" font-family="Noto Sans JP">九州</text>
+        <!-- 沖縄 -->
+        <ellipse cx="130" cy="560" rx="30" ry="14" fill="#c8d8a0" stroke="#aab880" stroke-width="1"/>
+        <text x="130" y="564" text-anchor="middle" font-size="8" fill="#506030" font-family="Noto Sans JP">沖縄</text>
+
+        <!-- 神社ピン（JSで動的生成） -->
+        <g id="mapPins"></g>
+      </svg>
+    </div>
+
+    <!-- 神社カードグリッド -->
+    <div class="shrine-grid" id="shrineGrid"></div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== 属性定義 =====
+const ATTRS = {
+  water: { name:'水', icon:'💧', color:'#3a7ab8', pale:'#ddeeff', deep:'#1a4a78',
+    title:'💧 水属性の神社',
+    desc:'水・海・川・雨・浄化を司る神様。心を整え、芸術性を高め、流れを生み出す力。恋愛・芸術・浄化・直感に関するご利益。',
+    kami:'龍神・弁財天・綿津見神・罔象女神（みずはのめのかみ）',
+    power:'心を整える・浄化・芸術性・恋愛・直感' },
+  fire:  { name:'火', icon:'🔥', color:'#c84820', pale:'#ffeedd', deep:'#882200',
+    title:'🔥 火属性の神社',
+    desc:'太陽・情熱・勝負・変革を司る神様。情熱と行動力を高め、勝運と事業を後押しする力。仕事運・勝運・事業拡大に。',
+    kami:'天照大御神・迦具土神（かぐつちのかみ）・火之迦具土神',
+    power:'仕事運・勝負運・事業拡大・変革・情熱' },
+  wood:  { name:'木', icon:'🌱', color:'#4a8a30', pale:'#ddf0d0', deep:'#2a5a18',
+    title:'🌱 木属性の神社',
+    desc:'成長・生命・自然・森を司る神様。心身の健康と子育て、学業成就の力。成長したい・学びたい・健康でいたい方に。',
+    kami:'木花咲耶姫命（このはなさくやひめ）・少彦名命・大山祇神',
+    power:'健康・子育て・学業・成長・農業' },
+  earth: { name:'土', icon:'🪨', color:'#b87820', pale:'#fff0cc', deep:'#7a5010',
+    title:'🪨 土属性の神社',
+    desc:'安定・豊穣・大地・生活を司る神様。縁結び・家内安全・財運の力。人との縁や生活基盤を整えたい方に。',
+    kami:'大国主命・埴山姫神（はにやまひめ）・稲荷大神',
+    power:'縁結び・家内安全・財運・豊穣・安定' },
+  metal: { name:'金', icon:'⚔️', color:'#8060c0', pale:'#eeddf8', deep:'#4a3080',
+    title:'⚔️ 金属性の神社',
+    desc:'金運・商売・決断・金属を司る神様。ビジネス運・決断力・金運を高める力。商売繁盛・金運アップに。',
+    kami:'金山彦神（かなやまひこのかみ）・宇迦之御魂神（稲荷）・事代主神',
+    power:'金運・商売繁盛・決断力・事業成功' },
+};
+
+// ===== 神社データベース（全国150社以上）=====
+const SHRINES = [
+
+  // ========== 💧 水属性 ==========
+  { id:'w01', attr:'water', name:'住吉大社', read:'すみよしたいしゃ', pref:'大阪府大阪市', desc:'全国2300社の住吉神社総本社。航海・海の守護神。清め・縁結び・開運のご利益。', kami:'底筒男命・中筒男命・表筒男命', map:'https://maps.google.com/?q=住吉大社+大阪', pin:{x:372,y:360} },
+  { id:'w02', attr:'water', name:'貴船神社', read:'きふねじんじゃ', pref:'京都府京都市', desc:'水の神・罔象女神を祀る。水占いおみくじ・縁結び・料理の神様。神秘的な石畳の参道。', kami:'罔象女神（みずはのめのかみ）', map:'https://maps.google.com/?q=貴船神社+京都', pin:{x:368,y:340} },
+  { id:'w03', attr:'water', name:'三嶋大社', read:'みしまたいしゃ', pref:'静岡県三島市', desc:'伊豆国一宮。湧水が境内に流れる水の神社。豊穣・縁結び・武運のご利益。', kami:'大山祇神・事代主神', map:'https://maps.google.com/?q=三嶋大社+静岡', pin:{x:470,y:320} },
+  { id:'w04', attr:'water', name:'宗像大社', read:'むなかたたいしゃ', pref:'福岡県宗像市', desc:'世界遺産。海の女神・三女神を祀る。沖ノ島は今も「神の島」。航海・縁結び。', kami:'沖津宮・中津宮・辺津宮の宗像三女神', map:'https://maps.google.com/?q=宗像大社+福岡', pin:{x:205,y:425} },
+  { id:'w05', attr:'water', name:'金刀比羅宮', read:'ことひらぐう', pref:'香川県仲多度郡', desc:'785段の石段で有名。海の神様・大物主神を祀る。航海・漁業・医療のご利益。', kami:'大物主神・崇徳天皇', map:'https://maps.google.com/?q=金刀比羅宮+香川', pin:{x:345,y:435} },
+  { id:'w06', attr:'water', name:'江田神社', read:'えだじんじゃ', pref:'宮崎県宮崎市', desc:'イザナギが禊ぎをした「みそぎ池」がある。夫婦円満・縁結び・浄化のパワースポット。', kami:'伊邪那岐命・伊邪那美命', map:'https://maps.google.com/?q=江田神社+宮崎市', pin:{x:248,y:488} },
+  { id:'w07', attr:'water', name:'青島神社', read:'あおしまじんじゃ', pref:'宮崎県宮崎市', desc:'亜熱帯植物に囲まれた島全体が境内。山幸彦・豊玉姫を祀る。縁結び・航海・安産。', kami:'彦火火出見尊・豊玉姫命・塩筒大神', map:'https://maps.google.com/?q=青島神社+宮崎', pin:{x:250,y:495} },
+  { id:'w08', attr:'water', name:'都農神社', read:'つのじんじゃ', pref:'宮崎県児湯郡都農町', desc:'日向国一宮。大己貴命を祀る。縁結び・商売繁盛。宮崎屈指のパワースポット。', kami:'大己貴命（大国主命）', map:'https://maps.google.com/?q=都農神社+宮崎県', pin:{x:247,y:480} },
+  { id:'w09', attr:'water', name:'月讀神社', read:'つきよみじんじゃ', pref:'鹿児島県鹿児島市（桜島）', desc:'活火山・桜島に鎮座。月の神・月読命を祀る。縁結び・子宝・浄化のご利益。', kami:'月読命・木花咲耶姫命', map:'https://maps.google.com/?q=月讀神社+桜島+鹿児島', pin:{x:228,y:510} },
+  { id:'w10', attr:'water', name:'枚聞神社', read:'ひらきき じんじゃ', pref:'鹿児島県指宿市', desc:'開聞岳（薩摩富士）の麓に鎮座。大日孁貴命を祀る。薩摩国一宮。開運・縁結び。', kami:'大日孁貴命（天照大御神）', map:'https://maps.google.com/?q=枚聞神社+指宿市', pin:{x:215,y:535} },
+  { id:'w11', attr:'water', name:'水天宮（総本社）', read:'すいてんぐう', pref:'福岡県久留米市', desc:'全国の水天宮の総本社。安産・子授け・水難除け・縁結び。壇ノ浦で入水した安徳天皇を祀る。', kami:'天御中主神・安徳天皇・高倉平中宮', map:'https://maps.google.com/?q=水天宮+久留米市', pin:{x:210,y:440} },
+  { id:'w12', attr:'water', name:'箱根神社', read:'はこねじんじゃ', pref:'神奈川県足柄下郡箱根町', desc:'芦ノ湖畔に鎮座。水の神・九頭龍大神を祀る。縁結び・水難除け・開運。湖中の大鳥居が有名。', kami:'瓊瓊杵尊・木花咲耶姫命・彦火火出見尊', map:'https://maps.google.com/?q=箱根神社+神奈川', pin:{x:480,y:306} },
+  { id:'w13', attr:'water', name:'諏訪大社（下社）', read:'すわたいしゃしもしゃ', pref:'長野県諏訪郡下諏訪町', desc:'全国2万5000社の総本社。水・風・農業の神。上社・下社合わせて参拝を。', kami:'八坂刀売神（やさかとめのかみ）', map:'https://maps.google.com/?q=諏訪大社下社+長野', pin:{x:448,y:278} },
+  { id:'w14', attr:'water', name:'龍田大社', read:'たつたたいしゃ', pref:'奈良県生駒郡三郷町', desc:'風と水を司る神社。「たつた姫」で有名。紅葉の名所。縁結び・農業・気象祈願。', kami:'天御柱命・国御柱命', map:'https://maps.google.com/?q=龍田大社+奈良', pin:{x:390,y:358} },
+  { id:'w15', attr:'water', name:'厳島神社', read:'いつくしまじんじゃ', pref:'広島県廿日市市', desc:'世界遺産。海の中に浮かぶ大鳥居で有名。宗像三女神を祀る。芸術・美・縁結び。', kami:'市杵島姫命・田心姫命・湍津姫命', map:'https://maps.google.com/?q=厳島神社+広島', pin:{x:295,y:390} },
+
+  // ========== 🔥 火属性 ==========
+  { id:'f01', attr:'fire', name:'伊勢神宮（内宮）', read:'いせじんぐうないくう', pref:'三重県伊勢市', desc:'天照大御神を祀る日本最高の神社。20年ごとの式年遷宮。日本人の総氏神。', kami:'天照大御神', map:'https://maps.google.com/?q=伊勢神宮内宮+三重', pin:{x:405,y:345} },
+  { id:'f02', attr:'fire', name:'愛宕神社', read:'あたごじんじゃ', pref:'京都府京都市', desc:'火の神・迦具土神を祀る。全国900社の愛宕神社の総本宮。防火・勝運。', kami:'迦具土神（かぐつちのかみ）', map:'https://maps.google.com/?q=愛宕神社+京都', pin:{x:360,y:338} },
+  { id:'f03', attr:'fire', name:'熱田神宮', read:'あつたじんぐう', pref:'愛知県名古屋市', desc:'草薙剣（三種の神器）を奉安。勝運・仕事運。全国から参拝者が絶えない。', kami:'天照大御神・日本武尊', map:'https://maps.google.com/?q=熱田神宮+名古屋', pin:{x:435,y:318} },
+  { id:'f04', attr:'fire', name:'霧島神宮', read:'きりしまじんぐう', pref:'鹿児島県霧島市', desc:'天孫降臨の地。瓊瓊杵尊を主祭神。南九州最大の格式を誇る神宮。勝運・縁結び。', kami:'瓊瓊杵尊（ニニギノミコト）', map:'https://maps.google.com/?q=霧島神宮+鹿児島', pin:{x:225,y:505} },
+  { id:'f05', attr:'fire', name:'秋葉神社（本宮）', read:'あきはじんじゃ', pref:'静岡県浜松市', desc:'火防の神・迦具土神。全国の秋葉神社の総本社。遠州の霊山・秋葉山頂に鎮座。', kami:'迦具土神', map:'https://maps.google.com/?q=秋葉神社+静岡', pin:{x:455,y:315} },
+  { id:'f06', attr:'fire', name:'天岩戸神社', read:'あまのいわとじんじゃ', pref:'宮崎県西臼杵郡高千穂町', desc:'天照が隠れた天岩戸を御神体とする。日本屈指のパワースポット。神職案内で岩戸を拝観できる。', kami:'天照大御神', map:'https://maps.google.com/?q=天岩戸神社+高千穂', pin:{x:242,y:472} },
+  { id:'f07', attr:'fire', name:'鹿児島神宮', read:'かごしまじんぐう', pref:'鹿児島県霧島市', desc:'大隅国一宮。山幸彦・豊玉姫を祀る。若返り・縁結び・子宝。なでると願いが叶う亀石。', kami:'彦火火出見尊・豊玉比売命', map:'https://maps.google.com/?q=鹿児島神宮+霧島市', pin:{x:230,y:508} },
+  { id:'f08', attr:'fire', name:'照国神社', read:'てるくにじんじゃ', pref:'鹿児島県鹿児島市', desc:'薩摩藩第11代藩主・島津斉彬公を祀る。開運・商売繁盛・学業成就。六月灯が有名。', kami:'島津斉彬命（照國大明神）', map:'https://maps.google.com/?q=照国神社+鹿児島市', pin:{x:225,y:518} },
+  { id:'f09', attr:'fire', name:'高千穂神社', read:'たかちほじんじゃ', pref:'宮崎県西臼杵郡高千穂町', desc:'天孫降臨・天岩戸伝説の地。高千穂八十八社の総社。縁結び・農業豊穣。夫婦杉が有名。', kami:'三毛入野命ほか十一柱', map:'https://maps.google.com/?q=高千穂神社+宮崎', pin:{x:240,y:472} },
+  { id:'f10', attr:'fire', name:'宮崎神宮', read:'みやざきじんぐう', pref:'宮崎県宮崎市', desc:'初代天皇・神武天皇を祀る。神武東征出発の地。神武さまとして親しまれる。勝運・開運。', kami:'神武天皇（彦波瀲武鸕鷀草葺不合尊）', map:'https://maps.google.com/?q=宮崎神宮+宮崎市', pin:{x:250,y:493} },
+  { id:'f11', attr:'fire', name:'新田神社', read:'にったじんじゃ', pref:'鹿児島県薩摩川内市', desc:'薩摩国一宮。瓊瓊杵尊を祀る。可愛山陵（ニニギの御陵）に隣接。縁結び・開運。', kami:'瓊瓊杵尊', map:'https://maps.google.com/?q=新田神社+薩摩川内市', pin:{x:213,y:502} },
+  { id:'f12', attr:'fire', name:'狭野神社', read:'さのじんじゃ', pref:'宮崎県西諸県郡高原町', desc:'神武天皇の幼名「狭野尊」を祀る。神武天皇ご誕生の地。樹齢400年の杉並木参道が圧巻。', kami:'神武天皇（狭野尊）', map:'https://maps.google.com/?q=狭野神社+宮崎県高原町', pin:{x:238,y:500} },
+  { id:'f13', attr:'fire', name:'都萬神社', read:'つまじんじゃ', pref:'宮崎県西都市', desc:'日向国二宮。木花咲耶姫命を祀る。縁結び・安産・開運。西都原古墳群の近く。', kami:'木花咲耶姫命', map:'https://maps.google.com/?q=都萬神社+宮崎県西都市', pin:{x:246,y:483} },
+  { id:'f14', attr:'fire', name:'靖国神社', read:'やすくにじんじゃ', pref:'東京都千代田区', desc:'明治時代以降の戦没者246万余柱を祀る。春・秋の例大祭。勝運・国家安泰。', kami:'護国の英霊246万余柱', map:'https://maps.google.com/?q=靖国神社+東京', pin:{x:490,y:290} },
+  { id:'f15', attr:'fire', name:'日前宮', read:'ひのくまのみや', pref:'和歌山県和歌山市', desc:'紀伊国一宮。天照大御神より古い日像鏡・日矛鏡を祀る。勝運・開運・国家安泰。', kami:'日前大神・国懸大神', map:'https://maps.google.com/?q=日前宮+和歌山市', pin:{x:370,y:375} },
+
+  // ========== 🌱 木属性 ==========
+  { id:'t01', attr:'wood', name:'富士山本宮浅間大社', read:'ふじさんほんぐうせんげんたいしゃ', pref:'静岡県富士宮市', desc:'全国1300社の浅間神社の総本社。富士山全体が御神体。安産・縁結び・農業。', kami:'木花咲耶姫命', map:'https://maps.google.com/?q=富士山本宮浅間大社+静岡', pin:{x:470,y:308} },
+  { id:'t02', attr:'wood', name:'春日大社', read:'かすがたいしゃ', pref:'奈良県奈良市', desc:'全国3000社の春日神社の総本社。鹿が神使。世界遺産の原始林。学業・農業。', kami:'天児屋根命・武甕槌命ほか', map:'https://maps.google.com/?q=春日大社+奈良', pin:{x:395,y:352} },
+  { id:'t03', attr:'wood', name:'大神神社（三輪明神）', read:'おおみわじんじゃ', pref:'奈良県桜井市', desc:'三輪山が御神体。日本最古の神社の一つ。医療・農業・縁結び・酒造りの神。', kami:'大物主大神', map:'https://maps.google.com/?q=大神神社+奈良県桜井市', pin:{x:390,y:355} },
+  { id:'t04', attr:'wood', name:'諏訪大社（上社）', read:'すわたいしゃかみしゃ', pref:'長野県諏訪市', desc:'全国2万5000社の諏訪神社の総本社。農業・武運・狩猟。縄文時代から続く最古の神社。', kami:'建御名方神（たけみなかたのかみ）', map:'https://maps.google.com/?q=諏訪大社上社+長野', pin:{x:450,y:280} },
+  { id:'t05', attr:'wood', name:'高千穂神社', read:'たかちほじんじゃ', pref:'宮崎県西臼杵郡高千穂町', desc:'夫婦杉の周りを3回回ると縁結びのご利益。農業豊穣・縁結び・子孫繁栄。', kami:'三毛入野命ほか', map:'https://maps.google.com/?q=高千穂神社+宮崎', pin:{x:241,y:473} },
+  { id:'t06', attr:'wood', name:'蒲生八幡神社', read:'かもうはちまんじんじゃ', pref:'鹿児島県姶良市蒲生町', desc:'境内に日本一の巨樹・蒲生の大クス（樹齢約1600年・幹周24m）がある。長寿・健康・開運。', kami:'品陀和気命（応神天皇）', map:'https://maps.google.com/?q=蒲生八幡神社+姶良市', pin:{x:228,y:512} },
+  { id:'t07', attr:'wood', name:'六所神社', read:'ろくしょじんじゃ', pref:'鹿児島県垂水市', desc:'垂水市の中心的神社。農業豊穣・子孫繁栄・家内安全。霧島山麓の自然の中に鎮座。', kami:'大己貴命ほか六柱', map:'https://maps.google.com/?q=六所神社+垂水市+鹿児島', pin:{x:232,y:515} },
+  { id:'t08', attr:'wood', name:'加紫久利神社', read:'かしくりじんじゃ', pref:'鹿児島県出水市', desc:'奈良時代創建の由緒ある古社。薩摩国二宮。五穀豊穣・家内安全・商売繁盛。', kami:'鹿屋野比売神（カヤノヒメ）', map:'https://maps.google.com/?q=加紫久利神社+出水市', pin:{x:210,y:498} },
+  { id:'t09', attr:'wood', name:'和気神社', read:'わけじんじゃ', pref:'岡山県和気郡和気町', desc:'皇統を守った和気清麻呂を祀る。縁結び・開運・学業成就。フジの花の名所。', kami:'和気清麻呂・和気広虫姫', map:'https://maps.google.com/?q=和気神社+岡山', pin:{x:325,y:370} },
+  { id:'t10', attr:'wood', name:'椿大神社', read:'つばきおおかみやしろ', pref:'三重県鈴鹿市', desc:'猿田彦大神の総本社。みちびきの神・道開き。交通安全・縁結び・農業。全国2000社の総本宮。', kami:'猿田彦大神', map:'https://maps.google.com/?q=椿大神社+三重県鈴鹿市', pin:{x:407,y:337} },
+  { id:'t11', attr:'wood', name:'太宰府天満宮', read:'だざいふてんまんぐう', pref:'福岡県太宰府市', desc:'学問の神・菅原道真を祀る全国12000社の天満宮の総本社。学業成就・受験合格。', kami:'菅原道真', map:'https://maps.google.com/?q=太宰府天満宮+福岡', pin:{x:210,y:432} },
+  { id:'t12', attr:'wood', name:'北野天満宮', read:'きたのてんまんぐう', pref:'京都府京都市', desc:'学問・芸能・農耕の神。全国12000社の天満宮の総本社（関東以西）。梅の名所。', kami:'菅原道真', map:'https://maps.google.com/?q=北野天満宮+京都', pin:{x:363,y:343} },
+  { id:'t13', attr:'wood', name:'大御神社', read:'おおみじんじゃ', pref:'宮崎県日向市', desc:'天照大御神降臨の地とも言われる。「さざれ石」と「亀岩」が有名なパワースポット。縁結び。', kami:'天照大御神', map:'https://maps.google.com/?q=大御神社+宮崎県日向市', pin:{x:248,y:476} },
+  { id:'t14', attr:'wood', name:'くしふる神社', read:'くしふるじんじゃ', pref:'宮崎県西臼杵郡高千穂町', desc:'天孫降臨の地・槵触峰をご神体とする。ニニギノミコトが降り立った聖地。相撲発祥の地とも。', kami:'天津日子番邇々杵命（ニニギ）', map:'https://maps.google.com/?q=くしふる神社+高千穂', pin:{x:241,y:471} },
+  { id:'t15', attr:'wood', name:'春日神社（全国）', read:'かすがじんじゃ', pref:'全国3000社', desc:'藤原氏の氏神が全国に広がった神社群。農業・学問・武運。各地の春日神社を訪ねよう。', kami:'天児屋根命', map:'https://maps.google.com/?q=春日神社', pin:{x:395,y:353} },
+
+  // ========== 🪨 土属性 ==========
+  { id:'e01', attr:'earth', name:'出雲大社', read:'いずもたいしゃ', pref:'島根県出雲市', desc:'縁結びの神・大国主命の総本社。神在月に全国の神様が集まる。全国最大の縁結びの聖地。', kami:'大国主命', map:'https://maps.google.com/?q=出雲大社+島根', pin:{x:270,y:340} },
+  { id:'e02', attr:'earth', name:'伏見稲荷大社', read:'ふしみいなりたいしゃ', pref:'京都府京都市', desc:'全国3万社の稲荷神社の総本宮。千本鳥居が有名。豊穣・商売繁盛・縁結び。秦氏が創建。', kami:'宇迦之御魂大神ほか', map:'https://maps.google.com/?q=伏見稲荷大社+京都', pin:{x:373,y:348} },
+  { id:'e03', attr:'earth', name:'大国魂神社', read:'おおくにたまじんじゃ', pref:'東京都府中市', desc:'武蔵国の総社。縁結び・厄除け・家内安全。くらやみ祭が有名。', kami:'大国魂大神（大国主命）', map:'https://maps.google.com/?q=大国魂神社+東京府中', pin:{x:493,y:290} },
+  { id:'e04', attr:'earth', name:'吾平山上陵・鵜戸神社', read:'あいらさんじょうりょう', pref:'鹿児島県鹿屋市吾平町', desc:'ウガヤフキアエズの御陵。「小伊勢」と呼ばれる岩屋の聖地。縁結び・安産・延命長寿。', kami:'鵜葺草葺不合命・玉依姫命', map:'https://maps.google.com/?q=吾平山上陵+鹿屋市', pin:{x:233,y:520} },
+  { id:'e05', attr:'earth', name:'箱崎八幡宮', read:'はこざきはちまんぐう', pref:'鹿児島県出水市', desc:'日本一の大鈴で有名。金運アップ・商売繁盛・健康長寿・交通の守護神。', kami:'應神天皇・神功皇后', map:'https://maps.google.com/?q=箱崎八幡宮+出水市+鹿児島', pin:{x:210,y:497} },
+  { id:'e06', attr:'earth', name:'鵜戸神宮', read:'うどじんぐう', pref:'宮崎県日南市', desc:'断崖絶壁の洞窟に鎮座。「運玉」を岩の穴に投げる参拝が有名。子宝・安産・縁結び。', kami:'鵜葺草葺不合命', map:'https://maps.google.com/?q=鵜戸神宮+宮崎', pin:{x:248,y:505} },
+  { id:'e07', attr:'earth', name:'富士浅間神社（北口）', read:'きたぐちほんぐうせんげん', pref:'山梨県富士吉田市', desc:'富士山吉田口登山道の起点。木花咲耶姫命を祀る。縁結び・五穀豊穣。', kami:'木花咲耶姫命', map:'https://maps.google.com/?q=北口本宮冨士浅間神社+山梨', pin:{x:468,y:296} },
+  { id:'e08', attr:'earth', name:'大山祇神社', read:'おおやまづみじんじゃ', pref:'愛媛県今治市（大三島）', desc:'全国1万社の三島神社・山祇神社の総本社。農業・山・戦いの神。国宝の武具が有名。', kami:'大山積神（おおやまつみのかみ）', map:'https://maps.google.com/?q=大山祇神社+愛媛県大三島', pin:{x:312,y:408} },
+  { id:'e09', attr:'earth', name:'三嶋大社', read:'みしまたいしゃ', pref:'静岡県三島市', desc:'湧水が境内を流れる伊豆国一宮。縁結び・豊穣・武運。三嶋の神の総本社。', kami:'大山祇神・事代主神', map:'https://maps.google.com/?q=三嶋大社+三島市', pin:{x:472,y:321} },
+  { id:'e10', attr:'earth', name:'石上神宮', read:'いそのかみじんぐう', pref:'奈良県天理市', desc:'物部氏の総本社・日本最古の神社の一つ。境内を自由に歩く鶏が独特の聖域。布都御魂剣を祀る。', kami:'布都御魂大神', map:'https://maps.google.com/?q=石上神宮+奈良県天理市', pin:{x:390,y:356} },
+  { id:'e11', attr:'earth', name:'一葉稲荷神社', read:'いちばいなりじんじゃ', pref:'宮崎県宮崎市', desc:'千本鳥居が圧巻。銭洗神社も境内に。金運・縁結び・豊穣のご利益。宮崎の人気パワースポット。', kami:'宇迦之御魂神', map:'https://maps.google.com/?q=一葉稲荷神社+宮崎市', pin:{x:251,y:492} },
+  { id:'e12', attr:'earth', name:'妙見神社（出水）', read:'みょうけんじんじゃ', pref:'鹿児島県出水市', desc:'天之御中主神（妙見様）を祀る。金運・縁結び・開運。地域で親しまれる古社。', kami:'天之御中主神', map:'https://maps.google.com/?q=妙見神社+出水市+鹿児島', pin:{x:210,y:499} },
+  { id:'e13', attr:'earth', name:'高屋山上陵・鹿児島神宮', read:'たかやさんじょうりょう', pref:'鹿児島県霧島市溝辺町', desc:'山幸彦の御陵。鹿児島空港近く。若返り・縁結び・子宝のご利益。亀石をなでると願いが叶う。', kami:'彦火火出見尊（山幸彦）', map:'https://maps.google.com/?q=高屋山上陵+霧島市', pin:{x:226,y:506} },
+  { id:'e14', attr:'earth', name:'可愛山陵・新田神社', read:'えのさんりょうにったじんじゃ', pref:'鹿児島県薩摩川内市', desc:'ニニギノミコトの御陵。新田神社（薩摩国一宮）の奥に鎮座。縁結び・開運・五穀豊穣。', kami:'瓊瓊杵尊', map:'https://maps.google.com/?q=可愛山陵+薩摩川内市', pin:{x:212,y:502} },
+  { id:'e15', attr:'earth', name:'東霧島神社', read:'つまきりしまじんじゃ', pref:'宮崎県都城市（霧島町）', desc:'スサノオが十握剣で切り裂いた「鬼磐階段」が有名。悪縁切り・開運・縁結び。霧島六社権現。', kami:'伊弉諾尊', map:'https://maps.google.com/?q=東霧島神社+都城市', pin:{x:235,y:503} },
+
+  // ========== ⚔️ 金属性 ==========
+  { id:'m01', attr:'metal', name:'西宮神社', read:'にしのみやじんじゃ', pref:'兵庫県西宮市', desc:'えびす宮総本社。商売繁盛・金運。福男選びが有名。全国えびす神社の総本宮。', kami:'蛭子大神', map:'https://maps.google.com/?q=西宮神社+兵庫', pin:{x:370,y:365} },
+  { id:'m02', attr:'metal', name:'今宮戎神社', read:'いまみやえびすじんじゃ', pref:'大阪府大阪市', desc:'商売の神・えびすさんを祀る。十日戎の福娘で有名。商売繁盛の大阪の総本社。', kami:'事代主命（えびす神）', map:'https://maps.google.com/?q=今宮戎神社+大阪', pin:{x:373,y:361} },
+  { id:'m03', attr:'metal', name:'宇佐神宮', read:'うさじんぐう', pref:'大分県宇佐市', desc:'全国4万社の八幡宮の総本宮。秦氏の一族・辛島氏が創建。商売繁盛・勝運・決断力。', kami:'応神天皇・神功皇后・比売大神', map:'https://maps.google.com/?q=宇佐神宮+大分', pin:{x:218,y:437} },
+  { id:'m04', attr:'metal', name:'金刀比羅宮（金運）', read:'ことひらぐう', pref:'香川県仲多度郡', desc:'785段の石段を登りきると強力な金運パワー。商売繁盛・決断力・事業成功。', kami:'大物主神', map:'https://maps.google.com/?q=金刀比羅宮+香川', pin:{x:347,y:437} },
+  { id:'m05', attr:'metal', name:'伏見稲荷大社', read:'ふしみいなりたいしゃ', pref:'京都府京都市', desc:'千本鳥居。全国3万社の稲荷神社の総本宮。金運・商売繁盛・豊穣。秦氏創建の古社。', kami:'宇迦之御魂大神', map:'https://maps.google.com/?q=伏見稲荷大社+京都', pin:{x:374,y:349} },
+  { id:'m06', attr:'metal', name:'荒田八幡宮', read:'あらたはちまんぐう', pref:'鹿児島県鹿児島市', desc:'鹿児島市中心部の八幡宮。金運向上・商売繁盛のご利益。應神天皇を主祭神。', kami:'應神天皇・神功皇后・玉依姫尊', map:'https://maps.google.com/?q=荒田八幡宮+鹿児島市', pin:{x:226,y:519} },
+  { id:'m07', attr:'metal', name:'春日神社（鹿屋）', read:'かすがじんじゃかのや', pref:'鹿児島県鹿屋市', desc:'鹿屋市の守護神。商売繁盛・金運・開運。地元で親しまれる古社。', kami:'天児屋根命', map:'https://maps.google.com/?q=春日神社+鹿屋市', pin:{x:234,y:522} },
+  { id:'m08', attr:'metal', name:'金峯山寺（吉野）', read:'きんぷせんじ', pref:'奈良県吉野町', desc:'金の蔵王権現を祀る修験道の総本山。世界遺産。決断・変革・金運。桜の名所。', kami:'金剛蔵王大権現', map:'https://maps.google.com/?q=金峯山寺+奈良県吉野', pin:{x:388,y:368} },
+  { id:'m09', attr:'metal', name:'鹿嶋神宮', read:'かしまじんぐう', pref:'茨城県鹿嶋市', desc:'武甕槌命を祀る。武運・勝運・決断力のご利益。鹿島アントラーズの名前の由来。', kami:'武甕槌命（たけみかづちのかみ）', map:'https://maps.google.com/?q=鹿島神宮+茨城', pin:{x:512,y:286} },
+  { id:'m10', attr:'metal', name:'香取神宮', read:'かとりじんぐう', pref:'千葉県香取市', desc:'経津主命を祀る。武運・勝運・事業成功。鹿島神宮と対をなす東国一宮。', kami:'経津主大神（ふつぬしのおおかみ）', map:'https://maps.google.com/?q=香取神宮+千葉', pin:{x:510,y:288} },
+  { id:'m11', attr:'metal', name:'金山神社', read:'かなやまじんじゃ', pref:'神奈川県川崎市', desc:'鍛冶・金属の神・金山彦神を祀る。金運・商売繁盛・縁結び。日本最大の金山神社。', kami:'金山彦神', map:'https://maps.google.com/?q=金山神社+川崎市', pin:{x:483,y:296} },
+  { id:'m12', attr:'metal', name:'春日神社（都城）', read:'かすがじんじゃみやこのじょう', pref:'宮崎県都城市', desc:'都城の守護神。商売繁盛・金運・開運。地元で愛される歴史ある神社。', kami:'天児屋根命', map:'https://maps.google.com/?q=春日神社+都城市', pin:{x:237,y:505} },
+  { id:'m13', attr:'metal', name:'住吉神社（博多）', read:'すみよしじんじゃはかた', pref:'福岡県福岡市博多区', desc:'全国2300社の住吉神社の発祥の地（一説）。航海・交通安全・商売繁盛。', kami:'表筒男命・中筒男命・底筒男命', map:'https://maps.google.com/?q=住吉神社+博多+福岡', pin:{x:208,y:430} },
+  { id:'m14', attr:'metal', name:'金神社', read:'こがねじんじゃ', pref:'岐阜県岐阜市', desc:'金運神社として全国的に有名。金色の鳥居・社殿が圧巻。金運アップ・商売繁盛。', kami:'金大神（渟熨斗姫命）', map:'https://maps.google.com/?q=金神社+岐阜市', pin:{x:430,y:305} },
+  { id:'m15', attr:'metal', name:'御金神社', read:'みかねじんじゃ', pref:'京都府京都市', desc:'金色の鳥居が輝く金運神社。24時間参拝可。金運・投資・商売繁盛。', kami:'金山毘古神（かなやまびこのかみ）', map:'https://maps.google.com/?q=御金神社+京都', pin:{x:367,y:344} },
+];
+
+// ===== 現在の属性フィルター =====
+let currentAttr = 'all';
+let collected = JSON.parse(localStorage.getItem('gokoStamps') || '[]');
+
+// ===== ピンのy位置を属性別にずらす =====
+const attrOffsets = { water:0, fire:-8, wood:8, earth:-4, metal:4 };
+
+// ===== 地図ピン生成 =====
+function renderMapPins() {
+  const g = document.getElementById('mapPins');
+  g.innerHTML = '';
+  const filtered = currentAttr === 'all' ? SHRINES : SHRINES.filter(s => s.attr === currentAttr);
+  filtered.forEach(s => {
+    const a = ATTRS[s.attr];
+    const isCol = collected.includes(s.id);
+    const g2 = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g2.setAttribute('transform', `translate(${s.pin.x},${s.pin.y})`);
+    g2.style.cursor = 'pointer';
+    g2.innerHTML = `
+      <circle r="9" fill="${a.color}" opacity="${isCol?1:.75}" stroke="white" stroke-width="1.5"/>
+      <text y="4" text-anchor="middle" font-size="9" fill="white">${a.icon}</text>
+      ${isCol ? `<circle r="13" fill="none" stroke="${a.color}" stroke-width="1" opacity=".5"/>` : ''}
+    `;
+    g2.title = s.name;
+    g2.addEventListener('click', () => {
+      const card = document.getElementById('card-' + s.id);
+      if(card) card.scrollIntoView({ behavior:'smooth', block:'center' });
+    });
+    // tooltip
+    const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+    title.textContent = s.name + '（' + s.pref + '）';
+    g2.appendChild(title);
+    g.appendChild(g2);
+  });
+}
+
+// ===== 神社カード生成 =====
+function renderShrines() {
+  const grid = document.getElementById('shrineGrid');
+  grid.innerHTML = '';
+  const filtered = currentAttr === 'all' ? SHRINES : SHRINES.filter(s => s.attr === currentAttr);
+  filtered.forEach(s => {
+    const a = ATTRS[s.attr];
+    const isCol = collected.includes(s.id);
+    const div = document.createElement('div');
+    div.className = 'shrine-card' + (isCol ? ' collected' : '');
+    div.id = 'card-' + s.id;
+    div.innerHTML = `
+      <div class="shrine-attr-tag" style="border-color:${a.color};color:${a.color};">${a.icon} ${a.name}属性</div>
+      <div class="shrine-name">${s.name}</div>
+      <div class="shrine-read">${s.read}</div>
+      <div class="shrine-loc">📍 ${s.pref}</div>
+      <div class="shrine-desc">${s.desc}</div>
+      <div class="shrine-kami">🙏 <strong>祭神：</strong>${s.kami}</div>
+      <div class="shrine-btn-row">
+        <a class="shrine-btn" href="${s.map}" target="_blank" rel="noopener">🗺 地図</a>
+        <button class="shrine-btn stamp-btn ${isCol?'done':''}" onclick="toggleStamp('${s.id}',this)">
+          ${isCol ? '✓ 参拝済み' : '⛩ 参拝記録'}
+        </button>
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+// ===== スタンプ =====
+function toggleStamp(id, btn) {
+  const idx = collected.indexOf(id);
+  if(idx === -1) {
+    collected.push(id);
+    btn.textContent = '✓ 参拝済み';
+    btn.classList.add('done');
+    const card = document.getElementById('card-' + id);
+    if(card) card.classList.add('collected');
+    const shrine = SHRINES.find(s => s.id === id);
+    showToast('⛩ ' + shrine.name + ' — 参拝スタンプ取得！');
+  } else {
+    collected.splice(idx, 1);
+    btn.textContent = '⛩ 参拝記録';
+    btn.classList.remove('done');
+    const card = document.getElementById('card-' + id);
+    if(card) card.classList.remove('collected');
+  }
+  localStorage.setItem('gokoStamps', JSON.stringify(collected));
+  renderStampGrid();
+  renderMapPins();
+}
+
+// ===== スタンプグリッド =====
+function renderStampGrid() {
+  const grid = document.getElementById('stampGrid');
+  grid.innerHTML = '';
+  SHRINES.forEach(s => {
+    const a = ATTRS[s.attr];
+    const isCol = collected.includes(s.id);
+    const div = document.createElement('div');
+    div.className = 'stamp-item' + (isCol ? ' collected' : '');
+    div.title = s.name;
+    div.style.borderColor = isCol ? a.color : '';
+    div.innerHTML = `
+      <span>${isCol ? a.icon : '⬜'}</span>
+      <span class="stamp-name">${s.name.slice(0,4)}</span>
+    `;
+    div.addEventListener('click', () => {
+      const card = document.getElementById('card-' + s.id);
+      if(card) {
+        currentAttr = s.attr;
+        updateAttrUI();
+        setTimeout(() => card.scrollIntoView({ behavior:'smooth', block:'center' }), 100);
+      }
+    });
+    grid.appendChild(div);
+  });
+  document.getElementById('stampCount').textContent = `${collected.length} / ${SHRINES.length} 社参拝済み`;
+}
+
+// ===== 属性UI更新 =====
+function updateAttrUI() {
+  document.querySelectorAll('.attr-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.attr === currentAttr);
+  });
+  const h = document.getElementById('attrHeadline');
+  if(currentAttr === 'all') {
+    h.style.borderColor = '#c9a84c';
+    h.querySelector('.attr-headline-title').textContent = '🗾 全国の五行神社';
+    h.querySelector('.attr-headline-desc').textContent = '五行（水・火・木・土・金）の属性別に神社を探せます。';
+    h.querySelector('.attr-headline-kami').textContent = '✦ 生年月日を入力すると、あなたに合った神社が分かります';
+  } else {
+    const a = ATTRS[currentAttr];
+    h.style.borderColor = a.color;
+    h.querySelector('.attr-headline-title').textContent = a.title;
+    h.querySelector('.attr-headline-desc').textContent = a.desc;
+    h.querySelector('.attr-headline-kami').innerHTML = `✦ 主な神様：${a.kami}<br>✦ ご利益：${a.power}`;
+  }
+  renderMapPins();
+  renderShrines();
+}
+
+// ===== タブクリック =====
+document.querySelectorAll('.attr-tab').forEach(t => {
+  t.addEventListener('click', () => {
+    currentAttr = t.dataset.attr;
+    updateAttrUI();
+  });
+});
+
+// ===== 四柱推命 正確計算 =====
+
+// 天干・地支
+const STEMS   = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const BRANCHES= ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+const STEM_ATTR  = ['wood','wood','fire','fire','earth','earth','metal','metal','water','water'];
+const BRANCH_ATTR= ['water','earth','wood','wood','earth','fire','fire','earth','metal','metal','earth','water'];
+
+// 日干支計算（基準: 1900/1/1 = 甲戌 = 干支番号9）
+function getDayStemBranch(year, month, day) {
+  const d    = new Date(year, month-1, day);
+  const base = new Date(1900, 0, 1);
+  const diff = Math.floor((d - base) / 86400000);
+  let idx = (diff + 9) % 60;
+  if(idx < 0) idx += 60;
+  return { stemIdx: idx % 10, branchIdx: idx % 12 };
+}
+
+// 年干支計算（基準: 1900年 = 庚子 = 干支番号36）
+function getYearStemBranch(year) {
+  let idx = (year - 1900 + 36) % 60;
+  if(idx < 0) idx += 60;
+  return { stemIdx: idx % 10, branchIdx: idx % 12 };
+}
+
+// 節入り月計算（二十四節気の概算）
+// 各月の節入り日（概算・グレゴリオ暦）
+const SEKKI_DAYS = [6,4,6,5,6,6,7,7,8,8,7,7]; // 1月〜12月の節入り概算日
+function getMonthStemBranch(year, month, day) {
+  // 節入り前は前月扱い
+  let adjMonth = month;
+  const sekkiDay = SEKKI_DAYS[month-1];
+  if(day < sekkiDay) adjMonth = month - 1;
+  if(adjMonth <= 0) adjMonth += 12;
+  
+  // 月の天干計算（年干から導出）
+  const yearStem = getYearStemBranch(year).stemIdx;
+  // 年干グループ: 甲己年→月天干は甲から、乙庚→丙から、丙辛→戊から、丁壬→庚から、戊癸→壬から
+  const monthStemBase = [0, 2, 4, 6, 8, 0, 2, 4, 6, 8][yearStem]; // 甲=0,乙=2,丙=4,丁=6,戊=8,己=0...
+  const monthStemIdx  = (monthStemBase + (adjMonth - 1)) % 10;
+  // 月支は固定（寅=2月始まり）
+  const monthBranchIdx = (adjMonth + 1) % 12; // 寅(2)が1月節
+  
+  return { stemIdx: monthStemIdx, branchIdx: (adjMonth + 1) % 12 };
+}
+
+// 時支計算
+function getHourStemBranch(year, month, day, hour) {
+  const daySB = getDayStemBranch(year, month, day);
+  // 時支: 子(23-1)=0, 丑(1-3)=1, ...
+  const hourBranchIdx = Math.floor(((hour + 1) % 24) / 2);
+  // 時天干: 日干グループから
+  const hourStemBase = [0,2,4,6,8,0,2,4,6,8][daySB.stemIdx];
+  const hourStemIdx  = (hourStemBase + hourBranchIdx) % 10;
+  return { stemIdx: hourStemIdx, branchIdx: hourBranchIdx };
+}
+
+// 九星気学 本命星（参考表示用）
+function calcKyusei(year, month, day) {
+  let y = year;
+  if(month < 2 || (month === 2 && day < 4)) y = year - 1;
+  let s = y;
+  while(s >= 10) s = String(s).split('').reduce((a,b)=>a+parseInt(b),0);
+  let star = 11 - s;
+  if(star > 9) star -= 9;
+  if(star <= 0) star += 9;
+  return star;
+}
+
+const KYUSEI_NAMES = ['','一白水星','二黒土星','三碧木星','四緑木星','五黄土星','六白金星','七赤金星','八白土星','九紫火星'];
+const KYUSEI_ATTR  = ['','water','earth','wood','wood','earth','metal','metal','earth','fire'];
+
+// ===== 五行診断メイン =====
+function diagnose() {
+  const dateStr = document.getElementById('birthdate').value;
+  const timeStr = document.getElementById('birthtime').value;
+  if(!dateStr){ showToast('⚠ 生年月日を入力してください'); return; }
+
+  const d     = new Date(dateStr);
+  const year  = d.getFullYear();
+  const month = d.getMonth() + 1;
+  const day   = d.getDate();
+  const hour  = parseInt((timeStr||'12:00').split(':')[0]);
+
+  // 四柱（年・月・日・時）の天干地支を取得
+  const yearSB  = getYearStemBranch(year);
+  const monthSB = getMonthStemBranch(year, month, day);
+  const daySB   = getDayStemBranch(year, month, day);
+  const hourSB  = getHourStemBranch(year, month, day, hour);
+
+  // 日干（最重要・その人そのもの）
+  const nichikan     = STEMS[daySB.stemIdx];
+  const nichikanAttr = STEM_ATTR[daySB.stemIdx];
+
+  // 五行スコア（四柱8字から計算）
+  const scores = { water:0, fire:0, wood:0, earth:0, metal:0 };
+  // 天干4つ（各+15）
+  [yearSB.stemIdx, monthSB.stemIdx, daySB.stemIdx, hourSB.stemIdx].forEach((si,i) => {
+    const w = i===2 ? 25 : 15; // 日干を最重視
+    scores[STEM_ATTR[si]] += w;
+  });
+  // 地支4つ（各+10）
+  [yearSB.branchIdx, monthSB.branchIdx, daySB.branchIdx, hourSB.branchIdx].forEach((bi,i) => {
+    scores[BRANCH_ATTR[bi]] += 10;
+  });
+
+  // 九星気学（参考）
+  const kyuseiNum  = calcKyusei(year, month, day);
+  const kyuseiName = KYUSEI_NAMES[kyuseiNum];
+  const kyuseiAttr = KYUSEI_ATTR[kyuseiNum];
+  scores[kyuseiAttr] += 5; // 九星も少し加味
+
+  // 主属性＝日干の五行（四柱推命の本義）
+  const mainAttr = nichikanAttr;
+  const sorted   = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+  const weakAttr = sorted[4][0];
+  const total    = Object.values(scores).reduce((a,b)=>a+b,0);
+
+  // ===== 結果表示 =====
+  const rc = document.getElementById('resultCard');
+  rc.classList.add('show');
+
+  const mainA = ATTRS[mainAttr];
+  const weakA = ATTRS[weakAttr];
+
+  // 日干の性格説明
+  const nichikanDesc = {
+    '甲':{ desc:'大樹のような堂々とした存在感。リーダー気質・正義感・向上心が強い。',  attr:'wood'  },
+    '乙':{ desc:'草花のようにしなやかで適応力が高い。人間関係を大切にし協調性がある。',attr:'wood'  },
+    '丙':{ desc:'太陽のように明るく情熱的。人を引き付けるカリスマと行動力の持ち主。',  attr:'fire'  },
+    '丁':{ desc:'ろうそくの炎のように温かく繊細。直感力と美意識が高く芸術的センスがある。',attr:'fire'},
+    '戊':{ desc:'大山のような安定感と包容力。堅実で信頼され、組織の要となる存在。',    attr:'earth' },
+    '己':{ desc:'大地のように豊かで柔軟。人の話をよく聞き、縁の下の力持ちになれる。',  attr:'earth' },
+    '庚':{ desc:'鉄のような意志の強さと決断力。原則を重んじ、信念を貫くリーダー。',    attr:'metal' },
+    '辛':{ desc:'宝石のように研ぎ澄まされた感性。完璧主義で美意識が高く細部に気を配る。',attr:'metal'},
+    '壬':{ desc:'大海のような広大な視野と受容力。自由を愛し、流れに乗るのが得意。',    attr:'water' },
+    '癸':{ desc:'雨のように静かに深く染み込む知性。直感力と洞察力に優れる内向きの力。',attr:'water' },
+  };
+  const nd = nichikanDesc[nichikan] || { desc:'', attr: nichikanAttr };
+
+  document.getElementById('mainAttrBadge').innerHTML = `
+    <div class="main-attr-icon">${mainA.icon}</div>
+    <div class="main-attr-info">
+      <div class="main-attr-name" style="color:${mainA.color};">日干「${nichikan}」— ${mainA.name}属性</div>
+      <div class="main-attr-desc">${nd.desc}</div>
+    </div>
+  `;
+  document.getElementById('mainAttrBadge').style.borderColor = mainA.color;
+  document.getElementById('mainAttrBadge').style.background  = mainA.pale;
+
+  // 五行バー
+  const bars = document.getElementById('gogyouBars');
+  bars.innerHTML = '';
+  sorted.forEach(([attr,val]) => {
+    const a   = ATTRS[attr];
+    const pct = Math.round(val/total*100);
+    bars.innerHTML += `
+      <div class="gogyou-row">
+        <div class="gogyou-label">${a.icon}${a.name}</div>
+        <div class="gogyou-bar-wrap">
+          <div class="gogyou-bar" style="width:${pct}%;background:${a.color};"></div>
+        </div>
+        <div class="gogyou-pct">${pct}%</div>
+      </div>
+    `;
+  });
+
+  // 四柱の詳細表示
+  document.getElementById('weakAttr').innerHTML = `
+    <strong>✦ 補うべき属性：</strong>${weakA.icon}${weakA.name}属性が弱め。
+    <span style="color:${weakA.color};cursor:pointer;text-decoration:underline;" onclick="filterAttr('${weakAttr}')">
+      → ${weakA.name}属性の神社を見る
+    </span>
+    <div style="margin-top:.6rem;padding:.6rem;background:#f5f0e0;border-left:3px solid #c9a84c;font-size:.66rem;color:#6a5a3a;line-height:2;">
+      <strong>📋 四柱（命式）</strong><br>
+      年柱：${STEMS[yearSB.stemIdx]}${BRANCHES[yearSB.branchIdx]}
+      （${ATTRS[STEM_ATTR[yearSB.stemIdx]].icon}${ATTRS[STEM_ATTR[yearSB.stemIdx]].name}）<br>
+      月柱：${STEMS[monthSB.stemIdx]}${BRANCHES[monthSB.branchIdx]}
+      （${ATTRS[STEM_ATTR[monthSB.stemIdx]].icon}${ATTRS[STEM_ATTR[monthSB.stemIdx]].name}）<br>
+      <strong>日柱：${STEMS[daySB.stemIdx]}${BRANCHES[daySB.branchIdx]}
+      （日干「${nichikan}」＝あなたの本質 ${mainA.icon}${mainA.name}）</strong><br>
+      時柱：${STEMS[hourSB.stemIdx]}${BRANCHES[hourSB.branchIdx]}
+      （${ATTRS[STEM_ATTR[hourSB.stemIdx]].icon}${ATTRS[STEM_ATTR[hourSB.stemIdx]].name}）<br>
+      ─────────────────<br>
+      九星気学（参考）：${kyuseiName}
+    </div>
+  `;
+
+  // 自動で弱属性神社を表示
+  setTimeout(() => {
+    filterAttr(weakAttr);
+    showToast('✦ 日干「' + nichikan + '」' + mainA.icon + mainA.name + '属性！弱い' + weakA.icon + weakA.name + 'の神社を表示中');
+  }, 600);
+}
+
+
+// ===== TOAST =====
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ===== 初期化 =====
+renderMapPins();
+renderShrines();
+renderStampGrid();
+</script>
+</body>
+</html>
