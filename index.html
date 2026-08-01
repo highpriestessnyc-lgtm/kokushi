@@ -336,7 +336,7 @@ body{background:var(--black);color:var(--pale);font-family:'Noto Sans JP',sans-s
     <a href="#kofun">古墳</a><a href="#asuka">飛鳥</a><a href="#nara">奈良</a>
     <a href="#heian">平安</a><a href="#kamakura">鎌倉</a><a href="#muromachi">室町</a>
     <a href="#azuchi">桃山</a><a href="#edo">江戸</a><a href="#meiji">明治〜</a>
-    <a href="#heisei">平成〜</a><a href="#emperors">天皇系譜</a>
+    <a href="#heisei">平成〜</a><a href="#keisho">継承問題</a><a href="#ichizoku">守護一族</a><a href="#emperors">天皇系譜</a>
   </div>
   <input class="search-input-nav" type="text" id="searchInput" placeholder="🔍 キーワード">
 </nav>
@@ -425,6 +425,16 @@ body{background:var(--black);color:var(--pale);font-family:'Noto Sans JP',sans-s
     <div class="ss-era">平成〜令和</div><div class="ss-date">1989〜現在</div>
     <div class="ss-emperor" data-emperor="akihito">👑 上皇明仁・今上徳仁</div>
     <div class="ss-persons"><span class="ss-person-tag">小泉純一郎</span><span class="ss-person-tag">安倍晋三</span></div>
+  </div>
+  <div class="sidebar-section" data-target="keisho">
+    <div class="ss-era">皇統継承問題</div><div class="ss-date">令和〜未来</div>
+    <div class="ss-emperor">👑 悠仁親王・愛子内親王</div>
+    <div class="ss-persons"><span class="ss-person-tag">男系維持</span><span class="ss-person-tag">女系容認</span><span class="ss-person-tag">旧宮家復帰</span></div>
+  </div>
+  <div class="sidebar-section" data-target="ichizoku">
+    <div class="ss-era">神道守護一族</div><div class="ss-date">神代〜現在</div>
+    <div class="ss-emperor">🦅 八咫烏・賀茂氏</div>
+    <div class="ss-persons"><span class="ss-person-tag">秦氏</span><span class="ss-person-tag">出雲国造家</span><span class="ss-person-tag">物部末裔</span><span class="ss-person-tag">千家家</span></div>
   </div>
 </aside>
 
@@ -1205,6 +1215,672 @@ body{background:var(--black);color:var(--pale);font-family:'Noto Sans JP',sans-s
 </aside>
 
 </div><!-- /.three-col -->
+
+
+<!-- ===== 皇統継承問題セクション ===== -->
+<section class="tri-section" id="keisho" style="scroll-margin-top:58px;">
+  <div class="tri-header" style="border-color:#c0392b;">
+    <span class="era-num">現</span>
+    <span class="era-title" style="color:#e87060;">皇統継承問題 — 男系・女系・皇統の未来</span>
+    <span class="era-span">令和現在 〜 未来</span>
+  </div>
+
+  <!-- 男系・女系の基本説明 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem;">
+    <div style="background:#070710;border:1px solid rgba(201,168,76,.2);padding:1.2rem;">
+      <div style="font-family:'Noto Serif JP',serif;font-size:.9rem;color:var(--gold);margin-bottom:.6rem;letter-spacing:.1em;">👑 男系継承（現行制度）</div>
+      <div style="font-size:.72rem;color:#a09080;line-height:1.9;">
+        父方を辿ると必ず天皇にたどり着く継承。<br>
+        <span style="color:var(--gold);">2600年間一度も途切れていない。</span><br><br>
+        例：今上天皇→昭和天皇→大正天皇→明治天皇…→神武天皇<br><br>
+        歴史上の女性天皇（8人10代）も<strong style="color:var(--gold);">全員「男系」女性天皇</strong>。父方を辿ると必ず天皇にたどり着く。
+      </div>
+    </div>
+    <div style="background:#070710;border:1px solid rgba(192,57,43,.2);padding:1.2rem;">
+      <div style="font-family:'Noto Serif JP',serif;font-size:.9rem;color:#e87060;margin-bottom:.6rem;letter-spacing:.1em;">⚡ 女系継承（議論中）</div>
+      <div style="font-size:.72rem;color:#a09080;line-height:1.9;">
+        母方でも皇統を繋ぐことを認める継承。<br>
+        <span style="color:#e87060;">歴史上一度も存在しない。</span><br><br>
+        例：愛子内親王が即位→女性天皇（これは男系でOK）<br>
+        愛子内親王の子が即位→<strong style="color:#e87060;">女系天皇（これが問題）</strong><br><br>
+        女系を認めると事実上「新王朝」になるという意見がある。
+      </div>
+    </div>
+  </div>
+
+  <!-- 現在の皇位継承順位 -->
+  <div style="background:#070710;border:1px solid rgba(201,168,76,.2);padding:1.2rem;margin-bottom:1.2rem;">
+    <div style="font-family:'Noto Serif JP',serif;font-size:.88rem;color:var(--gold);margin-bottom:.8rem;letter-spacing:.1em;">▌ 現在の皇位継承順位（2024年時点）</div>
+    <div style="display:flex;flex-direction:column;gap:.4rem;">
+
+      <div style="display:flex;align-items:center;gap:.8rem;padding:.6rem;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.3);">
+        <div style="font-family:'Noto Serif JP',serif;font-size:1rem;color:var(--gold);min-width:180px;">今上天皇（徳仁）</div>
+        <div style="font-size:.68rem;color:#8a8070;">第126代天皇・在位中</div>
+      </div>
+
+      <div style="margin-left:1.5rem;display:flex;align-items:center;gap:.5rem;">
+        <span style="color:var(--muted);font-size:.8rem;">↓ 第1位</span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.8rem;padding:.6rem;background:rgba(100,150,200,.06);border:1px solid rgba(100,150,200,.2);margin-left:1.5rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.9rem;color:#a0c0e0;min-width:180px;">秋篠宮皇嗣殿下</div>
+        <div style="font-size:.68rem;color:#6a8090;">今上天皇の弟・皇嗣（次の天皇候補）</div>
+      </div>
+
+      <div style="margin-left:3rem;display:flex;align-items:center;gap:.5rem;">
+        <span style="color:var(--muted);font-size:.8rem;">↓ 第2位</span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:.8rem;padding:.6rem;background:rgba(100,200,150,.06);border:2px solid rgba(100,200,150,.3);margin-left:3rem;position:relative;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.9rem;color:#80e0a0;min-width:180px;">悠仁親王殿下</div>
+        <div style="font-size:.68rem;color:#50a070;">秋篠宮の長男・<strong style="color:#80e0a0;">唯一の男系男子！</strong></div>
+        <div style="position:absolute;right:.8rem;font-size:.6rem;color:#80e0a0;border:1px solid #80e0a0;padding:.1rem .4rem;">2006年生まれ</div>
+      </div>
+
+      <div style="margin-left:1.5rem;margin-top:.4rem;padding:.5rem .8rem;background:rgba(201,168,76,.03);border-left:2px solid rgba(201,168,76,.2);font-size:.68rem;color:#7a7060;">
+        ※ 愛子内親王（今上天皇の長女）は現行法では継承順位に入らない（皇室典範の規定）
+      </div>
+    </div>
+  </div>
+
+  <!-- 歴史上の女性天皇 -->
+  <div style="background:#070710;border:1px solid rgba(160,100,180,.2);padding:1.2rem;margin-bottom:1.2rem;">
+    <div style="font-family:'Noto Serif JP',serif;font-size:.88rem;color:#c890a8;margin-bottom:.8rem;letter-spacing:.1em;">▌ 歴史上の女性天皇 8人10代 — 全員「男系」</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem;">
+      <div style="padding:.5rem .7rem;border:1px solid rgba(160,100,180,.15);font-size:.68rem;">
+        <div style="color:#c890a8;font-family:'Noto Serif JP',serif;">推古天皇（33代）</div>
+        <div style="color:#7a6070;">593〜628年・飛鳥</div>
+        <div style="color:#6a5060;font-size:.62rem;">欽明天皇の皇女（父が天皇）</div>
+      </div>
+      <div style="padding:.5rem .7rem;border:1px solid rgba(160,100,180,.15);font-size:.68rem;">
+        <div style="color:#c890a8;font-family:'Noto Serif JP',serif;">皇極/斉明天皇（35/37代）</div>
+        <div style="color:#7a6070;">642〜661年・飛鳥</div>
+        <div style="color:#6a5060;font-size:.62rem;">押坂彦人大兄皇子の孫（男系）</div>
+      </div>
+      <div style="padding:.5rem .7rem;border:1px solid rgba(160,100,180,.15);font-size:.68rem;">
+        <div style="color:#c890a8;font-family:'Noto Serif JP',serif;">持統天皇（41代）</div>
+        <div style="color:#7a6070;">686〜697年・飛鳥</div>
+        <div style="color:#6a5060;font-size:.62rem;">天智天皇の皇女（父が天皇）</div>
+      </div>
+      <div style="padding:.5rem .7rem;border:1px solid rgba(160,100,180,.15);font-size:.68rem;">
+        <div style="color:#c890a8;font-family:'Noto Serif JP',serif;">元明天皇（43代）</div>
+        <div style="color:#7a6070;">707〜715年・奈良</div>
+        <div style="color:#6a5060;font-size:.62rem;">天智天皇の皇女（父が天皇）</div>
+      </div>
+      <div style="padding:.5rem .7rem;border:1px solid rgba(160,100,180,.15);font-size:.68rem;">
+        <div style="color:#c890a8;font-family:'Noto Serif JP',serif;">元正天皇（44代）</div>
+        <div style="color:#7a6070;">715〜724年・奈良</div>
+        <div style="color:#6a5060;font-size:.62rem;">草壁皇子の皇女（父が皇子）</div>
+      </div>
+      <div style="padding:.5rem .7rem;border:1px solid rgba(160,100,180,.15);font-size:.68rem;">
+        <div style="color:#c890a8;font-family:'Noto Serif JP',serif;">孝謙/称徳天皇（46/48代）</div>
+        <div style="color:#7a6070;">749〜770年・奈良</div>
+        <div style="color:#6a5060;font-size:.62rem;">聖武天皇の皇女（父が天皇）</div>
+      </div>
+      <div style="padding:.5rem .7rem;border:1px solid rgba(160,100,180,.15);font-size:.68rem;">
+        <div style="color:#c890a8;font-family:'Noto Serif JP',serif;">明正天皇（109代）</div>
+        <div style="color:#7a6070;">1629〜1643年・江戸</div>
+        <div style="color:#6a5060;font-size:.62rem;">後水尾天皇の皇女（父が天皇）</div>
+      </div>
+      <div style="padding:.5rem .7rem;border:1px solid rgba(160,100,180,.15);font-size:.68rem;">
+        <div style="color:#c890a8;font-family:'Noto Serif JP',serif;">後桜町天皇（117代）</div>
+        <div style="color:#7a6070;">1762〜1771年・江戸</div>
+        <div style="color:#6a5060;font-size:.62rem;">桜町天皇の皇女（父が天皇）</div>
+      </div>
+    </div>
+    <div style="margin-top:.7rem;padding:.5rem .8rem;background:rgba(201,168,76,.04);border-left:2px solid var(--gold-dim);font-size:.68rem;color:#8a7060;">
+      ※ 全員「中継ぎ」的役割。独身のまま、または子を残さずに譲位。次の天皇は男系男子に戻っている。女系天皇は歴史上一度も存在しない。
+    </div>
+  </div>
+
+  <!-- GHQ皇籍離脱と旧宮家 -->
+  <div style="background:#070710;border:1px solid rgba(192,57,43,.2);padding:1.2rem;margin-bottom:1.2rem;">
+    <div style="font-family:'Noto Serif JP',serif;font-size:.88rem;color:#e87060;margin-bottom:.8rem;letter-spacing:.1em;">▌ GHQによる皇統断絶工作（1947年）と旧宮家問題</div>
+    <div style="font-size:.72rem;color:#a09080;line-height:1.9;margin-bottom:.8rem;">
+      1947年（昭和22年）、GHQの指令により<strong style="color:#e87060;">11の宮家・51名が一斉に皇籍を離脱</strong>させられた。<br>
+      これにより皇族の数が激減。意図的な皇統弱体化工作という見方もある。
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem;">
+      <div>
+        <div style="font-size:.65rem;color:#e87060;margin-bottom:.4rem;letter-spacing:.1em;">■ 離脱させられた11宮家</div>
+        <div style="font-size:.66rem;color:#9a8070;line-height:2;">
+          賀陽宮・久邇宮・梨本宮・朝香宮<br>
+          東久邇宮・北白川宮・竹田宮<br>
+          山階宮・閑院宮・東伏見宮・華頂宮
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.65rem;color:var(--gold);margin-bottom:.4rem;letter-spacing:.1em;">■ 旧宮家復帰の議論（現在）</div>
+        <div style="font-size:.66rem;color:#9a8070;line-height:2;">
+          旧宮家の子孫は今も民間に存在<br>
+          男系で皇統と繋がっている<br>
+          復帰により男系継承を維持できる<br>
+          2022年〜国会で本格議論開始
+        </div>
+      </div>
+    </div>
+    <div style="padding:.5rem .8rem;background:rgba(192,57,43,.05);border-left:2px solid rgba(192,57,43,.4);font-size:.68rem;color:#a06050;">
+      「勝者が歴史を書く」のと同様、GHQが皇統を人為的に細らせた可能性がある。戦後日本の最大の未解決問題の一つ。
+    </div>
+  </div>
+
+  <!-- 残った3宮家・外された11宮家 詳細 -->
+  <div style="margin-top:1.2rem;">
+    <div style="font-family:'Noto Serif JP',serif;font-size:.88rem;color:#e87060;margin-bottom:.5rem;letter-spacing:.1em;">▌ 1947年10月14日 — 運命の一日</div>
+    <div style="font-size:.72rem;color:#a09080;line-height:1.9;margin-bottom:.8rem;padding:.7rem 1rem;background:rgba(192,57,43,.04);border-left:3px solid rgba(192,57,43,.3);">
+      1947年（昭和22年）10月14日、11の宮家・51人が一斉に皇室を離れ民間人になった。前日には新憲法のもとで初めての皇室会議が開かれ決定された。<br>
+      <strong style="color:#e87060;">離脱の主な理由：</strong>GHQ占領下で宮家資産に<strong style="color:#e87060;">最高約9割の財産税</strong>が課され維持不可能に。GHQの皇室縮小方針＋日本側の「小さな皇室」志向が重なった。
+    </div>
+
+    <!-- 残った3宮家 -->
+    <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:var(--gold);margin-bottom:.5rem;letter-spacing:.1em;">✅ 皇室に残った3宮家（直宮家）</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.6rem;margin-bottom:1rem;">
+      <div style="background:#070710;border:1px solid rgba(201,168,76,.3);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.82rem;color:var(--gold);">秩父宮家</div>
+        <div style="font-size:.62rem;color:#6a5030;margin-bottom:.3rem;">ちちぶのみや</div>
+        <div style="font-size:.67rem;color:#9a8060;line-height:1.7;">昭和天皇の弟・雍仁親王。1953年薨去。子なし。現在廃絶。</div>
+      </div>
+      <div style="background:#070710;border:1px solid rgba(201,168,76,.3);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.82rem;color:var(--gold);">高松宮家</div>
+        <div style="font-size:.62rem;color:#6a5030;margin-bottom:.3rem;">たかまつのみや</div>
+        <div style="font-size:.67rem;color:#9a8060;line-height:1.7;">昭和天皇の弟・宣仁親王。1987年薨去。子なし。現在廃絶。</div>
+      </div>
+      <div style="background:#070710;border:2px solid rgba(201,168,76,.5);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.82rem;color:#e8c060;">三笠宮家 ★現存</div>
+        <div style="font-size:.62rem;color:#6a5030;margin-bottom:.3rem;">みかさのみや</div>
+        <div style="font-size:.67rem;color:#9a8060;line-height:1.7;">昭和天皇の弟・崇仁親王。彬子女王・瑶子女王らが継承。<strong style="color:#c9a84c;">現存する唯一の直宮家。</strong></div>
+      </div>
+    </div>
+
+    <!-- 外された11宮家 -->
+    <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#e87060;margin-bottom:.4rem;letter-spacing:.1em;">❌ GHQに外された旧11宮家（皇籍離脱）</div>
+    <div style="font-size:.67rem;color:#7a6050;margin-bottom:.6rem;">全家が<strong style="color:#c9a84c;">伏見宮貞成親王（約600年前・崇光天皇の孫）</strong>を共通の男系祖先とする。</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.55rem;margin-bottom:1rem;">
+
+      <div style="background:#0a0508;border:1px solid rgba(192,57,43,.2);padding:.75rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#e09080;">① 伏見宮家（ふしみのみや）</div>
+        <div style="font-size:.62rem;color:#6a4040;margin-bottom:.25rem;">室町時代創設・全11宮家の源流</div>
+        <div style="font-size:.65rem;color:#8a6060;line-height:1.7;">崇光天皇の子孫として室町時代に創設。11宮家すべての祖。最も由緒深い家系。</div>
+      </div>
+
+      <div style="background:#0a0508;border:1px solid rgba(192,57,43,.2);padding:.75rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#e09080;">② 閑院宮家（かんいんのみや）</div>
+        <div style="font-size:.62rem;color:#6a4040;margin-bottom:.25rem;">江戸時代創設・光格天皇を輩出</div>
+        <div style="font-size:.65rem;color:#8a6060;line-height:1.7;">第119代光格天皇を輩出。現皇室は光格天皇の血を引くため閑院宮家と縁が深い。</div>
+      </div>
+
+      <div style="background:#0a0508;border:1px solid rgba(192,57,43,.2);padding:.75rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#e09080;">③ 山階宮家（やましなのみや）</div>
+        <div style="font-size:.62rem;color:#6a4040;margin-bottom:.25rem;">明治初期創設・学術系</div>
+        <div style="font-size:.65rem;color:#8a6060;line-height:1.7;">山階鳥類研究所（現在も存続）を設立した学術的な宮家。仁孝天皇の皇子・晃親王が創設。</div>
+      </div>
+
+      <div style="background:#0a0508;border:1px solid rgba(192,57,43,.2);padding:.75rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#e09080;">④ 北白川宮家（きたしらかわのみや）</div>
+        <div style="font-size:.62rem;color:#6a4040;margin-bottom:.25rem;">台湾平定で戦死・台湾に慕われる</div>
+        <div style="font-size:.65rem;color:#8a6060;line-height:1.7;">能久親王が台湾平定（1895年）で戦死。台湾神社に祀られ今も台湾人に尊敬される。</div>
+      </div>
+
+      <div style="background:#0a0508;border:1px solid rgba(192,57,43,.25);padding:.75rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#e8a880;">⑤ 久邇宮家（くにのみや）★</div>
+        <div style="font-size:.62rem;color:#6a4040;margin-bottom:.25rem;">香淳皇后の実家・最も血縁が近い</div>
+        <div style="font-size:.65rem;color:#8a6060;line-height:1.7;"><strong style="color:#c9a84c;">昭和天皇の皇后・香淳皇后の実家。</strong>現皇室と最も血縁が近い旧宮家。旧邸は聖心女子大学（渋谷）。</div>
+      </div>
+
+      <div style="background:#0a0508;border:1px solid rgba(192,57,43,.2);padding:.75rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#e09080;">⑥ 梨本宮家（なしもとのみや）</div>
+        <div style="font-size:.62rem;color:#6a4040;margin-bottom:.25rem;">唯一のA級戦犯拘置・朝鮮王室と縁</div>
+        <div style="font-size:.65rem;color:#8a6060;line-height:1.7;">守正王は皇族唯一のA級戦犯拘置（1947年3月釈放）。娘・方子女王は朝鮮王室に嫁ぎ韓国で福祉活動に尽力。</div>
+      </div>
+
+      <div style="background:#0a0508;border:1px solid rgba(192,57,43,.2);padding:.75rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#e09080;">⑦ 賀陽宮家（かやのみや）</div>
+        <div style="font-size:.62rem;color:#6a4040;margin-bottom:.25rem;">明治中期創設</div>
+        <div style="font-size:.65rem;color:#8a6060;line-height:1.7;">子孫は現在も菊栄親睦会を通じ皇室と交流。旧宮家男子の皇籍復帰候補の一つ。</div>
+      </div>
+
+      <div style="background:#0a0508;border:1px solid rgba(192,57,43,.2);padding:.75rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#e09080;">⑧ 朝香宮家（あさかのみや）</div>
+        <div style="font-size:.62rem;color:#6a4040;margin-bottom:.25rem;">旧邸が東京都庭園美術館</div>
+        <div style="font-size:.65rem;color:#8a6060;line-height:1.7;">旧朝香宮邸は現在「東京都庭園美術館」（港区白金台）として一般公開。アール・デコ建築が有名。</div>
+      </div>
+
+      <div style="background:#0a0508;border:1px solid rgba(192,57,43,.25);padding:.75rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#e8a880;">⑨ 東久邇宮家（ひがしくにのみや）★</div>
+        <div style="font-size:.62rem;color:#6a4040;margin-bottom:.25rem;">唯一の皇族出身首相</div>
+        <div style="font-size:.65rem;color:#8a6060;line-height:1.7;">稔彦王は終戦直後（1945年8月）に<strong style="color:#c9a84c;">唯一の皇族出身首相</strong>に就任。「一億総懺悔」発言で有名。</div>
+      </div>
+
+      <div style="background:#0a0508;border:1px solid rgba(192,57,43,.25);padding:.75rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#e8a880;">⑩ 竹田宮家（たけだのみや）★</div>
+        <div style="font-size:.62rem;color:#6a4040;margin-bottom:.25rem;">皇籍復帰論の中心・竹田恒泰氏</div>
+        <div style="font-size:.65rem;color:#8a6060;line-height:1.7;">明治天皇の皇女・昌子内親王が嫁いだ。子孫の竹田恒泰氏は皇統問題の論客として旧宮家の皇籍復帰を主張。</div>
+      </div>
+
+      <div style="background:#0a0508;border:1px solid rgba(192,57,43,.2);padding:.75rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#e09080;">⑪ 東伏見宮家（ひがしふしみのみや）</div>
+        <div style="font-size:.62rem;color:#6a4040;margin-bottom:.25rem;">依仁親王・子なしで実質廃絶</div>
+        <div style="font-size:.65rem;color:#8a6060;line-height:1.7;">依仁親王（1922年薨去）は子なし。皇籍離脱時は未亡人・周子妃が家を預かっていた。</div>
+      </div>
+
+    </div>
+
+    <!-- 2026年最新の動き -->
+    <div style="background:#070710;border:1px solid rgba(201,168,76,.25);padding:1rem;margin-top:.5rem;">
+      <div style="font-family:'Noto Serif JP',serif;font-size:.82rem;color:var(--gold);margin-bottom:.6rem;letter-spacing:.1em;">🔴 2026年6月 — 国会で「立法府の総意」が出た</div>
+      <div style="font-size:.7rem;color:#a09070;line-height:1.9;">
+        <strong style="color:#c9a84c;">具体化した案：旧宮家子孫の「妻子なし・15歳以上の男系男子」を養子として皇室に迎える。</strong><br>
+        ・本人には継承資格なし　・その子（次世代）には継承資格あり　・30年ごとに見直し<br><br>
+        旧宮家の中には明治天皇・昭和天皇の皇女が嫁ぎ、天皇陛下の従弟もいる。初代神武天皇の男系血筋を受け継ぐ若い男子が旧宮家に<strong style="color:#c9a84c;">10名以上いる。</strong><br><br>
+        <div style="padding:.5rem .8rem;background:rgba(192,57,43,.05);border-left:2px solid rgba(192,57,43,.3);margin-top:.4rem;font-size:.67rem;color:#9a7060;">
+          ⚠️ 慎重論：旧宮家と現皇室の男系共通祖先は約600年前に分岐。70年以上完全な民間人として生活してきた人を皇室に迎えることへの慎重意見もある。
+        </div>
+      </div>
+    </div>
+
+    <!-- 菊栄親睦会 -->
+    <div style="margin-top:.7rem;padding:.6rem .9rem;background:rgba(201,168,76,.03);border-left:2px solid rgba(201,168,76,.15);font-size:.67rem;color:#8a7860;line-height:1.8;">
+      💠 <strong style="color:#c9a84c;">菊栄親睦会（きくえいしんぼくかい）</strong>：旧宮家と現皇室が今も交流を続ける親睦会。GHQに外されても皇室との精神的なつながりは70年以上続いている。
+    </div>
+  </div>
+
+  <!-- 論点の対立 3列 -->
+  <div style="font-family:'Noto Serif JP',serif;font-size:.85rem;color:var(--pale);margin:.8rem 0 .5rem;letter-spacing:.1em;">▌ 論点の対立</div>
+  <div class="tri-legend">
+    <span class="tri-legend-item tl-tsuu" style="border-color:#5a9a6a;color:#5a9a6a;">👑 男系維持派</span>
+    <span class="tri-legend-item tl-ises" style="border-color:#9a6a9a;color:#9a6a9a;">👸 女系容認派</span>
+    <span class="tri-legend-item tl-roman">🔍 中立・深読み</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;margin-top:.5rem;">
+    <div style="background:#070710;border:1px solid rgba(90,154,106,.2);padding:1rem;">
+      <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#5a9a6a;margin-bottom:.6rem;">👑 男系維持派の主張</div>
+      <div style="font-size:.68rem;color:#708870;line-height:1.9;">
+        ・2600年間途切れていない世界最長の皇統<br>
+        ・女系にすると事実上「新王朝」になる<br>
+        ・旧宮家の復帰で男系継承を維持できる<br>
+        ・歴史上の女性天皇も全員男系だった<br>
+        ・一度女系を認めると元に戻せない<br>
+        ・皇統は「民意」で変えるべきものではない
+      </div>
+    </div>
+    <div style="background:#070710;border:1px solid rgba(154,106,154,.2);padding:1rem;">
+      <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#9a6a9a;margin-bottom:.6rem;">👸 女系容認派の主張</div>
+      <div style="font-size:.68rem;color:#887088;line-height:1.9;">
+        ・愛子内親王への圧倒的な国民的支持<br>
+        ・旧宮家は70年以上完全に民間人<br>
+        ・悠仁親王一人に依存するリスク<br>
+        ・時代に合わせた柔軟な対応が必要<br>
+        ・女性が活躍する時代に合っている<br>
+        ・国民が選ぶ象徴天皇制の在り方
+      </div>
+    </div>
+    <div style="background:#070710;border:1px solid rgba(201,168,76,.15);padding:1rem;">
+      <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:var(--gold);margin-bottom:.6rem;">🔍 深読み・本質論</div>
+      <div style="font-size:.68rem;color:#907860;line-height:1.9;">
+        ・GHQが意図的に皇統を細らせた問題を直視すべき<br>
+        ・「Y染色体」で繋がる男系は遺伝学的にも特別な連続性<br>
+        ・天武系→天智系の転換点（光仁天皇）の先例がある<br>
+        ・藤原氏が皇室に入り込んだように、外部の血が入ることへの警戒<br>
+        ・2600年の連続性こそが日本の国体の根幹
+      </div>
+    </div>
+  </div>
+
+  <!-- 皇統の未来 -->
+  <div style="margin-top:1rem;padding:1rem 1.2rem;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.15);">
+    <div style="font-family:'Noto Serif JP',serif;font-size:.85rem;color:var(--gold);margin-bottom:.5rem;">▌ 皇統の未来シナリオ</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;font-size:.68rem;">
+      <div style="color:#9a9080;line-height:1.9;border-left:2px solid rgba(90,154,106,.4);padding-left:.8rem;">
+        <strong style="color:#5a9a6a;">A. 男系維持シナリオ</strong><br>
+        悠仁親王が即位・子をもうける<br>
+        旧宮家の皇籍復帰を実現<br>
+        → 世界最長の皇統が続く
+      </div>
+      <div style="color:#9a9080;line-height:1.9;border-left:2px solid rgba(154,106,154,.4);padding-left:.8rem;">
+        <strong style="color:#9a6a9a;">B. 女系容認シナリオ</strong><br>
+        皇室典範を改正・愛子内親王即位<br>
+        その子が即位→女系天皇誕生<br>
+        → 事実上の新王朝（賛否両論）
+      </div>
+      <div style="color:#9a9080;line-height:1.9;border-left:2px solid rgba(192,57,43,.4);padding-left:.8rem;">
+        <strong style="color:#e87060;">C. 皇統断絶リスク</strong><br>
+        悠仁親王に子がいない場合<br>
+        旧宮家復帰も実現しない場合<br>
+        → 2600年の皇統が終わる可能性
+      </div>
+      <div style="color:#9a9080;line-height:1.9;border-left:2px solid rgba(201,168,76,.4);padding-left:.8rem;">
+        <strong style="color:var(--gold);">D. 折衷案</strong><br>
+        女性皇族は結婚後も皇室に残る<br>
+        旧宮家男子が養子として入る<br>
+        → 議論中・実現の可否不明
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ===== 神道を守り続けた一族セクション ===== -->
+<section class="tri-section" id="ichizoku" style="scroll-margin-top:58px;">
+  <div class="tri-header" style="border-color:#4a6a5a;">
+    <span class="era-num">族</span>
+    <span class="era-title" style="color:#80c8a0;">神道を守り続けた一族 — 八咫烏・賀茂氏・秦氏・出雲国造家</span>
+    <span class="era-span">神代 〜 現在</span>
+  </div>
+
+  <!-- 八咫烏・賀茂氏 -->
+  <div style="margin-bottom:1.5rem;">
+    <div style="font-family:'Noto Serif JP',serif;font-size:.95rem;color:#80c8a0;margin-bottom:.8rem;letter-spacing:.1em;border-left:3px solid #4a8a6a;padding-left:.8rem;">🦅 八咫烏と賀茂氏 — 神武天皇を導いた一族</div>
+
+    <div class="tri-legend" style="margin-bottom:.8rem;">
+      <span class="tri-legend-item tl-tsuu">📜 通説（記紀）</span>
+      <span class="tri-legend-item tl-ises">🔍 異説・深読み</span>
+      <span class="tri-legend-item tl-roman">✨ ロマン・仮説</span>
+    </div>
+
+    <div class="tri-entry">
+      <div class="tri-date-col">八咫烏の正体<br>神武東征時</div>
+      <div class="tri-col tc-tsuu">
+        <div class="tri-col-title">賀茂建角身命が化身</div>
+        古事記・日本書紀に記録。賀茂建角身命（かもたけつぬみのみこと）が八咫烏に化身し、神武天皇を熊野から大和へ先導した。三本足は「智・仁・勇」また「天・地・人」を表す。下鴨神社の祭神として今も祀られる。
+      </div>
+      <div class="tri-col tc-ises">
+        <div class="tri-col-title">出雲系縄文族の道案内説</div>
+        賀茂氏は出雲系・縄文飛騨系の一族とも言われる。「八咫烏」は渡来系天孫族（神武）を、縄文ネイティブ（賀茂氏）が大和へ案内したことを意味するかもしれない。案内した側が「烏」として神話化された可能性がある。
+      </div>
+      <div class="tri-col tc-roman">
+        <div class="tri-col-title">三本足の宇宙的意味</div>
+        三本足のカラスは世界各地の神話に登場する（中国の「三足烏」・太陽の象徴）。天皇即位礼の衣装の左胸に「三足鳥」が描かれている。サッカー日本代表のエンブレムもここから来ている。三本足が「太陽」を意味するなら、賀茂氏は太陽信仰の守護者だったかもしれない。
+      </div>
+    </div>
+
+    <div class="tri-entry">
+      <div class="tri-date-col">八咫烏<br>秘密結社説</div>
+      <div class="tri-col tc-tsuu">
+        <div class="tri-col-title">神話上の神の使い</div>
+        記紀では八咫烏は神武東征を導いた神の使い。熊野本宮大社の神紋が八咫烏。熊野那智大社・熊野速玉大社とともに熊野三山すべてに八咫烏のシンボルがある。
+      </div>
+      <div class="tri-col tc-ises">
+        <div class="tri-col-title">賀茂氏が藤原氏に対抗する組織を作ったという説</div>
+        オカルト系書籍では「744年（天平16年）に吉備真備が聖武天皇の密勅により藤原氏の専横に対抗するため結成した」という説がある。下鴨神社境内の河合神社を仮本宗とし、「大烏」と呼ばれる三人の実質的指導者がいるとされる。戦後GHQの神道指令で弱体化したとも言われる。
+      </div>
+      <div class="tri-col tc-roman">
+        <div class="tri-col-title">「裏天皇」として今も日本を守っているかもしれない</div>
+        「八咫烏」を名乗る組織が今も存在するという説がある。天皇・皇族の葬儀を担う「八瀬童子」、皇室の祭祀実務を担う内廷職員の一部にメンバーがいるとも言われる。藤原氏が「表の支配者」なら、賀茂氏・八咫烏は「裏の守護者」として2600年の皇統を守り続けたロマンがある。
+      </div>
+    </div>
+
+    <!-- 賀茂氏ゆかりの神社 -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;margin-top:.8rem;">
+      <div style="background:#070710;border:1px solid rgba(80,160,100,.2);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#80c8a0;">下鴨神社（賀茂御祖神社）</div>
+        <div style="font-size:.62rem;color:#4a6a50;margin-bottom:.3rem;">📍 京都府京都市</div>
+        <div style="font-size:.66rem;color:#7a9870;line-height:1.7;">賀茂建角身命（八咫烏の化身）を主祭神。世界遺産。糺の森に鎮座。「八咫烏組織」の仮本宗とも言われる河合神社が境内に。</div>
+        <a href="https://maps.google.com/?q=下鴨神社+京都" target="_blank" rel="noopener" style="display:inline-block;margin-top:.4rem;font-size:.6rem;padding:.15rem .5rem;border:1px solid rgba(80,160,100,.3);color:#60a878;text-decoration:none;">🗺 地図</a>
+      </div>
+      <div style="background:#070710;border:1px solid rgba(80,160,100,.2);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#80c8a0;">上賀茂神社（賀茂別雷神社）</div>
+        <div style="font-size:.62rem;color:#4a6a50;margin-bottom:.3rem;">📍 京都府京都市</div>
+        <div style="font-size:.66rem;color:#7a9870;line-height:1.7;">賀茂別雷命（かもわけいかづち）を主祭神。世界遺産。山城国一宮。下鴨神社と合わせて「賀茂社」と呼ばれる。葵祭（5月）が有名。</div>
+        <a href="https://maps.google.com/?q=上賀茂神社+京都" target="_blank" rel="noopener" style="display:inline-block;margin-top:.4rem;font-size:.6rem;padding:.15rem .5rem;border:1px solid rgba(80,160,100,.3);color:#60a878;text-decoration:none;">🗺 地図</a>
+      </div>
+      <div style="background:#070710;border:1px solid rgba(80,160,100,.2);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#80c8a0;">熊野本宮大社</div>
+        <div style="font-size:.62rem;color:#4a6a50;margin-bottom:.3rem;">📍 和歌山県田辺市</div>
+        <div style="font-size:.66rem;color:#7a9870;line-height:1.7;">八咫烏を神紋とする熊野三山の一つ。熊野国造家（賀茂氏と同じく出雲系）が今も神職を継承。神武東征・熊野神話の舞台。</div>
+        <a href="https://maps.google.com/?q=熊野本宮大社" target="_blank" rel="noopener" style="display:inline-block;margin-top:.4rem;font-size:.6rem;padding:.15rem .5rem;border:1px solid rgba(80,160,100,.3);color:#60a878;text-decoration:none;">🗺 地図</a>
+      </div>
+      <div style="background:#070710;border:1px solid rgba(80,160,100,.2);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#80c8a0;">八咫烏神社</div>
+        <div style="font-size:.62rem;color:#4a6a50;margin-bottom:.3rem;">📍 奈良県宇陀市（神武東征ゆかりの地）</div>
+        <div style="font-size:.66rem;color:#7a9870;line-height:1.7;">八咫烏（賀茂建角身命）を主祭神とする全国唯一の独立社。神武東征の道案内をした地に鎮座。知る人ぞ知る聖地。</div>
+        <a href="https://maps.google.com/?q=八咫烏神社+奈良県宇陀市" target="_blank" rel="noopener" style="display:inline-block;margin-top:.4rem;font-size:.6rem;padding:.15rem .5rem;border:1px solid rgba(80,160,100,.3);color:#60a878;text-decoration:none;">🗺 地図</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 秦氏 深掘り -->
+  <div style="margin-bottom:1.5rem;padding-top:1rem;border-top:1px solid rgba(201,168,76,.15);">
+    <div style="font-family:'Noto Serif JP',serif;font-size:.95rem;color:#d4a840;margin-bottom:.8rem;letter-spacing:.1em;border-left:3px solid #8a6820;padding-left:.8rem;">🌟 秦氏（はたうじ）— 古代日本の「見えないエンジン」深掘り</div>
+
+    <!-- 秦氏の基本 -->
+    <div style="background:#07070f;border:1px solid rgba(201,168,76,.2);padding:1rem;margin-bottom:.8rem;">
+      <div style="font-family:'Noto Serif JP',serif;font-size:.82rem;color:var(--gold);margin-bottom:.5rem;">▌ 秦氏とは何者か</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;font-size:.7rem;color:#a09070;line-height:1.8;">
+        <div>
+          <strong style="color:#c9a84c;">基本情報</strong><br>
+          ・渡来時期：3〜5世紀（応神天皇〜雄略天皇の時代）<br>
+          ・渡来規模：<strong style="color:#c9a84c;">数万人規模</strong>（日本書紀「弓月君が127県の民を率いて渡来」）<br>
+          ・本拠地：山城国葛野郡<strong style="color:#c9a84c;">太秦（うずまさ）</strong>（現・京都市右京区）<br>
+          ・「ハタ」の語源：新羅語で「海」＝海を渡ってきた人々
+        </div>
+        <div>
+          <strong style="color:#c9a84c;">持ち込んだ技術</strong><br>
+          ・養蚕・機織り（シルク産業）<br>
+          ・酒造技術<br>
+          ・土木・水利・灌漑技術<br>
+          ・鉄製錬技術<br>
+          → 当時の<strong style="color:#c9a84c;">「古代版シリコンバレー人材」</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- 秦氏が建てた聖地 -->
+    <div style="font-family:'Noto Serif JP',serif;font-size:.82rem;color:var(--gold);margin-bottom:.5rem;letter-spacing:.05em;">▌ 秦氏が建てた・深く関わった聖地</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;margin-bottom:.8rem;">
+
+      <div style="background:#0a0a05;border:1px solid rgba(201,168,76,.25);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.82rem;color:#e8c060;">伏見稲荷大社 ★最重要</div>
+        <div style="font-size:.62rem;color:#6a5a20;margin-bottom:.3rem;">📍 京都府京都市伏見区 ／ 711年創建</div>
+        <div style="font-size:.66rem;color:#9a8840;line-height:1.7;">
+          秦伊侶具（はたのいろぐ）が創建。全国<strong style="color:#c9a84c;">約3万社の稲荷神社の総本宮</strong>。千本鳥居は秦氏の「全国ネットワーク」の象徴かもしれない。<br>
+          <strong style="color:#c9a84c;">「稲荷（いなり）」</strong>＝「稲成り（いねなり）」→「伊奈利（いなり）」という説と、ヘブライ語「主なる神（Inari）」説がある。
+        </div>
+        <a href="https://maps.google.com/?q=伏見稲荷大社+京都" target="_blank" rel="noopener" style="display:inline-block;margin-top:.4rem;font-size:.6rem;padding:.15rem .5rem;border:1px solid rgba(201,168,76,.3);color:#a08830;text-decoration:none;">🗺 地図</a>
+      </div>
+
+      <div style="background:#0a0a05;border:1px solid rgba(201,168,76,.2);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.82rem;color:#e8c060;">松尾大社</div>
+        <div style="font-size:.62rem;color:#6a5a20;margin-bottom:.3rem;">📍 京都府京都市西京区 ／ 701年創建</div>
+        <div style="font-size:.66rem;color:#9a8840;line-height:1.7;">
+          秦忌寸都理（はたのいみきとり）が創建。山城国一宮。<strong style="color:#c9a84c;">全国の酒造業者の総本社</strong>（お酒の神様）。秦氏が酒造技術を日本にもたらしたことから。
+        </div>
+        <a href="https://maps.google.com/?q=松尾大社+京都" target="_blank" rel="noopener" style="display:inline-block;margin-top:.4rem;font-size:.6rem;padding:.15rem .5rem;border:1px solid rgba(201,168,76,.3);color:#a08830;text-decoration:none;">🗺 地図</a>
+      </div>
+
+      <div style="background:#0a0a05;border:1px solid rgba(201,168,76,.2);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.82rem;color:#e8c060;">広隆寺（蜂岡寺）</div>
+        <div style="font-size:.62rem;color:#6a5a20;margin-bottom:.3rem;">📍 京都府京都市右京区太秦 ／ 603年</div>
+        <div style="font-size:.66rem;color:#9a8840;line-height:1.7;">
+          聖徳太子から仏像を賜った秦河勝が創建。<strong style="color:#c9a84c;">京都最古の寺院</strong>。国宝・弥勒菩薩半跏思惟像を安置。秦氏の本拠地「太秦」に今も鎮座する。
+        </div>
+        <a href="https://maps.google.com/?q=広隆寺+京都太秦" target="_blank" rel="noopener" style="display:inline-block;margin-top:.4rem;font-size:.6rem;padding:.15rem .5rem;border:1px solid rgba(201,168,76,.3);color:#a08830;text-decoration:none;">🗺 地図</a>
+      </div>
+
+      <div style="background:#0a0a05;border:1px solid rgba(201,168,76,.2);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.82rem;color:#e8c060;">蚕ノ社（木嶋坐天照御魂神社）</div>
+        <div style="font-size:.62rem;color:#6a5a20;margin-bottom:.3rem;">📍 京都府京都市右京区太秦 </div>
+        <div style="font-size:.66rem;color:#9a8840;line-height:1.7;">
+          秦氏ゆかりの謎多き神社。境内に<strong style="color:#c9a84c;">三柱鳥居</strong>（三方向に鳥居が立つ日本唯一の構造）がある。三柱鳥居はユダヤ教の三位一体・ダビデの星との類似が指摘される神秘的な構造物。
+        </div>
+        <a href="https://maps.google.com/?q=蚕ノ社+木嶋坐天照御魂神社+京都" target="_blank" rel="noopener" style="display:inline-block;margin-top:.4rem;font-size:.6rem;padding:.15rem .5rem;border:1px solid rgba(201,168,76,.3);color:#a08830;text-decoration:none;">🗺 地図</a>
+      </div>
+
+      <div style="background:#0a0a05;border:1px solid rgba(201,168,76,.2);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.82rem;color:#e8c060;">宇佐神宮</div>
+        <div style="font-size:.62rem;color:#6a5a20;margin-bottom:.3rem;">📍 大分県宇佐市 ／ 全国4万社八幡宮の総本社</div>
+        <div style="font-size:.66rem;color:#9a8840;line-height:1.7;">
+          秦氏の一族・辛島氏が創建者とされる。全国<strong style="color:#c9a84c;">約4万社の八幡宮の総本宮</strong>。「宇佐神託事件」では道鏡の天皇即位を阻止した（和気清麻呂）。秦氏が八幡信仰を通じて全国ネットワークを構築。
+        </div>
+        <a href="https://maps.google.com/?q=宇佐神宮+大分県" target="_blank" rel="noopener" style="display:inline-block;margin-top:.4rem;font-size:.6rem;padding:.15rem .5rem;border:1px solid rgba(201,168,76,.3);color:#a08830;text-decoration:none;">🗺 地図</a>
+      </div>
+
+      <div style="background:#0a0a05;border:1px solid rgba(201,168,76,.2);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.82rem;color:#e8c060;">大避神社（大辟神社）</div>
+        <div style="font-size:.62rem;color:#6a5a20;margin-bottom:.3rem;">📍 兵庫県赤穂市坂越</div>
+        <div style="font-size:.66rem;color:#9a8840;line-height:1.7;">
+          秦河勝（聖徳太子の側近）を祀る。秦河勝は晩年に坂越に漂着し大避大神として天照皇大神とともに祀られた。「大避（おおさけ）」はヘブライ語「アドサキ（主なる神）」との類似が指摘される。
+        </div>
+        <a href="https://maps.google.com/?q=大避神社+兵庫県赤穂市" target="_blank" rel="noopener" style="display:inline-block;margin-top:.4rem;font-size:.6rem;padding:.15rem .5rem;border:1px solid rgba(201,168,76,.3);color:#a08830;text-decoration:none;">🗺 地図</a>
+      </div>
+
+    </div>
+
+    <!-- 秦氏とユダヤ 3列並記 -->
+    <div style="font-family:'Noto Serif JP',serif;font-size:.82rem;color:var(--gold);margin-bottom:.5rem;">▌ 秦氏＝ユダヤ系渡来人説 （3列並記）</div>
+    <div class="tri-entry" style="background:rgba(255,255,255,.02);">
+      <div class="tri-date-col">秦氏の出自<br>3〜5世紀</div>
+      <div class="tri-col tc-tsuu">
+        <div class="tri-col-title">朝鮮半島・新羅からの渡来</div>
+        日本書紀の記述では「秦の始皇帝の子孫・弓月君が127県の民を率いて渡来」。ただし「ハタ」は新羅語で「海」の意。実際は5世紀頃に新羅地方から渡来した集団と考えられている（京都市公式資料）。
+      </div>
+      <div class="tri-col tc-ises">
+        <div class="tri-col-title">シルクロード経由・中央アジアからの移動</div>
+        「弓月国（ゆづきのくに）」はカザフスタン付近の中央アジアに実在した地名という説がある。秦氏の高度な養蚕・機織り技術はシルクロードの「絹の道」と一致する。「秦」は中国語で「チン（Chin）」→中央アジアを経由した可能性。
+      </div>
+      <div class="tri-col tc-roman">
+        <div class="tri-col-title">失われた10支族の一派かもしれない</div>
+        BC722年にアッシリアに征服されたイスラエル10支族の一部が中央アジア→朝鮮半島→日本へ移動し、秦氏として帰化したかもしれない。「大和（ヤマト）」＝ヘブライ語「ヤー・ウマト（ヤハウェの民）」、「祇園」＝ヘブライ語「シオン」という対応が指摘される。数千年の旅の末に「約束の地ジパング」へ帰還したロマンがある。
+      </div>
+    </div>
+
+    <div class="tri-entry">
+      <div class="tri-date-col">日本語×<br>ヘブライ語<br>の類似</div>
+      <div class="tri-col tc-tsuu">
+        <div class="tri-col-title">偶然の一致という見方</div>
+        言語学的に体系的な証明はされていない。音の類似は偶然や後付けによる可能性もある。学術的な定説ではない。
+      </div>
+      <div class="tri-col tc-ises">
+        <div class="tri-col-title">複数の研究者が類似を指摘</div>
+        「大和（ヤマト）」＝ヘブライ語「ヤー・ウマト（主の民）」、「祇園」＝「シオン」、「アーメン」＝神道の「アワウタ」の一節、「ハレルヤ」＝「晴れよや（はれよや）」など。偶然とするには多すぎるという意見もある。
+      </div>
+      <div class="tri-col tc-roman">
+        <div class="tri-col-title">言語が記憶している「帰還」かもしれない</div>
+        言葉は民族の記憶を最も深いところで保存する。日本語とヘブライ語の類似が「共通の源流」から来るとすれば、言語そのものが数千年前の「別れと約束」を今も語り続けているロマンがある。「アリガトウ」＝ヘブライ語「アリ・ガトゥ（主の力）」という説も。
+      </div>
+    </div>
+
+    <div class="tri-entry">
+      <div class="tri-date-col">神道儀礼×<br>ユダヤ儀礼<br>の類似</div>
+      <div class="tri-col tc-tsuu">
+        <div class="tri-col-title">それぞれ独立発展した文化</div>
+        神道は縄文時代から続く自然崇拝と大陸文化の融合。ユダヤ教と直接のつながりは歴史的に証明されていない。文化的類似は人類の普遍的な信仰パターンとも言える。
+      </div>
+      <div class="tri-col tc-ises">
+        <div class="tri-col-title">驚くほど多い儀礼の類似点</div>
+        ・祇園祭の神輿とアーク（契約の箱）の形状・運搬法の類似<br>
+        ・天狗・山伏の「兜巾（ときん）」とユダヤ教徒の「テフィリン」<br>
+        ・蚕ノ社の三柱鳥居とユダヤ教の三位一体<br>
+        ・伊勢神宮の「エルサレム神殿」との設計類似
+      </div>
+      <div class="tri-col tc-roman">
+        <div class="tri-col-title">秦氏が景教（キリスト教）を日本に持ち込んだかもしれない</div>
+        秦氏は「景教（ネストリウス派キリスト教）」の信者だったという説がある。広隆寺の弥勒菩薩の姿勢が十字架上のキリストに似ているという指摘も。日本の神道の奥底にユダヤ・キリスト教的な「神との契約」の概念が潜んでいるかもしれない。
+      </div>
+    </div>
+  </div>
+
+  <!-- 出雲国造家 -->
+  <div style="margin-bottom:1.5rem;padding-top:1rem;border-top:1px solid rgba(201,168,76,.15);">
+    <div style="font-family:'Noto Serif JP',serif;font-size:.95rem;color:#80a8e0;margin-bottom:.8rem;letter-spacing:.1em;border-left:3px solid #405880;padding-left:.8rem;">🌊 出雲国造家（千家家・北島家）— 世界最長の神職家系</div>
+    <div style="background:#07070f;border:1px solid rgba(80,120,180,.2);padding:1rem;margin-bottom:.8rem;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;font-size:.7rem;color:#9098b0;line-height:1.8;">
+        <div>
+          <strong style="color:#80a8e0;">出雲国造家の凄さ</strong><br>
+          ・継承代数：<strong style="color:#80a8e0;">84代以上（天皇家126代と並ぶ！）</strong><br>
+          ・継続期間：古代〜現在まで途切れなし<br>
+          ・出雲大社宮司：千家尊祐（現84代）<br>
+          ・祖神：天穂日命（アメノホヒノミコト）<br>
+          ＝大国主命に仕えた「国譲り」の使者の子孫
+        </div>
+        <div>
+          <strong style="color:#80a8e0;">皇室との深い縁</strong><br>
+          ・千家国麿氏（83代宮司の長男）が<br>
+          　<strong style="color:#80a8e0;">高円宮典子女王と結婚（2014年）</strong><br>
+          ・縄文系・出雲系の血と天孫系の血が<br>
+          　2014年に再び一つになった象徴<br>
+          ・「国譲り」から約1800年を経た「和解」とも言える
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;">
+      <div style="background:#070710;border:1px solid rgba(80,120,180,.2);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#80a8e0;">出雲大社</div>
+        <div style="font-size:.62rem;color:#404860;margin-bottom:.3rem;">📍 島根県出雲市</div>
+        <div style="font-size:.66rem;color:#708090;line-height:1.7;">大国主命の総本社。本殿高さは現在24m（古代は48mだったという伝承）。千家・北島の二家が今も神職を継ぐ。縁結びの神として全国から参拝者が絶えない。</div>
+        <a href="https://maps.google.com/?q=出雲大社+島根県" target="_blank" rel="noopener" style="display:inline-block;margin-top:.4rem;font-size:.6rem;padding:.15rem .5rem;border:1px solid rgba(80,120,180,.3);color:#6080a0;text-decoration:none;">🗺 地図</a>
+      </div>
+      <div style="background:#070710;border:1px solid rgba(80,120,180,.2);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#80a8e0;">熊野大社（島根）</div>
+        <div style="font-size:.62rem;color:#404860;margin-bottom:.3rem;">📍 島根県松江市</div>
+        <div style="font-size:.66rem;color:#708090;line-height:1.7;">スサノオノミコトを主祭神とする出雲国一宮。出雲大社と並ぶ出雲の二大神社。「日本火出初社（ひのもとひでぞめのやしろ）」として火の起源の社とも呼ばれる。</div>
+        <a href="https://maps.google.com/?q=熊野大社+島根県松江市" target="_blank" rel="noopener" style="display:inline-block;margin-top:.4rem;font-size:.6rem;padding:.15rem .5rem;border:1px solid rgba(80,120,180,.3);color:#6080a0;text-decoration:none;">🗺 地図</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 物部氏の生き残り -->
+  <div style="margin-bottom:1rem;padding-top:1rem;border-top:1px solid rgba(201,168,76,.15);">
+    <div style="font-family:'Noto Serif JP',serif;font-size:.95rem;color:#c8a070;margin-bottom:.8rem;letter-spacing:.1em;border-left:3px solid #806040;padding-left:.8rem;">⚔️ 物部氏の生き残り — 石上神宮と布留氏</div>
+    <div style="background:#07070a;border:1px solid rgba(180,140,80,.15);padding:1rem;margin-bottom:.8rem;font-size:.7rem;color:#a08860;line-height:1.8;">
+      587年に蘇我馬子に滅ぼされた物部氏。しかし完全には消えていない。<br>
+      物部氏の祖神・<strong style="color:#c9a84c;">ニギハヤヒノミコト（饒速日命）</strong>を祀る<strong style="color:#c9a84c;">石上神宮（いそのかみじんぐう）</strong>は、物部氏の末裔・布留氏が神職を継ぎ今も存続している。<br>
+      ニギハヤヒは<strong style="color:#c9a84c;">神武天皇よりも先に大和に降臨した神</strong>。つまり物部氏は「最初から大和にいた」縄文ネイティブ系の最古の豪族。
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem;">
+      <div style="background:#070708;border:1px solid rgba(180,140,80,.2);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#c8a070;">石上神宮（いそのかみじんぐう）</div>
+        <div style="font-size:.62rem;color:#604830;margin-bottom:.3rem;">📍 奈良県天理市 ／ 日本最古の神社の一つ</div>
+        <div style="font-size:.66rem;color:#908060;line-height:1.7;">ニギハヤヒノミコトを主祭神。物部氏の総本社。布都御魂大神（布都御魂剣）＝神武天皇を助けた神剣を祀る。神宮を名乗る格式。境内に鶏が自由に歩き回る独特の聖域。</div>
+        <a href="https://maps.google.com/?q=石上神宮+奈良県天理市" target="_blank" rel="noopener" style="display:inline-block;margin-top:.4rem;font-size:.6rem;padding:.15rem .5rem;border:1px solid rgba(180,140,80,.3);color:#a07840;text-decoration:none;">🗺 地図</a>
+      </div>
+      <div style="background:#070708;border:1px solid rgba(180,140,80,.2);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#c8a070;">大神神社（三輪明神）</div>
+        <div style="font-size:.62rem;color:#604830;margin-bottom:.3rem;">📍 奈良県桜井市 ／ 三輪山が御神体</div>
+        <div style="font-size:.66rem;color:#908060;line-height:1.7;">大国主命（出雲系）を主祭神。三輪山そのものが御神体の日本最古の神社の一つ。物部氏・大神氏が古来より守り継ぐ。拝殿はあるが本殿なし。奥の禁足地に三輪の神が宿る。</div>
+        <a href="https://maps.google.com/?q=大神神社+奈良県桜井市" target="_blank" rel="noopener" style="display:inline-block;margin-top:.4rem;font-size:.6rem;padding:.15rem .5rem;border:1px solid rgba(180,140,80,.3);color:#a07840;text-decoration:none;">🗺 地図</a>
+      </div>
+      <div style="background:#070708;border:1px solid rgba(180,140,80,.2);padding:.8rem;">
+        <div style="font-family:'Noto Serif JP',serif;font-size:.8rem;color:#c8a070;">春日大社</div>
+        <div style="font-size:.62rem;color:#604830;margin-bottom:.3rem;">📍 奈良県奈良市 ／ 藤原氏の氏神</div>
+        <div style="font-size:.66rem;color:#908060;line-height:1.7;">藤原不比等が創建。武甕槌命・経津主命・天児屋根命・比売神を祀る。藤原氏が政治権力を握るとともに朝廷の中心的神社となった。物部→蘇我→藤原の権力交代が神社の地位にも反映している。</div>
+        <a href="https://maps.google.com/?q=春日大社+奈良県" target="_blank" rel="noopener" style="display:inline-block;margin-top:.4rem;font-size:.6rem;padding:.15rem .5rem;border:1px solid rgba(180,140,80,.3);color:#a07840;text-decoration:none;">🗺 地図</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 一族の系譜まとめ -->
+  <div style="background:#070710;border:1px solid rgba(201,168,76,.15);padding:1rem;margin-top:.5rem;">
+    <div style="font-family:'Noto Serif JP',serif;font-size:.82rem;color:var(--gold);margin-bottom:.7rem;letter-spacing:.1em;">▌ 神道を守り続けた一族 — 全体像まとめ</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.5rem;font-size:.66rem;">
+      <div style="padding:.5rem;border-left:2px solid #80c8a0;">
+        <div style="color:#80c8a0;font-family:'Noto Serif JP',serif;margin-bottom:.2rem;">賀茂氏</div>
+        <div style="color:#6a8870;">縄文・出雲系／八咫烏の一族／下鴨・上賀茂神社を今も守る</div>
+      </div>
+      <div style="padding:.5rem;border-left:2px solid #d4a840;">
+        <div style="color:#d4a840;font-family:'Noto Serif JP',serif;margin-bottom:.2rem;">秦氏</div>
+        <div style="color:#8a7840;">渡来系（中央アジア？）／伏見稲荷・松尾大社・宇佐神宮を創建／全国3万社稲荷神ネットワーク</div>
+      </div>
+      <div style="padding:.5rem;border-left:2px solid #80a8e0;">
+        <div style="color:#80a8e0;font-family:'Noto Serif JP',serif;margin-bottom:.2rem;">出雲国造家（千家家）</div>
+        <div style="color:#607090;">大国主の末裔／84代以上連続／2014年に典子女王と結婚</div>
+      </div>
+      <div style="padding:.5rem;border-left:2px solid #c8a070;">
+        <div style="color:#c8a070;font-family:'Noto Serif JP',serif;margin-bottom:.2rem;">物部氏の末裔（布留氏）</div>
+        <div style="color:#807050;">縄文系最古の豪族／587年に蘇我氏に滅ぼされるも石上神宮に生き残る</div>
+      </div>
+      <div style="padding:.5rem;border-left:2px solid #c890a8;">
+        <div style="color:#c890a8;font-family:'Noto Serif JP',serif;margin-bottom:.2rem;">中臣・藤原氏</div>
+        <div style="color:#806070;">春日大社を氏神に／政治権力と神道を連動させた一族</div>
+      </div>
+      <div style="padding:.5rem;border-left:2px solid #9090c8;">
+        <div style="color:#9090c8;font-family:'Noto Serif JP',serif;margin-bottom:.2rem;">安倍氏（土御門家）</div>
+        <div style="color:#606080;">陰陽道の継承者／安倍晴明の子孫・土御門家が今も陰陽道を継ぐ</div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <footer class="footer">
   <div>国史年表 v2 — 地球誕生 46億年前 〜 令和現在</div>
