@@ -768,12 +768,13 @@ const BRANCHES= ['子','丑','寅','卯','辰','巳','午','未','申','酉','�
 const STEM_ATTR  = ['wood','wood','fire','fire','earth','earth','metal','metal','water','water'];
 const BRANCH_ATTR= ['water','earth','wood','wood','earth','fire','fire','earth','metal','metal','earth','water'];
 
-// 日干支計算（基準: 1900/1/1 = 甲戌 = 干支番号9）
+// 日干支計算（基準: 1900/1/1 = 甲戌 = 干支番号10 ※甲子=0）
+// UTCで日数差を取り、端末のタイムゾーン・夏時間の影響を受けないようにする
 function getDayStemBranch(year, month, day) {
-  const d    = new Date(year, month-1, day);
-  const base = new Date(1900, 0, 1);
-  const diff = Math.floor((d - base) / 86400000);
-  let idx = (diff + 9) % 60;
+  const d    = Date.UTC(year, month-1, day);
+  const base = Date.UTC(1900, 0, 1);
+  const diff = Math.round((d - base) / 86400000);
+  let idx = (diff + 10) % 60;
   if(idx < 0) idx += 60;
   return { stemIdx: idx % 10, branchIdx: idx % 12 };
 }
