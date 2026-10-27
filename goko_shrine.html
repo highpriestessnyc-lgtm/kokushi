@@ -215,38 +215,40 @@ body {
   border: 1px solid var(--border);
   padding: 1.2rem;
 }
+.stamp-group { margin-top: .8rem; }
+.stamp-group-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: .72rem; font-weight: 500; padding-bottom: .25rem;
+  border-bottom: 1px solid var(--border); margin-bottom: .4rem;
+}
+.stamp-group-head span:last-child { font-size: .62rem; color: var(--muted); font-weight: 300; }
 .stamp-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: .4rem;
-  margin-top: .6rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .35rem;
 }
 .stamp-item {
-  aspect-ratio: 1;
   border: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: .9rem;
-  cursor: pointer;
-  transition: all .2s;
   background: white;
-  position: relative;
+  padding: .45rem .3rem .4rem;
+  display: flex; flex-direction: column; align-items: center; gap: .15rem;
+  cursor: pointer; position: relative;
+  font-family: inherit; color: var(--ink);
+  transition: background .15s, border-color .15s, transform .1s;
+  -webkit-tap-highlight-color: transparent;
 }
-.stamp-item.collected {
-  background: #fffdf0;
-  border-color: #c9a84c;
+.stamp-item:active { transform: scale(.96); }
+.stamp-mark {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1.5px dashed var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Noto Serif JP', serif; font-weight: 900; font-size: .8rem; color: var(--border);
 }
-.stamp-item.collected::after {
-  content: '✓';
-  position: absolute;
-  top: 1px; right: 2px;
-  font-size: .55rem;
-  color: #c9a84c;
-}
-.stamp-item:hover { background: #f5f0e0; }
-.stamp-name { font-size: .45rem; color: var(--muted); margin-top: .1rem; text-align: center; line-height: 1.2; }
+.stamp-item.collected { background: #fffdf0; }
+.stamp-item.collected .stamp-mark { border: 0; color: #fff; transform: rotate(-8deg); }
+.stamp-name { font-size: .6rem; color: var(--muted); text-align: center; line-height: 1.3; word-break: keep-all; overflow-wrap: anywhere; }
+.stamp-item.collected .stamp-name { color: var(--ink); font-weight: 500; }
+.stamp-help { font-size: .65rem; color: var(--muted); margin-top: .3rem; }
 .stamp-count { font-size: .65rem; color: var(--muted); margin-top: .4rem; }
 
 /* ===== RIGHT: MAP AREA ===== */
@@ -481,8 +483,9 @@ body {
     <!-- スタンプコレクション -->
     <div class="stamp-card">
       <div class="card-title"><span>⛩</span>スタンプコレクション</div>
-      <div class="stamp-grid" id="stampGrid"></div>
-      <div class="stamp-count" id="stampCount">0 / 25 社参拝済み</div>
+      <div class="stamp-help">行った神社をタップするとスタンプが押せます（もう一度タップで取り消し）</div>
+      <div id="stampGrid"></div>
+      <div class="stamp-count" id="stampCount"></div>
     </div>
 
   </div>
@@ -747,13 +750,18 @@ function popupHTML(s) {
     ${ll && ll[2] ? '<div class="pp-approx">※ ピンの位置は目安です。正確な場所はGoogleマップで確認してください</div>' : ''}
     <div class="pp-btns">
       <a href="${s.map}" target="_blank" rel="noopener">🗺 Googleマップ</a>
-      <button type="button" onclick="focusCard('${s.id}')">詳細を見る</button>
+      <button type="button" onclick="toggleStamp('${s.id}');leafMap.closePopup()">${collected.includes(s.id) ? '✓ 参拝済み' : '⛩ 参拝記録'}</button>
+      <button type="button" onclick="focusCard('${s.id}')">詳細</button>
     </div>`;
 }
 
 function focusCard(id) {
-  const card = document.getElementById('card-' + id);
-  if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  let card = document.getElementById('card-' + id);
+  if (!card) {
+    const s = SHRINES.find(x => x.id === id);
+    if (s) { currentAttr = s.attr; updateAttrUI(); card = document.getElementById('card-' + id); }
+  }
+  if (card) setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
 }
 
 // ===== 地図ピン生成 =====
@@ -811,7 +819,7 @@ function renderShrines() {
       <div class="shrine-kami">🙏 <strong>祭神：</strong>${s.kami}</div>
       <div class="shrine-btn-row">
         <a class="shrine-btn" href="${s.map}" target="_blank" rel="noopener">🗺 地図</a>
-        <button class="shrine-btn stamp-btn ${isCol?'done':''}" onclick="toggleStamp('${s.id}',this)">
+        <button class="shrine-btn stamp-btn ${isCol?'done':''}" onclick="toggleStamp('${s.id}')">
           ${isCol ? '✓ 参拝済み' : '⛩ 参拝記録'}
         </button>
       </div>
@@ -821,52 +829,55 @@ function renderShrines() {
 }
 
 // ===== スタンプ =====
-function toggleStamp(id, btn) {
+// どこから押しても（カード・スタンプ帳・地図）同じ処理で、全部の表示を揃える
+function toggleStamp(id) {
+  const shrine = SHRINES.find(s => s.id === id);
+  if (!shrine) return;
   const idx = collected.indexOf(id);
-  if(idx === -1) {
-    collected.push(id);
-    btn.textContent = '✓ 参拝済み';
-    btn.classList.add('done');
-    const card = document.getElementById('card-' + id);
-    if(card) card.classList.add('collected');
-    const shrine = SHRINES.find(s => s.id === id);
-    showToast('⛩ ' + shrine.name + ' — 参拝スタンプ取得！');
-  } else {
-    collected.splice(idx, 1);
-    btn.textContent = '⛩ 参拝記録';
-    btn.classList.remove('done');
-    const card = document.getElementById('card-' + id);
-    if(card) card.classList.remove('collected');
-  }
+  const nowDone = idx === -1;
+  if (nowDone) collected.push(id); else collected.splice(idx, 1);
   localStorage.setItem('gokoStamps', JSON.stringify(collected));
+
+  const card = document.getElementById('card-' + id);
+  if (card) {
+    card.classList.toggle('collected', nowDone);
+    const btn = card.querySelector('.stamp-btn');
+    if (btn) { btn.textContent = nowDone ? '✓ 参拝済み' : '⛩ 参拝記録'; btn.classList.toggle('done', nowDone); }
+  }
+  showToast(nowDone ? '⛩ ' + shrine.name + ' — 参拝スタンプ取得！' : shrine.name + ' のスタンプを取り消しました');
   renderStampGrid();
   renderMapPins();
 }
 
 // ===== スタンプグリッド =====
 function renderStampGrid() {
-  const grid = document.getElementById('stampGrid');
-  grid.innerHTML = '';
-  SHRINES.forEach(s => {
-    const a = ATTRS[s.attr];
-    const isCol = collected.includes(s.id);
-    const div = document.createElement('div');
-    div.className = 'stamp-item' + (isCol ? ' collected' : '');
-    div.title = s.name;
-    div.style.borderColor = isCol ? a.color : '';
-    div.innerHTML = `
-      <span>${isCol ? a.icon : '⬜'}</span>
-      <span class="stamp-name">${s.name.slice(0,4)}</span>
-    `;
-    div.addEventListener('click', () => {
-      const card = document.getElementById('card-' + s.id);
-      if(card) {
-        currentAttr = s.attr;
-        updateAttrUI();
-        setTimeout(() => card.scrollIntoView({ behavior:'smooth', block:'center' }), 100);
-      }
+  const wrap = document.getElementById('stampGrid');
+  wrap.innerHTML = '';
+  ['water','fire','wood','earth','metal'].forEach(attr => {
+    const a = ATTRS[attr];
+    const list = SHRINES.filter(s => s.attr === attr);
+    const got = list.filter(s => collected.includes(s.id)).length;
+    const group = document.createElement('div');
+    group.className = 'stamp-group';
+    group.innerHTML = `<div class="stamp-group-head" style="color:${a.color}"><span>${a.icon} ${a.name}属性</span><span>${got} / ${list.length}</span></div>`;
+    const grid = document.createElement('div');
+    grid.className = 'stamp-grid';
+    list.forEach(s => {
+      const isCol = collected.includes(s.id);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'stamp-item' + (isCol ? ' collected' : '');
+      btn.title = s.name + '（' + s.pref + '）';
+      btn.setAttribute('aria-pressed', isCol);
+      if (isCol) btn.style.borderColor = a.color;
+      btn.innerHTML = `
+        <span class="stamp-mark" style="${isCol ? 'background:' + a.color : ''}">${isCol ? ELEMENT_KANJI[attr] : ''}</span>
+        <span class="stamp-name">${s.name}</span>`;
+      btn.addEventListener('click', () => toggleStamp(s.id));
+      grid.appendChild(btn);
     });
-    grid.appendChild(div);
+    group.appendChild(grid);
+    wrap.appendChild(group);
   });
   document.getElementById('stampCount').textContent = `${collected.length} / ${SHRINES.length} 社参拝済み`;
 }
