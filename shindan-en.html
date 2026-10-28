@@ -130,6 +130,14 @@ body {
   font-size: 13px; color: var(--ink); background: rgba(255,253,248,.35);
 }
 
+.maplist {
+  display: flex; align-items: center; gap: 12px; margin-top: 12px; padding: 14px 16px;
+  background: var(--card); border: 1px solid var(--gold); text-decoration: none; color: var(--ink);
+}
+.maplist .ic { font-size: 26px; line-height: 1; }
+.maplist b { display: block; font-family: 'Cormorant Garamond', 'Noto Serif JP', serif; font-size: 19px; }
+.maplist span { font-size: 13px; color: var(--muted); }
+.maplist .go { margin-left: auto; font-size: 20px; color: var(--gold); }
 /* ---------- アプリ版の案内 ---------- */
 .app-cta {
   background: var(--sumi); color: #f4efe5; margin: 34px -16px 0; padding: 32px 20px 30px;
@@ -322,6 +330,12 @@ function renderResult(si, attr) {
         <a class="shrine-map" href="https://maps.google.com/?q=${encodeURIComponent(s.q)}" target="_blank" rel="noopener">🗺 Open in Google Maps</a>
       </div>
     </article>
+
+    <a class="maplist" href="https://maps.app.goo.gl/JVoCquSfkjpcoTby9" target="_blank" rel="noopener">
+      <span class="ic">🗺</span>
+      <span><b>Plan your shrine trip</b>Our Google Maps list of Five Elements shrines across Japan</span>
+      <span class="go">→</span>
+    </a>
 
     <div class="locked" aria-label="Shrines unlocked in the app">
       ${[1,2].map(() => `
