@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>五行診断 — 鳥居の向こう側</title>
+<meta name="description" content="生年月日を入れるだけ。四柱推命の五行で、あなたのタイプと相性のいい神社がわかる無料診断。">
+<meta property="og:title" content="五行診断 — あなたを呼んでいる神社は？">
+<meta property="og:description" content="生年月日を入れるだけ。四柱推命の五行で、あなたのタイプと相性のいい神社がわかる無料診断。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://highpriestessnyc-lgtm.github.io/kokushi/shindan_img/og.jpg">
+<meta name="theme-color" content="#151210">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sumi: #151210;
+  --washi: #f4efe5;
+  --card: #fffdf8;
+  --ink: #221e1c;
+  --muted: #776c62;
+  --line: #ddd2c0;
+  --gold: #c9a55a;
+  --shu: #c0392b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--washi);
+  color: var(--ink);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+}
+.serif { font-family: 'Noto Serif JP', serif; }
+.wrap { max-width: 520px; margin: 0 auto; padding: 0 16px; }
+
+/* ---------- ヒーロー ---------- */
+.hero {
+  background: radial-gradient(ellipse at 50% 30%, #3a1d16 0%, var(--sumi) 70%);
+  color: #f4efe5;
+  text-align: center;
+  padding: 48px 16px 40px;
+}
+.hero svg { width: 92px; height: auto; display: block; margin: 0 auto 18px; }
+.hero .kicker { color: var(--gold); font-size: 13px; letter-spacing: .3em; }
+.hero h1 {
+  font-family: 'Noto Serif JP', serif; font-weight: 900;
+  font-size: clamp(30px, 8.5vw, 40px); line-height: 1.35; margin: 10px 0 12px;
+}
+.hero p { color: #cfc3b3; font-size: 14px; }
+
+/* ---------- フォーム ---------- */
+.form-card {
+  background: var(--card); border: 1px solid var(--line);
+  margin: -22px auto 0; padding: 22px 18px 20px; position: relative;
+}
+.form-card label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.date-row { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 8px; }
+.date-row select {
+  width: 100%; font: inherit; font-size: 17px; color: var(--ink);
+  padding: 12px 10px; border: 1px solid var(--line); background: #fff;
+  border-radius: 0; -webkit-appearance: none; appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position: calc(100% - 15px) 52%, calc(100% - 10px) 52%;
+  background-size: 5px 5px; background-repeat: no-repeat;
+}
+.btn-main {
+  display: block; width: 100%; margin-top: 16px;
+  font-family: 'Noto Serif JP', serif; font-weight: 700; font-size: 18px; letter-spacing: .1em;
+  color: #fff; background: var(--shu); border: 0; padding: 15px; cursor: pointer;
+}
+.btn-main:active { transform: translateY(1px); }
+.form-note { font-size: 11px; color: var(--muted); margin-top: 10px; text-align: center; }
+
+/* ---------- 結果 ---------- */
+#result { display: none; padding: 34px 0 10px; }
+#result.show { display: block; animation: rise .6s ease both; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.type-head { text-align: center; }
+.type-seal {
+  width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Noto Serif JP', serif; font-weight: 900; font-size: 64px; color: #fff;
+  box-shadow: 0 0 0 6px var(--washi), 0 0 0 7px var(--line);
+}
+.type-head .you { font-size: 14px; color: var(--muted); }
+.type-head h2 { font-family: 'Noto Serif JP', serif; font-weight: 900; font-size: 34px; line-height: 1.3; }
+.type-head .stem { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.type-desc { font-size: 16px; margin: 20px 0 16px; }
+.benefit {
+  border: 1px solid; padding: 12px 14px; display: flex; gap: 12px; align-items: baseline;
+}
+.benefit span:first-child { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.benefit strong { font-family: 'Noto Serif JP', serif; font-size: 17px; }
+
+.sec-title {
+  font-family: 'Noto Serif JP', serif; font-weight: 700; font-size: 19px;
+  margin: 34px 0 12px; padding-left: 12px; border-left: 4px solid var(--shu); line-height: 1.4;
+}
+.shrine {
+  background: var(--card); border: 1px solid var(--line);
+}
+.shrine-photo { position: relative; aspect-ratio: 16/9; overflow: hidden; background: #ccc; }
+.shrine-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.shrine-photo .tag {
+  position: absolute; left: 10px; top: 10px; font-size: 11px; color: #fff;
+  background: rgba(0,0,0,.6); padding: 2px 8px;
+}
+.shrine-body { padding: 16px 16px 18px; }
+.shrine-pref { font-size: 12px; color: var(--muted); }
+.shrine-name { font-family: 'Noto Serif JP', serif; font-weight: 900; font-size: 26px; line-height: 1.3; }
+.shrine-read { font-size: 12px; color: var(--muted); }
+.shrine-kami { font-size: 13px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+.shrine-desc { font-size: 15px; margin-top: 8px; }
+.shrine-map { display: inline-block; margin-top: 12px; font-size: 13px; color: var(--ink); border: 1px solid var(--line); padding: 6px 12px; text-decoration: none; }
+
+.locked { margin-top: 10px; display: grid; gap: 10px; }
+.lock-item {
+  position: relative; background: var(--card); border: 1px solid var(--line);
+  padding: 16px; overflow: hidden;
+}
+.lock-item .blur { filter: blur(6px); user-select: none; }
+.lock-item .blur .n { font-family: 'Noto Serif JP', serif; font-weight: 900; font-size: 20px; }
+.lock-item .blur .d { font-size: 13px; color: var(--muted); }
+.lock-item .key {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--ink); background: rgba(255,253,248,.35);
+}
+
+/* ---------- アプリ版の案内 ---------- */
+.app-cta {
+  background: var(--sumi); color: #f4efe5; margin: 34px -16px 0; padding: 32px 20px 30px;
+}
+.app-cta .kicker { color: var(--gold); font-size: 12px; letter-spacing: .25em; }
+.app-cta h3 { font-family: 'Noto Serif JP', serif; font-weight: 900; font-size: 24px; line-height: 1.45; margin: 6px 0 16px; }
+.app-cta ul { list-style: none; display: grid; gap: 10px; }
+.app-cta li { display: flex; gap: 10px; font-size: 15px; color: #e6dccd; }
+.app-cta li::before { content: '⛩'; flex: none; }
+.app-cta .weak {
+  margin-top: 18px; padding: 12px 14px; border: 1px solid #4a3d33; font-size: 14px; color: #e6dccd;
+}
+.app-cta .weak b { color: var(--gold); font-weight: 500; }
+.soon { margin-top: 18px; font-size: 13px; color: #a89a88; }
+.btn-insta {
+  display: block; text-align: center; margin-top: 12px; text-decoration: none;
+  font-weight: 500; font-size: 16px; color: var(--sumi); background: var(--gold); padding: 14px;
+}
+
+.sub-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 22px 0 8px; }
+.sub-actions button {
+  font: inherit; font-size: 14px; padding: 12px; background: var(--card); border: 1px solid var(--line); color: var(--ink); cursor: pointer;
+}
+footer { text-align: center; font-size: 11px; color: var(--muted); padding: 26px 16px 40px; line-height: 1.8; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px);
+  background: var(--sumi); color: #fff; font-size: 13px; padding: 10px 16px; opacity: 0;
+  transition: .25s; pointer-events: none; z-index: 10; max-width: calc(100% - 32px);
+}
+.toast.show { opacity: 1; transform: translateX(-50%); }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <svg viewBox="0 0 100 100" aria-hidden="true">
+    <path d="M2 10 Q50 2 98 10 L96 16 Q50 9 4 16 Z" fill="#c0392b"/>
+    <rect x="10" y="16" width="80" height="5" fill="#c0392b"/>
+    <rect x="47" y="21" width="6" height="12" fill="#c0392b"/>
+    <rect x="6" y="31" width="88" height="6" fill="#c0392b"/>
+    <path d="M23 21 L31 21 L33 100 L22 100 Z" fill="#c0392b"/>
+    <path d="M69 21 L77 21 L78 100 L67 100 Z" fill="#c0392b"/>
+  </svg>
+  <div class="kicker">無料 五行診断</div>
+  <h1>あなたを呼んでいる<br>神社は、どこ？</h1>
+  <p>生年月日を入れるだけ。四柱推命の五行でわかります。</p>
+</header>
+
+<main class="wrap">
+  <section class="form-card">
+    <label for="y">生年月日</label>
+    <div class="date-row">
+      <select id="y" aria-label="年"></select>
+      <select id="m" aria-label="月"></select>
+      <select id="d" aria-label="日"></select>
+    </div>
+    <button class="btn-main" id="go" type="button">診断する</button>
+    <div class="form-note">入力した生年月日はどこにも送信・保存されません</div>
+  </section>
+
+  <section id="result" aria-live="polite"></section>
+</main>
+
+<footer>
+  鳥居の向こう側 ⛩ @torii_no_mukougawa<br>
+  診断は四柱推命の日干にもとづく目安です
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== 五行データ =====
+const ATTR = {
+  wood:  { k:'木', name:'木タイプ', color:'#2f6b3f', benefit:'健康・学業・成長',
+           kami:'成長と学びの神様' },
+  fire:  { k:'火', name:'火タイプ', color:'#a8321f', benefit:'仕事運・勝負運・事業拡大',
+           kami:'太陽と勝運の神様' },
+  earth: { k:'土', name:'土タイプ', color:'#a8761f', benefit:'縁結び・家内安全・財運',
+           kami:'縁と大地の神様' },
+  metal: { k:'金', name:'金タイプ', color:'#8a6a24', benefit:'金運・商売繁盛・決断力',
+           kami:'金運と勝負の神様' },
+  water: { k:'水', name:'水タイプ', color:'#1d3550', benefit:'浄化・恋愛・芸術・直感',
+           kami:'浄化と縁の神様' },
+};
+
+const STEMS = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const STEM_READ = ['きのえ','きのと','ひのえ','ひのと','つちのえ','つちのと','かのえ','かのと','みずのえ','みずのと'];
+const STEM_ATTR = ['wood','wood','fire','fire','earth','earth','metal','metal','water','water'];
+const STEM_DESC = {
+  '甲':'大樹のように堂々とした存在感。正義感と向上心が強く、まっすぐ伸びていくリーダー気質。',
+  '乙':'草花のようにしなやかで、どんな場所にもなじむ適応力の持ち主。人とのつながりを大切にする。',
+  '丙':'太陽のように明るく情熱的。いるだけで周りを照らし、人を引きつけるカリスマがある。',
+  '丁':'ろうそくの炎のように温かく繊細。直感と美意識が鋭く、人の心に灯をともす。',
+  '戊':'大山のような安定感と包容力。堅実で信頼され、みんなの拠りどころになる。',
+  '己':'田畑の土のように豊かで柔軟。人の話をよく聞き、まわりを育てる力がある。',
+  '庚':'鍛えた鉄のような意志の強さ。決断力があり、信念をつらぬく。',
+  '辛':'磨かれた宝石のような感性。美意識が高く、細部まで妥協しない。',
+  '壬':'大海のように広い視野と受容力。自由を愛し、大きな流れに乗るのが得意。',
+  '癸':'静かに染み込む雨のような知性。直感と洞察力にすぐれ、物事の本質を見抜く。',
+};
+
+// 無料で見せるのは各タイプ1社（インスタの「相性神社3選」の1社目と同じ）
+const SHRINE = {
+  water: { name:'貴船神社', read:'きふねじんじゃ', pref:'京都府京都市', kami:'高龗神（たかおかみのかみ）',
+           desc:'水の神を祀る全国の貴船神社の総本宮。水に浮かべると文字が現れる「水占みくじ」が名物。縁結びの社としても知られる。',
+           q:'貴船神社+京都' },
+  metal: { name:'御金神社', read:'みかねじんじゃ', pref:'京都府京都市', kami:'金山毘古神（かなやまびこのかみ）',
+           desc:'金色に輝く鳥居で知られる、金属・鉱山の神の社。金運を願う参拝者が絶えない。',
+           q:'御金神社+京都' },
+  earth: { name:'出雲大社', read:'いずもおおやしろ', pref:'島根県出雲市', kami:'大国主大神（おおくにぬしのおおかみ）',
+           desc:'縁結びの神として名高い。旧暦10月の「神在月」には、全国の神々が出雲に集うとされる。',
+           q:'出雲大社+島根' },
+  fire:  { name:'伊勢神宮・内宮', read:'いせじんぐう・ないくう', pref:'三重県伊勢市', kami:'天照大御神（あまてらすおおみかみ）',
+           desc:'太陽の神を祀る、日本の神社の中心。20年に一度の式年遷宮で社殿が新しく建て替えられる。',
+           q:'伊勢神宮内宮' },
+  wood:  { name:'富士山本宮浅間大社', read:'ふじさんほんぐうせんげんたいしゃ', pref:'静岡県富士宮市', kami:'木花之佐久夜毘売命（このはなのさくやひめのみこと）',
+           desc:'全国の浅間神社の総本宮。富士山そのものを神としてあおぐ信仰の中心地。',
+           q:'富士山本宮浅間大社' },
+};
+const SHRINE_TOTAL = 87;
+
+// ===== 日干の計算（1900/1/1 = 甲戌 = 干支番号10、甲子=0）=====
+function dayStem(y, m, d) {
+  const diff = Math.round((Date.UTC(y, m - 1, d) - Date.UTC(1900, 0, 1)) / 86400000);
+  let idx = (diff + 10) % 60; if (idx < 0) idx += 60;
+  return idx % 10;
+}
+
+// ===== フォーム =====
+const $ = id => document.getElementById(id);
+(function initForm() {
+  const now = new Date().getFullYear();
+  let html = '';
+  for (let y = now; y >= 1920; y--) html += `<option value="${y}"${y === 1990 ? ' selected' : ''}>${y}年</option>`;
+  $('y').innerHTML = html;
+  html = ''; for (let m = 1; m <= 12; m++) html += `<option value="${m}">${m}月</option>`;
+  $('m').innerHTML = html;
+  fillDays();
+  $('y').addEventListener('change', fillDays);
+  $('m').addEventListener('change', fillDays);
+})();
+function fillDays() {
+  const y = +$('y').value, m = +$('m').value, keep = +$('d').value || 1;
+  const n = new Date(y, m, 0).getDate();
+  let html = ''; for (let d = 1; d <= n; d++) html += `<option value="${d}"${d === Math.min(keep, n) ? ' selected' : ''}>${d}日</option>`;
+  $('d').innerHTML = html;
+}
+
+// ===== 診断 =====
+let lastAttr = null;
+$('go').addEventListener('click', () => {
+  const y = +$('y').value, m = +$('m').value, d = +$('d').value;
+  const si = dayStem(y, m, d);
+  const attr = STEM_ATTR[si];
+  lastAttr = attr;
+  renderResult(si, attr);
+});
+
+function renderResult(si, attr) {
+  const a = ATTR[attr], s = SHRINE[attr], stem = STEMS[si];
+  const r = $('result');
+  r.innerHTML = `
+    <div class="type-head">
+      <div class="type-seal" style="background:${a.color}">${a.k}</div>
+      <div class="you">あなたは</div>
+      <h2>${a.name}</h2>
+      <div class="stem">日干「${stem}」（${STEM_READ[si]}）</div>
+    </div>
+    <p class="type-desc">${STEM_DESC[stem]}</p>
+    <div class="benefit" style="border-color:${a.color}">
+      <span>相性のいいご利益</span><strong style="color:${a.color}">${a.benefit}</strong>
+    </div>
+
+    <h3 class="sec-title">${a.name}のあなたを呼んでいる神社</h3>
+    <article class="shrine">
+      <div class="shrine-photo">
+        <img src="shindan_img/${attr}.webp" alt="" loading="lazy">
+        <span class="tag">イメージ</span>
+      </div>
+      <div class="shrine-body">
+        <div class="shrine-pref">📍 ${s.pref}</div>
+        <div class="shrine-name">${s.name}</div>
+        <div class="shrine-read">${s.read}</div>
+        <div class="shrine-kami">祭神：${s.kami}</div>
+        <p class="shrine-desc">${s.desc}</p>
+        <a class="shrine-map" href="https://maps.google.com/?q=${encodeURIComponent(s.q)}" target="_blank" rel="noopener">🗺 Googleマップで見る</a>
+      </div>
+    </article>
+
+    <div class="locked" aria-label="アプリ版で見られる神社">
+      ${[1,2].map(() => `
+        <div class="lock-item">
+          <div class="blur"><div class="n">◯◯◯◯神社</div><div class="d">${a.kami}を祀る、${a.name}と響き合う社。</div></div>
+          <div class="key">🔒 アプリ版で公開</div>
+        </div>`).join('')}
+    </div>
+
+    <section class="app-cta">
+      <div class="kicker">GOKO SHRINE QUEST</div>
+      <h3>全国${SHRINE_TOTAL}社の中から、<br>あなたの神社を全部。</h3>
+      <ul>
+        <li>全国${SHRINE_TOTAL}社の相性神社マップ</li>
+        <li>参拝したらスタンプが押せる巡礼帳</li>
+        <li>毎月の開運日をタイプ別にお知らせ</li>
+      </ul>
+      <div class="weak">そしてもうひとつ。<br>あなたの生まれた年・月・日・時間の中で<b>足りていない五行</b>と、それを<b>補ってくれる神社</b>も分かります。</div>
+      <p class="soon">アプリ版は近日公開。公開のお知らせはインスタで。</p>
+      <a class="btn-insta" href="https://www.instagram.com/torii_no_mukougawa/" target="_blank" rel="noopener">インスタをフォローして待つ</a>
+    </section>
+
+    <div class="sub-actions">
+      <button type="button" id="share">結果をシェア</button>
+      <button type="button" id="again">もう一度診断</button>
+    </div>
+  `;
+  r.classList.remove('show'); void r.offsetWidth; r.classList.add('show');
+  r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  $('again').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  $('share').addEventListener('click', () => shareResult(attr));
+}
+
+async function shareResult(attr) {
+  const a = ATTR[attr];
+  const text = `私は${a.name}でした⛩ 相性のいい神社は「${SHRINE[attr].name}」。あなたは何タイプ？`;
+  const url = location.href.split('#')[0].split('?')[0];
+  try {
+    if (navigator.share) { await navigator.share({ title: '五行診断', text, url }); return; }
+    await navigator.clipboard.writeText(text + ' ' + url);
+    toast('シェア用の文章をコピーしました');
+  } catch (e) {
+    if (e && e.name !== 'AbortError') toast('シェアできませんでした');
+  }
+}
+
+function toast(msg) {
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+</script>
+</body>
+</html>
