@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>五行神社巡礼 — GOKO SHRINE QUEST</title>
+<!-- Travelpayouts Drive (Project 592681) -->
+<script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">
+  (function () {
+      var script = document.createElement("script");
+      script.async = 1;
+      script.setAttribute("data-cmp-ab","2");
+      script.src = 'https://emrldco.com/NTkyNjgx.js?t=592681';
+      document.head.appendChild(script);
+  })();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -404,6 +414,20 @@ body {
 .shrine-btn.stamp-btn:hover { background: #fffdf0; }
 .shrine-btn.stamp-btn.done { background: #c9a84c; color: white; border-color: #c9a84c; }
 
+
+/* TRAVEL PLAN (affiliate) */
+.travel-plan { margin-top: .55rem; border-top: 1px dashed var(--border); padding-top: .5rem; }
+.travel-head { font-size: .62rem; letter-spacing: .12em; color: var(--muted); display: flex; align-items: center; gap: .4rem; margin-bottom: .35rem; }
+.pr-badge { font-size: .55rem; border: 1px solid var(--muted); color: var(--muted); padding: 0 .3rem; letter-spacing: .08em; }
+.travel-links { display: flex; gap: .4rem; }
+.travel-links a {
+  flex: 1; padding: .3rem; font-size: .62rem; text-align: center; text-decoration: none;
+  border: 1px solid #c9a84c; color: #8a6820; background: #fffdf0;
+  display: flex; align-items: center; justify-content: center; gap: .2rem; transition: background .2s;
+}
+.travel-links a:hover { background: #fdf3d0; }
+.travel-note { font-size: .55rem; color: var(--muted); line-height: 1.6; margin-top: .3rem; }
+
 /* TOAST */
 .toast {
   position: fixed;
@@ -801,6 +825,24 @@ function renderMapPins() {
 }
 
 // ===== 神社カード生成 =====
+
+// ===== 巡礼プラン（旅行リンク） =====
+// 神社データの所在地・名前から、宿と体験の検索リンクを自動生成する。
+// 上のプレーンなリンクは Travelpayouts Drive がアフィリエイトリンクに自動変換する。
+function travelHTML(s) {
+  const stay = 'https://www.booking.com/searchresults.html?ss=' + encodeURIComponent(s.pref);
+  const tour = 'https://www.getyourguide.com/s/?q=' + encodeURIComponent(s.name);
+  return `
+      <div class="travel-plan">
+        <div class="travel-head">🧳 巡礼プラン <span class="pr-badge">PR</span></div>
+        <div class="travel-links">
+          <a href="${stay}" target="_blank" rel="noopener sponsored">🏨 ${s.pref}の宿</a>
+          <a href="${tour}" target="_blank" rel="noopener sponsored">🎟 ${s.name}周辺の体験</a>
+        </div>
+        <div class="travel-note">広告リンクを含みます。予約が成立すると運営に紹介料が入る場合があります（あなたの支払額は変わりません）。</div>
+      </div>`;
+}
+
 function renderShrines() {
   const grid = document.getElementById('shrineGrid');
   grid.innerHTML = '';
@@ -824,6 +866,7 @@ function renderShrines() {
           ${isCol ? '✓ 参拝済み' : '⛩ 参拝記録'}
         </button>
       </div>
+      ${travelHTML(s)}
     `;
     grid.appendChild(div);
   });

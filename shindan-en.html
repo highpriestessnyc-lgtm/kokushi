@@ -169,7 +169,27 @@ footer { text-align: center; font-size: 11px; color: var(--muted); padding: 26px
   transition: .25s; pointer-events: none; z-index: 10; max-width: calc(100% - 32px);
 }
 .toast.show { opacity: 1; transform: translateX(-50%); }
+
+/* ---------- Travel affiliate block (added 2026-10-29, Sam) ---------- */
+.travel { background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--gold); margin-top: 18px; padding: 16px 16px 12px; }
+.travel h4 { font-family: 'Cormorant Garamond','Noto Serif JP',serif; font-size: 20px; font-weight: 700; line-height: 1.35; }
+.travel p.lead { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.travel-links { display: grid; gap: 8px; margin-top: 12px; }
+.travel-links a { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); padding: 10px 12px; text-decoration: none; color: var(--ink); background: #fff; font-size: 14px; }
+.travel-links a b { font-weight: 500; }
+.travel-links a .go { margin-left: auto; color: var(--gold); }
+.travel .disc { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
 </style>
+<!-- Travelpayouts Drive (Project 592681, installed by Sam 2026-10-29) -->
+<script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">
+  (function () {
+      var script = document.createElement("script");
+      script.async = 1;
+      script.setAttribute("data-cmp-ab","2");
+      script.src = 'https://emrldco.com/NTkyNjgx.js?t=592681';
+      document.head.appendChild(script);
+  })();
+</script>
 </head>
 <body>
 
@@ -262,6 +282,42 @@ const SHRINE = {
 };
 const SHRINE_TOTAL = 87;
 
+// ===== Travel affiliate (added 2026-10-29, Sam) =====
+// HOW TO ACTIVATE: paste the real affiliate links below.
+// While a link is '' (empty), its button is hidden. If all three are empty,
+// the whole "Plan your visit" block is hidden — safe to publish as-is.
+// tours/stay: PLAIN brand links (no affiliate IDs baked in).
+// Travelpayouts Drive (script installed in <head>) automatically switches
+// plain travel-brand links on the page into tracked Travelpayouts affiliate links.
+// If Drive is ever removed, replace these with direct affiliate links instead.
+// esim: one Japan eSIM link used for every result (Airalo, switched by Drive)
+const TRAVEL_LINKS = {
+  water: { tours:'https://www.getyourguide.com/s/?q=Kurama%20Kibune%20Kyoto', stay:'https://www.booking.com/searchresults.html?ss=Kyoto', area:'Kyoto', pair:'https://www.getyourguide.com/s/?q=Kurama%20Kibune', pairLabel:'Kurama & Kibune — the mountain route above your shrine' },   // Kifune Shrine — Kibune/Kurama, Kyoto
+  metal: { tours:'https://www.getyourguide.com/s/?q=Kyoto', stay:'https://www.booking.com/searchresults.html?ss=Kyoto', area:'Kyoto', pair:'https://www.getyourguide.com/s/?q=Nijo%20Castle%20Kyoto', pairLabel:'Nijo Castle — a short walk from your shrine' },   // Mikane Shrine — central Kyoto
+  earth: { tours:'https://www.getyourguide.com/s/?q=Izumo', stay:'https://www.booking.com/searchresults.html?ss=Izumo', area:'Izumo & Matsue', pair:'https://www.getyourguide.com/s/?q=Matsue', pairLabel:'Matsue — castle town on the same Izumo route' }, // Izumo Taisha — Shimane
+  fire:  { tours:'https://www.getyourguide.com/s/?q=Ise%20Grand%20Shrine', stay:'https://www.booking.com/searchresults.html?ss=Ise', area:'Ise', pair:'https://www.getyourguide.com/s/?q=Ise-Shima', pairLabel:'Ise-Shima — the sacred coast beyond the shrine' },      // Ise Grand Shrine (Naiku) — Mie
+  wood:  { tours:'https://www.getyourguide.com/s/?q=Mount%20Fuji', stay:'https://www.booking.com/searchresults.html?ss=Fujinomiya', area:'Mt Fuji & Fujinomiya', pair:'https://www.getyourguide.com/s/?q=Shiraito%20Falls', pairLabel:'Shiraito Falls — Fuji\'s sacred waters, on the same route' }, // Fujisan Hongu Sengen Taisha
+};
+const ESIM_LINK = 'https://www.airalo.com/japan-esim';
+
+function travelBlock(attr, s) {
+  const t = TRAVEL_LINKS[attr] || {};
+  const items = [];
+  if (t.tours) items.push(`<a href="${t.tours}" target="_blank" rel="noopener sponsored"><span>🎟️</span><span><b>Tours & experiences near ${s.name}</b></span><span class="go">→</span></a>`);
+  if (t.stay)  items.push(`<a href="${t.stay}" target="_blank" rel="noopener sponsored"><span>🏨</span><span><b>Stay in ${t.area || s.pref}</b></span><span class="go">→</span></a>`);
+  if (t.pair) items.push(`<a href="${t.pair}" target="_blank" rel="noopener sponsored"><span>🧭</span><span><b>Make a day of it</b> — ${t.pairLabel}</span><span class="go">→</span></a>`);
+  if (ESIM_LINK) items.push(`<a href="${ESIM_LINK}" target="_blank" rel="noopener sponsored"><span>📶</span><span><b>eSIM for Japan</b> — stay connected on your pilgrimage</span><span class="go">→</span></a>`);
+  if (!items.length) return '';
+  return `
+    <section class="travel">
+      <h4>Plan your visit to ${s.name}</h4>
+      <p class="lead">Your shrine is in ${s.pref}. Here is everything you need to actually go:</p>
+      <div class="travel-links">${items.join('')}</div>
+      <p class="disc">Some links above are affiliate links. If you book through them, we may earn a commission at no extra cost to you. It helps keep this reading free.</p>
+    </section>`;
+}
+
+
 // ===== 日干の計算（1900/1/1 = 甲戌 = 干支番号10、甲子=0）=====
 function dayStem(y, m, d) {
   const diff = Math.round((Date.UTC(y, m - 1, d) - Date.UTC(1900, 0, 1)) / 86400000);
@@ -330,6 +386,8 @@ function renderResult(si, attr) {
         <a class="shrine-map" href="https://maps.google.com/?q=${encodeURIComponent(s.q)}" target="_blank" rel="noopener">🗺 Open in Google Maps</a>
       </div>
     </article>
+
+    ${travelBlock(attr, s)}
 
     <a class="maplist" href="https://maps.app.goo.gl/JVoCquSfkjpcoTby9" target="_blank" rel="noopener">
       <span class="ic">🗺</span>
