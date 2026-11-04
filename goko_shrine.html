@@ -428,6 +428,46 @@ body {
 .travel-links a:hover { background: #fdf3d0; }
 .travel-note { font-size: .55rem; color: var(--muted); line-height: 1.6; margin-top: .3rem; }
 
+/* STICKY BAR (affiliate, trial 2026-10-31) */
+#stickyBar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 1200;
+  background: rgba(26, 20, 16, .97); color: #f5f0e8;
+  border-top: 2px solid #c9a84c;
+  padding: .5rem .8rem calc(.5rem + env(safe-area-inset-bottom));
+  display: none;
+  box-shadow: 0 -4px 18px rgba(0,0,0,.25);
+}
+#stickyBar.show { display: block; }
+body.sticky-on { padding-bottom: 92px; }
+body.sticky-on .toast { bottom: 7.2rem; }
+.sticky-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: .7rem; }
+.sticky-info { flex: 1 1 auto; min-width: 0; }
+.sticky-label { font-size: .55rem; letter-spacing: .12em; color: #c9a84c; display: flex; align-items: center; gap: .4rem; }
+.sticky-label .pr-badge { border-color: #c9a84c; color: #c9a84c; }
+.sticky-name { font-family: 'Noto Serif JP', serif; font-size: .92rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sticky-sub { font-size: .58rem; color: #b8a88f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sticky-btns { flex: 0 0 auto; display: flex; gap: .45rem; }
+.sticky-btns a {
+  padding: .5rem .8rem; font-size: .72rem; text-align: center; text-decoration: none;
+  border: 1px solid #c9a84c; color: #1a1410; background: #c9a84c; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; gap: .25rem; white-space: nowrap;
+}
+.sticky-btns a.sub { background: transparent; color: #e8d9ae; }
+.sticky-btns a:hover { filter: brightness(1.08); }
+.sticky-close {
+  flex: 0 0 auto; background: none; border: none; color: #b8a88f; cursor: pointer;
+  font-size: 1rem; line-height: 1; padding: .3rem; align-self: flex-start;
+}
+.sticky-close:hover { color: #f5f0e8; }
+@media (max-width: 640px) {
+  body.sticky-on { padding-bottom: 118px; }
+  body.sticky-on .toast { bottom: 8.6rem; }
+  .sticky-inner { flex-wrap: wrap; gap: .45rem; }
+  .sticky-info { flex: 1 1 calc(100% - 2rem); }
+  .sticky-btns { flex: 1 1 100%; }
+  .sticky-btns a { flex: 1; }
+}
+
 /* TOAST */
 .toast {
   position: fixed;
@@ -549,6 +589,19 @@ body {
     <!-- 神社カードグリッド -->
     <div class="shrine-grid" id="shrineGrid"></div>
 
+  </div>
+</div>
+
+<!-- STICKY BAR (affiliate, trial) -->
+<div id="stickyBar" role="complementary" aria-label="巡礼プラン">
+  <div class="sticky-inner">
+    <div class="sticky-info">
+      <div class="sticky-label">🧳 巡礼プラン <span class="pr-badge">PR</span><span>広告リンクを含みます</span></div>
+      <div class="sticky-name" id="stickyName"></div>
+      <div class="sticky-sub" id="stickySub"></div>
+    </div>
+    <div class="sticky-btns" id="stickyBtns"></div>
+    <button type="button" class="sticky-close" id="stickyClose" aria-label="巡礼プランを閉じる">✕</button>
   </div>
 </div>
 
@@ -814,6 +867,7 @@ function renderMapPins() {
     });
     L.marker(pos, { icon, title: s.name, zIndexOffset: order.indexOf(s.attr) })
       .bindPopup(popupHTML(s), { maxWidth: 240 })
+      .on('click', () => setStickyShrine(s))
       .addTo(pinLayer);
     pts.push(pos);
   });
@@ -864,6 +918,41 @@ function travelHTML(s) {
         <div class="travel-note">広告リンクを含みます。予約が成立すると運営に紹介料が入る場合があります（あなたの支払額は変わりません）。</div>
       </div>`;
 }
+
+// ===== 下部固定バー（巡礼プラン）2026-10-31 試行 =====
+// いま見ている／選んだ神社に連動して、画面下に宿リンクを常時出す。
+// 閉じたらそのセッション中は再表示しない（sessionStorage）。
+let stickyShrine = null;
+function stickyClosed() {
+  try { return sessionStorage.getItem('gokoStickyClosed') === '1'; } catch (e) { return false; }
+}
+function setStickyShrine(s) {
+  if (!s) return;
+  stickyShrine = s;
+  const bar = document.getElementById('stickyBar');
+  if (!bar || stickyClosed()) return;
+  document.getElementById('stickyName').textContent = '⛩ ' + s.name;
+  document.getElementById('stickySub').textContent = s.pref + ' への巡礼に';
+  const stay = 'https://www.booking.com/searchresults.html?ss=' + encodeURIComponent(s.pref);
+  document.getElementById('stickyBtns').innerHTML =
+    `<a href="${rakutenHref(s.pref)}" target="_blank" rel="noopener sponsored">🏨 楽天トラベルで宿を探す</a><img border="0" width="1" height="1" src="https://www12.a8.net/0.gif?a8mat=${A8_RAKUTEN.a8mat}" alt="">` +
+    `<a class="sub" href="${stay}" target="_blank" rel="noopener sponsored">Booking.com</a>`;
+  bar.classList.add('show');
+  document.body.classList.add('sticky-on');
+}
+function closeStickyBar() {
+  const bar = document.getElementById('stickyBar');
+  if (bar) bar.classList.remove('show');
+  document.body.classList.remove('sticky-on');
+  try { sessionStorage.setItem('gokoStickyClosed', '1'); } catch (e) {}
+}
+document.getElementById('stickyClose').addEventListener('click', closeStickyBar);
+document.getElementById('shrineGrid').addEventListener('click', (e) => {
+  const card = e.target.closest('.shrine-card');
+  if (!card) return;
+  const s = SHRINES.find(x => x.id === card.id.replace('card-', ''));
+  if (s) setStickyShrine(s);
+});
 
 function renderShrines() {
   const grid = document.getElementById('shrineGrid');
@@ -968,6 +1057,14 @@ function updateAttrUI() {
   }
   renderMapPins();
   renderShrines();
+  const first = currentAttr === 'all' ? SHRINES[0] : SHRINES.find(s => s.attr === currentAttr);
+  if (first) setStickyShrine(first);
+}
+
+// 属性フィルタ（診断結果からの呼び出し用。従来は未定義でエラーになっていた）
+function filterAttr(attr) {
+  currentAttr = attr;
+  updateAttrUI();
 }
 
 // ===== タブクリック =====
@@ -1101,6 +1198,10 @@ function diagnose() {
   const rc = document.getElementById('resultCard');
   rc.classList.add('show');
 
+  // 固定バーは「補うべき属性」の筆頭神社＝おすすめ巡礼先に連動させる
+  const recShrine = SHRINES.find(s => s.attr === weakAttr);
+  if (recShrine) setStickyShrine(recShrine);
+
   const mainA = ATTRS[mainAttr];
   const weakA = ATTRS[weakAttr];
 
@@ -1188,6 +1289,7 @@ initMap();
 renderMapPins();
 renderShrines();
 renderStampGrid();
+if (SHRINES[0]) setStickyShrine(SHRINES[0]);
 </script>
 </body>
 </html>
